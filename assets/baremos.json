@@ -1,0 +1,17 @@
+{
+  "baremos": [
+    {
+      "edad": "18-25",
+      "genero": "M",
+      "flexiones": [
+        {"min": 40, "nota": 20, "nivel": "Excelente"},
+        {"min": 30, "nota": 15, "nivel": "Regular"}
+      ],
+      "trote": [
+        {"max": "12:00", "nota": 20, "nivel": "Excelente"},
+        {"max": "15:00", "nota": 10, "nivel": "Regular"}
+      ]
+    }
+    // ...más datos
+  ]
+}

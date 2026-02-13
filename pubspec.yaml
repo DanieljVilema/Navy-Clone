@@ -1,0 +1,33 @@
+name: navy_pfa_armada_ecuador
+
+description: Clon Navy PFA - Versión Armada Ecuador. App Flutter offline-first para autoevaluación, entrenamiento, consulta de reglamentos y asistencia IA.
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  google_fonts: ^6.1.0 
+  sqflite: ^2.3.0
+  path_provider: ^2.0.15
+  chewie: ^1.6.0
+  video_player: ^2.7.0
+  fl_chart: ^0.64.0
+  http: ^1.2.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/videos/
+    - assets/images/
+    - assets/baremos.json
+    - assets/nutrition_guide.json

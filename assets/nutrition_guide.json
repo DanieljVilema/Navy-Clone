@@ -1,0 +1,13 @@
+{
+  "plan_nutricional": [
+    {
+      "titulo": "Desayuno",
+      "descripcion": "Ejemplo de desayuno equilibrado."
+    },
+    {
+      "titulo": "Almuerzo",
+      "descripcion": "Ejemplo de almuerzo equilibrado."
+    }
+    // ...más datos
+  ]
+}
