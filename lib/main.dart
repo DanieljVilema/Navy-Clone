@@ -23,11 +23,12 @@ class NavyPFAApp extends StatelessWidget {
   static const Color goldAccent = Color(0xFFC5A44E);
   static const Color lightGold = Color(0xFFE8D5A0);
   static const Color surfaceWhite = Color(0xFFF5F6FA);
+  static const Color navyAppBar = Color(0xFF1B2A4A);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Navy PFA - Armada del Ecuador',
+      title: 'Official Navy PFA',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
@@ -36,60 +37,67 @@ class NavyPFAApp extends StatelessWidget {
           seedColor: navyPrimary,
           primary: navyPrimary,
           secondary: goldAccent,
-          surface: surfaceWhite,
+          surface: Colors.white,
           onPrimary: Colors.white,
           onSecondary: navyDark,
         ),
-        scaffoldBackgroundColor: navyPrimary,
+        scaffoldBackgroundColor: Colors.white,
         textTheme: GoogleFonts.robotoTextTheme().apply(
-          bodyColor: Colors.white,
-          displayColor: Colors.white,
+          bodyColor: Colors.black87,
+          displayColor: Colors.black87,
         ),
         appBarTheme: AppBarTheme(
-          backgroundColor: navyDark,
+          backgroundColor: navyAppBar,
           foregroundColor: Colors.white,
-          centerTitle: true,
-          elevation: 0,
+          centerTitle: false,
+          elevation: 2,
+          shadowColor: Colors.black26,
           titleTextStyle: GoogleFonts.roboto(
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
+            fontSize: 17,
+            fontWeight: FontWeight.w500,
             color: Colors.white,
-            letterSpacing: 1.2,
           ),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor: goldAccent,
-            foregroundColor: navyDark,
+            backgroundColor: navyPrimary,
+            foregroundColor: Colors.white,
             padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(8),
             ),
             textStyle: GoogleFonts.roboto(
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               fontSize: 15,
-              letterSpacing: 0.8,
             ),
           ),
         ),
-
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
           fillColor: Colors.white,
           contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide.none,
+            borderRadius: BorderRadius.circular(8),
+            borderSide: BorderSide(color: Colors.grey.shade300),
           ),
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(8),
             borderSide: BorderSide(color: Colors.grey.shade300),
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: goldAccent, width: 2),
+            borderRadius: BorderRadius.circular(8),
+            borderSide: const BorderSide(color: navyPrimary, width: 2),
           ),
-          labelStyle: GoogleFonts.roboto(color: navyPrimary),
+          labelStyle: GoogleFonts.roboto(color: Colors.grey.shade600),
+        ),
+        dividerTheme: DividerThemeData(
+          color: Colors.grey.shade200,
+          thickness: 1,
+          space: 0,
+        ),
+        listTileTheme: ListTileThemeData(
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          iconColor: Colors.grey.shade600,
         ),
       ),
       home: const MainScreen(),
