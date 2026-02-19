@@ -21,7 +21,7 @@ class TrainingScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'NOFFS Workout Library',
+                  'Biblioteca de Entrenamiento NOFFS',
                   style: GoogleFonts.roboto(
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
@@ -30,7 +30,7 @@ class TrainingScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Naval Operational Fitness and Fueling Series - Select a workout category below to browse available routines.',
+                  'Serie de Acondicionamiento Físico Operacional Naval - Seleccione una categoría de entrenamiento a continuación.',
                   style: GoogleFonts.roboto(
                     fontSize: 13,
                     color: Colors.black54,
@@ -43,87 +43,87 @@ class TrainingScreen extends StatelessWidget {
           Divider(height: 1, color: Colors.grey.shade200),
 
           // ── WORKOUT CATEGORIES ──
-          _WorkoutExpandableCategory(
-            title: 'Command PT - Endurance',
-            workoutCount: '15 workouts',
+          const _WorkoutExpandableCategory(
+            title: 'Entrenamiento de Comando - Resistencia',
+            workoutCount: '15 rutinas',
             exercises: [
-              'Continuous Run 30 min',
-              '400m Intervals x 8',
-              'Fartlek Run 40 min',
-              'Progressive Run',
-              'Tempo Run 25 min',
+              'Carrera Continua 30 min',
+              'Intervalos 400m x 8',
+              'Carrera Fartlek 40 min',
+              'Carrera Progresiva',
+              'Carrera Tempo 25 min',
             ],
           ),
-          _WorkoutExpandableCategory(
-            title: 'FEP - Upper Body Strength',
-            workoutCount: '12 workouts',
+          const _WorkoutExpandableCategory(
+            title: 'FEP - Fuerza Tren Superior',
+            workoutCount: '12 rutinas',
             exercises: [
-              'Progressive Push-ups',
-              'Diamond Push-ups',
-              'Military Plank',
-              'Parallel Bar Dips',
-              'Wide-arm Push-ups',
+              'Flexiones Progresivas',
+              'Flexiones Diamante',
+              'Plancha Militar',
+              'Fondos en Barras Paralelas',
+              'Flexiones Brazos Abiertos',
             ],
           ),
-          _WorkoutExpandableCategory(
-            title: 'Core & Abdominals',
-            workoutCount: '10 workouts',
+          const _WorkoutExpandableCategory(
+            title: 'Core y Abdominales',
+            workoutCount: '10 rutinas',
             exercises: [
-              'Standard Curl-ups',
-              'Front Plank Hold',
-              'Mountain Climbers',
-              'Russian Twists',
-              'Bicycle Crunches',
+              'Abdominales Estándar',
+              'Sostener Plancha Frontal',
+              'Escalada de Montaña',
+              'Giros Rusos',
+              'Abdominales Bicicleta',
             ],
           ),
-          _WorkoutExpandableCategory(
-            title: 'Swimming & Cardio',
-            workoutCount: '8 workouts',
+          const _WorkoutExpandableCategory(
+            title: 'Natación y Cardio',
+            workoutCount: '8 rutinas',
             exercises: [
-              '450m Swim Technique',
-              'Pool Intervals',
-              'Aquatic Resistance',
-              'Combined Cardio',
+              'Técnica de Nado 450m',
+              'Intervalos en Piscina',
+              'Resistencia Acuática',
+              'Cardio Combinado',
             ],
           ),
-          _WorkoutExpandableCategory(
-            title: 'Flexibility & Mobility',
-            workoutCount: '8 workouts',
+          const _WorkoutExpandableCategory(
+            title: 'Flexibilidad y Movilidad',
+            workoutCount: '8 rutinas',
             exercises: [
-              'Dynamic Stretching',
-              'Military Yoga',
-              'Joint Mobility',
-              'Complete Cool-down',
+              'Estiramiento Dinámico',
+              'Yoga Militar',
+              'Movilidad Articular',
+              'Vuelta a la Calma Completa',
             ],
           ),
-          _WorkoutExpandableCategory(
-            title: 'Cycling & Rowing',
-            workoutCount: '6 workouts',
+          const _WorkoutExpandableCategory(
+            title: 'Ciclismo y Remo',
+            workoutCount: '6 rutinas',
             exercises: [
-              '12 min Bike Test',
-              '2000m Row Preparation',
-              'Bike Intervals',
-              'Alt. Cardio Endurance',
+              'Prueba de Bici 12 min',
+              'Preparación Remo 2000m',
+              'Intervalos en Bici',
+              'Resistencia Cardio Alt.',
             ],
           ),
-          _WorkoutExpandableCategory(
-            title: 'Full Body Workouts',
-            workoutCount: '10 workouts',
+          const _WorkoutExpandableCategory(
+            title: 'Entrenamiento Cuerpo Completo',
+            workoutCount: '10 rutinas',
             exercises: [
-              'Total Body Circuit',
-              'Strength Endurance',
-              'Combat Conditioning',
-              'Functional Fitness',
+              'Circuito Cuerpo Total',
+              'Resistencia de Fuerza',
+              'Acondicionamiento de Combate',
+              'Fitness Funcional',
             ],
           ),
-          _WorkoutExpandableCategory(
-            title: 'Pre-PRT Preparation',
-            workoutCount: '6 workouts',
+          const _WorkoutExpandableCategory(
+            title: 'Preparación Pre-Evaluación',
+            workoutCount: '6 rutinas',
             exercises: [
-              'PRT Simulation',
-              'Event-specific Training',
-              'Peak Week Protocol',
-              'Recovery Routine',
+              'Simulacro de Evaluación',
+              'Entrenamiento Específico',
+              'Protocolo Semana Pico',
+              'Rutina de Recuperación',
             ],
           ),
 

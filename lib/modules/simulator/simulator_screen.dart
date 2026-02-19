@@ -14,16 +14,18 @@ class _SimulatorScreenState extends State<SimulatorScreen>
   late TabController _tabController;
 
   // PFA Form
-  String _selectedGender = 'Male';
+  String _selectedGender = 'Masculino';
   String _selectedAgeGroup = '17-19';
-  String _selectedAltitude = 'Below 5000 ft';
+  String _selectedAltitude = 'Bajo 5000 pies';
 
   // BCA Form
-  String _heightFt = '5ft - 6in';
-  String _heightIn = '';
-  String _waistFt = '27ft - 50in';
-  String _waistIn = '';
-  String _weight = '51lb - 600lb';
+  final _heightController = TextEditingController(); // inches
+  final _waistController = TextEditingController(); // inches
+  final _weightController = TextEditingController(); // lbs
+
+  String? _bcaRatioResult;
+  String? _bcaStatus;
+  String? _bmiResult;
 
   // PFA Events
   final _pushUpsController = TextEditingController();
@@ -37,12 +39,12 @@ class _SimulatorScreenState extends State<SimulatorScreen>
   String? _pfaLevel;
   double? _bcaWaistToHeight;
 
-  final List<String> _genders = ['Male', 'Female'];
+  final List<String> _genders = ['Masculino', 'Femenino'];
   final List<String> _ageGroups = [
     '17-19', '20-24', '25-29', '30-34', '35-39',
     '40-44', '45-49', '50-54', '55-59', '60-64', '65+'
   ];
-  final List<String> _altitudes = ['Below 5000 ft', 'Above 5000 ft'];
+  final List<String> _altitudes = ['Bajo 5000 pies', 'Sobre 5000 pies'];
   final List<String> _cardioTypes = [
     'Trote 2.4km',
     'Natación 450m',
@@ -63,10 +65,14 @@ class _SimulatorScreenState extends State<SimulatorScreen>
     _curlUpsController.dispose();
     _cardioMinController.dispose();
     _cardioSecController.dispose();
+    _heightController.dispose();
+    _waistController.dispose();
+    _weightController.dispose();
     super.dispose();
   }
 
   void _calculatePFA() {
+    // PFA Calculation
     int pushUps = int.tryParse(_pushUpsController.text) ?? 0;
     int curlUps = int.tryParse(_curlUpsController.text) ?? 0;
     int cardioMin = int.tryParse(_cardioMinController.text) ?? 0;
@@ -83,20 +89,47 @@ class _SimulatorScreenState extends State<SimulatorScreen>
 
     String level;
     if (totalScore >= 90) {
-      level = 'OUTSTANDING';
+      level = 'SOBRESALIENTE';
     } else if (totalScore >= 75) {
-      level = 'EXCELLENT';
+      level = 'EXCELENTE';
     } else if (totalScore >= 60) {
-      level = 'GOOD';
+      level = 'BUENO';
     } else if (totalScore >= 45) {
-      level = 'SATISFACTORY';
+      level = 'SATISFACTORIO';
     } else {
-      level = 'FAILURE';
+      level = 'NO APROBADO';
+    }
+
+    // BCA Calculation
+    double height = double.tryParse(_heightController.text) ?? 0;
+    double waist = double.tryParse(_waistController.text) ?? 0;
+    double weight = double.tryParse(_weightController.text) ?? 0;
+
+    String? bcaRatioStr;
+    String? bcaStatus;
+    String? bmiStr;
+
+    if (height > 0) {
+      // Waist / Height Ratio
+      if (waist > 0) {
+        double ratio = waist / height;
+        bcaRatioStr = ratio.toStringAsFixed(4);
+        bcaStatus = ratio <= 0.5500 ? 'APROBADO' : 'FALLO';
+      }
+
+      // BMI Calculation
+      if (weight > 0) {
+        double bmi = (weight / (height * height)) * 703;
+        bmiStr = bmi.toStringAsFixed(1);
+      }
     }
 
     setState(() {
       _pfaResult = '${totalScore.toStringAsFixed(1)} / 100';
       _pfaLevel = level;
+      _bcaRatioResult = bcaRatioStr;
+      _bcaStatus = bcaStatus;
+      _bmiResult = bmiStr;
     });
   }
 
@@ -124,8 +157,8 @@ class _SimulatorScreenState extends State<SimulatorScreen>
                 fontSize: 14,
               ),
               tabs: const [
-                Tab(text: 'Welcome'),
-                Tab(text: 'PFA Calculator'),
+                Tab(text: 'Bienvenido'),
+                Tab(text: 'Simulador'),
               ],
             ),
           ),
@@ -153,7 +186,7 @@ class _SimulatorScreenState extends State<SimulatorScreen>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'PFA Calculator',
+            'Simulador de Evaluación Física',
             style: GoogleFonts.roboto(
               fontSize: 20,
               fontWeight: FontWeight.w700,
@@ -162,7 +195,7 @@ class _SimulatorScreenState extends State<SimulatorScreen>
           ),
           const SizedBox(height: 12),
           Text(
-            'This tool allows you to calculate your Physical Fitness Assessment (PFA) score based on your performance in the Body Composition Assessment (BCA) and Physical Readiness Test (PRT).',
+            'Esta herramienta le permite calcular su nota de Evaluación Física basándose en el Control de Peso (IMC) y las Pruebas Físicas.',
             style: GoogleFonts.roboto(
               fontSize: 14,
               color: Colors.black54,
@@ -171,7 +204,7 @@ class _SimulatorScreenState extends State<SimulatorScreen>
           ),
           const SizedBox(height: 16),
           Text(
-            'Tap on "PFA Calculator" tab above to get started.',
+            'Presione la pestaña "Simulador" arriba para comenzar.',
             style: GoogleFonts.roboto(
               fontSize: 14,
               fontWeight: FontWeight.w500,
@@ -195,7 +228,7 @@ class _SimulatorScreenState extends State<SimulatorScreen>
           const SizedBox(height: 20),
 
           // ── BODY COMPOSITION ASSESSMENT (BCA) ──
-          _buildSectionLabel('Body Composition Assessment (BCA)'),
+          _buildSectionLabel('Control de Peso e Índice de Masa Corporal (IMC)'),
           const SizedBox(height: 8),
           _buildBCAForm(),
           const SizedBox(height: 8),
@@ -205,7 +238,7 @@ class _SimulatorScreenState extends State<SimulatorScreen>
           const SizedBox(height: 20),
 
           // ── PHYSICAL READINESS TEST (PRT) ──
-          _buildSectionLabel('Physical Readiness Test (PRT)'),
+          _buildSectionLabel('Pruebas Físicas'),
           const SizedBox(height: 8),
           _buildPRTForm(),
           const SizedBox(height: 20),
@@ -224,7 +257,7 @@ class _SimulatorScreenState extends State<SimulatorScreen>
                 ),
               ),
               child: Text(
-                'Calculate PFA Score',
+                'Calcular Nota de Evaluación',
                 style: GoogleFonts.roboto(
                   fontWeight: FontWeight.w600,
                   fontSize: 15,
@@ -255,7 +288,7 @@ class _SimulatorScreenState extends State<SimulatorScreen>
         children: [
           Expanded(
             child: _buildCompactDropdown(
-              label: 'Sex',
+              label: 'Sexo',
               value: _selectedGender,
               items: _genders,
               onChanged: (v) => setState(() => _selectedGender = v!),
@@ -264,7 +297,7 @@ class _SimulatorScreenState extends State<SimulatorScreen>
           const SizedBox(width: 8),
           Expanded(
             child: _buildCompactDropdown(
-              label: 'Age',
+              label: 'Edad',
               value: _selectedAgeGroup,
               items: _ageGroups,
               onChanged: (v) => setState(() => _selectedAgeGroup = v!),
@@ -273,7 +306,7 @@ class _SimulatorScreenState extends State<SimulatorScreen>
           const SizedBox(width: 8),
           Expanded(
             child: _buildCompactDropdown(
-              label: 'Altitude',
+              label: 'Altitud',
               value: _selectedAltitude,
               items: _altitudes,
               onChanged: (v) => setState(() => _selectedAltitude = v!),
@@ -371,33 +404,30 @@ class _SimulatorScreenState extends State<SimulatorScreen>
       ),
       child: Column(
         children: [
-          _buildFormRow('Height', _heightFt, 'in', Icons.height,
-              rightHint: 'in'),
+          _buildFormInputRow('Altura', _heightController, 'pulg', Icons.height),
           Divider(height: 1, color: Colors.grey.shade200),
-          _buildFormRowText('Select a value', italic: true,
-              subtext: 'Round up to the nearest half-inch'),
+          _buildFormRowText('Ingrese altura en pulgadas', italic: true,
+              subtext: 'Ej: 68 para 5\'8"'),
           Divider(height: 1, color: Colors.grey.shade200),
-          _buildFormRow('Waist', _waistFt, 'in', Icons.straighten,
-              rightHint: 'in'),
+          _buildFormInputRow('Cintura', _waistController, 'pulg', Icons.straighten),
           Divider(height: 1, color: Colors.grey.shade200),
-          _buildFormRowText('Select a value', italic: true,
-              subtext: 'Round down to the nearest half-inch'),
+          _buildFormRowText('Ingrese cintura en pulgadas', italic: true,
+              subtext: 'Medida al ombligo'),
           Divider(height: 1, color: Colors.grey.shade200),
-          _buildFormRow('Weight', _weight, 'lb', Icons.monitor_weight_outlined,
-              rightHint: 'lb'),
+          _buildFormInputRow('Peso', _weightController, 'lb',
+              Icons.monitor_weight_outlined),
           Divider(height: 1, color: Colors.grey.shade200),
           _buildFormRowText('', italic: false,
-              subtext: 'Round to the nearest pound'),
+              subtext: 'Ingrese peso en libras'),
         ],
       ),
     );
   }
 
-  Widget _buildFormRow(
-      String label, String value, String unit, IconData icon,
-      {String? rightHint}) {
+  Widget _buildFormInputRow(
+      String label, TextEditingController controller, String unit, IconData icon) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       child: Row(
         children: [
           SizedBox(
@@ -413,40 +443,41 @@ class _SimulatorScreenState extends State<SimulatorScreen>
           ),
           const SizedBox(width: 8),
           Expanded(
-            child: Container(
-              height: 36,
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey.shade300),
-                borderRadius: BorderRadius.circular(6),
-              ),
-              alignment: Alignment.centerLeft,
-              child: Text(
-                value,
-                style: GoogleFonts.roboto(
-                  fontSize: 13,
-                  color: Colors.grey.shade600,
+            child: TextField(
+              controller: controller,
+              keyboardType: TextInputType.number,
+              style: GoogleFonts.roboto(fontSize: 14),
+              decoration: InputDecoration(
+                hintText: '0',
+                hintStyle: GoogleFonts.roboto(color: Colors.grey.shade400),
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(6),
+                  borderSide: BorderSide(color: Colors.grey.shade300),
                 ),
-              ),
-            ),
-          ),
-          if (rightHint != null) ...[
-            const SizedBox(width: 8),
-            SizedBox(
-              width: 24,
-              child: Text(
-                rightHint,
-                style: GoogleFonts.roboto(
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(6),
+                  borderSide: BorderSide(color: Colors.grey.shade300),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(6),
+                  borderSide: BorderSide(color: NavyPFAApp.navyPrimary),
+                ),
+                suffixText: unit,
+                suffixStyle: GoogleFonts.roboto(
                   fontSize: 12,
                   color: Colors.grey.shade500,
                 ),
               ),
             ),
-          ],
+          ),
         ],
       ),
     );
   }
+
+
 
   Widget _buildFormRowText(String text,
       {bool italic = false, String? subtext}) {
@@ -493,7 +524,7 @@ class _SimulatorScreenState extends State<SimulatorScreen>
           Padding(
             padding: const EdgeInsets.all(12),
             child: Text(
-              'Body Composition Assessment Results',
+              'Resultados del Control de Peso',
               style: GoogleFonts.roboto(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
@@ -508,11 +539,11 @@ class _SimulatorScreenState extends State<SimulatorScreen>
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
             child: Row(
               children: [
-                _tableHeaderCell('Step', flex: 1),
-                _tableHeaderCell('Test', flex: 3),
-                _tableHeaderCell('Value', flex: 2),
-                _tableHeaderCell('Max', flex: 2),
-                _tableHeaderCell('Result', flex: 2),
+                _tableHeaderCell('Paso', flex: 1),
+                _tableHeaderCell('Prueba', flex: 3),
+                _tableHeaderCell('Valor', flex: 2),
+                _tableHeaderCell('Máx', flex: 2),
+                _tableHeaderCell('Resultado', flex: 2),
               ],
             ),
           ),
@@ -520,13 +551,29 @@ class _SimulatorScreenState extends State<SimulatorScreen>
           // Table row
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-            child: Row(
+            child: Column(
               children: [
-                _tableCell('1', flex: 1),
-                _tableCell('Waist to Height\nRatio', flex: 3),
-                _tableCell('-', flex: 2),
-                _tableCell('0.5500', flex: 2),
-                _tableCell('-', flex: 2),
+                Row(
+                  children: [
+                    _tableCell('1', flex: 1),
+                    _tableCell('Relación\nCintura/Altura', flex: 3),
+                    _tableCell(_bcaRatioResult ?? '-', flex: 2),
+                    _tableCell('0.5500', flex: 2),
+                    _tableCell(_bcaStatus ?? '-', flex: 2),
+                  ],
+                ),
+                if (_bmiResult != null) ...[
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      _tableCell('2', flex: 1),
+                      _tableCell('IMC Simulado', flex: 3),
+                      _tableCell(_bmiResult!, flex: 2),
+                      _tableCell('27.0', flex: 2),
+                      _tableCell('-', flex: 2),
+                    ],
+                  ),
+                ],
               ],
             ),
           ),
@@ -573,7 +620,7 @@ class _SimulatorScreenState extends State<SimulatorScreen>
       child: Column(
         children: [
           // Push-ups section header
-          _buildPRTSectionHeader('Push-ups'),
+          _buildPRTSectionHeader('Flexiones de Pecho'),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
             child: TextField(
@@ -581,7 +628,7 @@ class _SimulatorScreenState extends State<SimulatorScreen>
               keyboardType: TextInputType.number,
               style: GoogleFonts.roboto(fontSize: 14),
               decoration: InputDecoration(
-                hintText: 'Enter reps',
+                hintText: 'Ingrese repeticiones',
                 hintStyle: GoogleFonts.roboto(
                     fontSize: 13, color: Colors.grey.shade400),
                 isDense: true,
@@ -601,7 +648,7 @@ class _SimulatorScreenState extends State<SimulatorScreen>
           Divider(height: 1, color: Colors.grey.shade200),
 
           // Forearm Plank (or Curl-ups)
-          _buildPRTSectionHeader('Forearm Plank / Curl-ups'),
+          _buildPRTSectionHeader('Plancha Abdominal / Abdominales'),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
             child: TextField(
@@ -609,7 +656,7 @@ class _SimulatorScreenState extends State<SimulatorScreen>
               keyboardType: TextInputType.number,
               style: GoogleFonts.roboto(fontSize: 14),
               decoration: InputDecoration(
-                hintText: 'Enter time (mm:ss) or reps',
+                hintText: 'Ingrese tiempo (mm:ss) o reps',
                 hintStyle: GoogleFonts.roboto(
                     fontSize: 13, color: Colors.grey.shade400),
                 isDense: true,
@@ -629,7 +676,7 @@ class _SimulatorScreenState extends State<SimulatorScreen>
           Divider(height: 1, color: Colors.grey.shade200),
 
           // Cardio
-          _buildPRTSectionHeader('Cardio Event'),
+          _buildPRTSectionHeader('Evento Cardiovascular'),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
             child: Column(
@@ -698,7 +745,7 @@ class _SimulatorScreenState extends State<SimulatorScreen>
                         keyboardType: TextInputType.number,
                         style: GoogleFonts.roboto(fontSize: 14),
                         decoration: InputDecoration(
-                          hintText: 'Sec',
+                          hintText: 'Seg',
                           hintStyle: GoogleFonts.roboto(
                               fontSize: 13, color: Colors.grey.shade400),
                           isDense: true,

@@ -18,7 +18,7 @@ class ServicesScreen extends StatelessWidget {
             padding: const EdgeInsets.all(20),
             color: Colors.grey.shade50,
             child: Text(
-              'All U.S. Navy Physical Readiness Program policy resources, including the following:',
+              'Todos los recursos de políticas del Programa de Preparación Física de la Armada, incluyendo lo siguiente:',
               style: GoogleFonts.roboto(
                 fontSize: 14,
                 color: Colors.black54,
@@ -30,48 +30,48 @@ class ServicesScreen extends StatelessWidget {
 
           // ── POLICY RESOURCE ITEMS ──
           _PolicyItem(
-            title: 'Physical Readiness Program Guide',
-            subtitle: 'OPNAVINST 6110.1K',
+            title: 'Guía del Programa de Preparación Física',
+            subtitle: 'Reglamento General de Deportes',
             onTap: () {},
           ),
           _PolicyItem(
-            title: 'PFA Guidance',
-            subtitle: 'Updated policy guidance and FAQs',
+            title: 'Guía de Evaluación Física',
+            subtitle: 'Guía de políticas actualizada y preguntas frecuentes',
             onTap: () {},
           ),
           _PolicyItem(
-            title: 'BCA Standards',
-            subtitle: 'Body Composition Assessment standards',
+            title: 'Estándares de Control de Peso',
+            subtitle: 'Estándares de Evaluación de Composición Corporal',
             onTap: () {},
           ),
           _PolicyItem(
-            title: 'PRT Standards',
-            subtitle: 'Physical Readiness Test event standards',
+            title: 'Estándares de Pruebas Físicas',
+            subtitle: 'Estándares de eventos de la Prueba de Preparación Física',
             onTap: () {},
           ),
           _PolicyItem(
-            title: 'Command Fitness Leader Guide',
-            subtitle: 'CFL responsibilities and procedures',
+            title: 'Guía del Líder de Fitness del Comando',
+            subtitle: 'Responsabilidades y procedimientos',
             onTap: () {},
           ),
           _PolicyItem(
-            title: 'PRIMS User Guide',
-            subtitle: 'Physical Readiness Information Management System',
+            title: 'Guía de Usuario del Sistema de Gestión',
+            subtitle: 'Sistema de Gestión de Información de Preparación Física',
             onTap: () {},
           ),
           _PolicyItem(
-            title: 'Fitness Enhancement Program (FEP)',
-            subtitle: 'FEP requirements and procedures',
+            title: 'Programa de Mejora Física (FEP)',
+            subtitle: 'Requisitos y procedimientos del FEP',
             onTap: () {},
           ),
           _PolicyItem(
-            title: 'Medical Waivers & Exemptions',
-            subtitle: 'Medical clearance and exemption guidance',
+            title: 'Exenciones Médicas',
+            subtitle: 'Guía de autorización médica y exenciones',
             onTap: () {},
           ),
           _PolicyItem(
-            title: 'NAVADMIN Messages',
-            subtitle: 'PFA-related NAVADMIN messages',
+            title: 'Mensajes Oficiales y Radiogramas',
+            subtitle: 'Mensajes relacionados con la Evaluación Física',
             onTap: () {},
           ),
 
@@ -82,7 +82,7 @@ class ServicesScreen extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
             color: Colors.grey.shade50,
             child: Text(
-              'Additional Resources',
+              'Recursos Adicionales',
               style: GoogleFonts.roboto(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
@@ -93,20 +93,20 @@ class ServicesScreen extends StatelessWidget {
           Divider(height: 1, color: Colors.grey.shade200),
 
           _PolicyItem(
-            title: 'Navy Fitness Website',
-            subtitle: 'www.navyfitness.org',
+            title: 'Sitio Web de Fitness Naval',
+            subtitle: 'www.armada.mil.ec',
             trailing: Icons.open_in_new,
             onTap: () {},
           ),
           _PolicyItem(
-            title: 'MyNavy HR',
-            subtitle: 'Personnel command resources',
+            title: 'Dirección de Personal',
+            subtitle: 'Recursos del comando de personal',
             trailing: Icons.open_in_new,
             onTap: () {},
           ),
           _PolicyItem(
-            title: 'Navy Medicine',
-            subtitle: 'Health and wellness resources',
+            title: 'Sanidad Naval',
+            subtitle: 'Recursos de salud y bienestar',
             trailing: Icons.open_in_new,
             onTap: () {},
           ),

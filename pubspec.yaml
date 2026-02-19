@@ -19,6 +19,7 @@ dependencies:
   video_player: ^2.7.0
   fl_chart: ^0.64.0
   http: ^1.2.0
+  dash_chat_2: ^0.0.21
 
 dev_dependencies:
   flutter_test:

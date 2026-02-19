@@ -28,7 +28,7 @@ class NavyPFAApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Official Navy PFA',
+      title: 'Evaluación Física Armada Ecuador',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
