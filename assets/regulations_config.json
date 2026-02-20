@@ -1,0 +1,75 @@
+{
+  "regulaciones": [
+    {
+      "titulo": "Guía del Programa de Preparación Física",
+      "subtitulo": "Reglamento General de Deportes",
+      "pdfAsset": "",
+      "externalUrl": ""
+    },
+    {
+      "titulo": "Guía de Evaluación Física",
+      "subtitulo": "Guía de políticas actualizada y preguntas frecuentes",
+      "pdfAsset": "",
+      "externalUrl": ""
+    },
+    {
+      "titulo": "Estándares de Control de Peso",
+      "subtitulo": "Estándares de Evaluación de Composición Corporal",
+      "pdfAsset": "",
+      "externalUrl": ""
+    },
+    {
+      "titulo": "Estándares de Pruebas Físicas",
+      "subtitulo": "Estándares de eventos de la Prueba de Preparación Física",
+      "pdfAsset": "",
+      "externalUrl": ""
+    },
+    {
+      "titulo": "Guía del Líder de Fitness del Comando",
+      "subtitulo": "Responsabilidades y procedimientos",
+      "pdfAsset": "",
+      "externalUrl": ""
+    },
+    {
+      "titulo": "Guía de Usuario del Sistema de Gestión",
+      "subtitulo": "Sistema de Gestión de Información de Preparación Física",
+      "pdfAsset": "",
+      "externalUrl": ""
+    },
+    {
+      "titulo": "Programa de Mejora Física (FEP)",
+      "subtitulo": "Requisitos y procedimientos del FEP",
+      "pdfAsset": "",
+      "externalUrl": ""
+    },
+    {
+      "titulo": "Exenciones Médicas",
+      "subtitulo": "Guía de autorización médica y exenciones",
+      "pdfAsset": "",
+      "externalUrl": ""
+    },
+    {
+      "titulo": "Mensajes Oficiales y Radiogramas",
+      "subtitulo": "Mensajes relacionados con la Evaluación Física",
+      "pdfAsset": "",
+      "externalUrl": ""
+    }
+  ],
+  "recursos_adicionales": [
+    {
+      "titulo": "Sitio Web de Fitness Naval",
+      "subtitulo": "www.armada.mil.ec",
+      "externalUrl": "https://www.armada.mil.ec"
+    },
+    {
+      "titulo": "Dirección de Personal",
+      "subtitulo": "Recursos del comando de personal",
+      "externalUrl": ""
+    },
+    {
+      "titulo": "Sanidad Naval",
+      "subtitulo": "Recursos de salud y bienestar",
+      "externalUrl": ""
+    }
+  ]
+}

@@ -210,3 +210,4 @@ coverage/
 **/web/.idea/
 **/web/.vscode/
 **/web/.DS_Store
+.flutter-plugins-dependencies

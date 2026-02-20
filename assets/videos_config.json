@@ -1,0 +1,44 @@
+{
+  "videos": [
+    {
+      "id": "demo_peso_m",
+      "titulo": "Demo Control de Peso - Cintura (Masculino)",
+      "descripcion": "Demostración del procedimiento de medición de cintura para personal masculino.",
+      "categoria": "demo_peso",
+      "url": "",
+      "thumbnailUrl": ""
+    },
+    {
+      "id": "demo_peso_f",
+      "titulo": "Demo Control de Peso - Cintura (Femenino)",
+      "descripcion": "Demostración del procedimiento de medición de cintura para personal femenino.",
+      "categoria": "demo_peso",
+      "url": "",
+      "thumbnailUrl": ""
+    },
+    {
+      "id": "demo_flexiones",
+      "titulo": "Demo Flexiones de Pecho",
+      "descripcion": "Técnica correcta para la evaluación de flexiones de pecho.",
+      "categoria": "demo_pruebas",
+      "url": "",
+      "thumbnailUrl": ""
+    },
+    {
+      "id": "demo_plancha",
+      "titulo": "Demo Plancha Abdominal",
+      "descripcion": "Técnica correcta para la plancha abdominal cronometrada.",
+      "categoria": "demo_pruebas",
+      "url": "",
+      "thumbnailUrl": ""
+    },
+    {
+      "id": "demo_remo",
+      "titulo": "Demo Remo 2000M",
+      "descripcion": "Técnica y procedimiento para la prueba de remo ergómetro.",
+      "categoria": "demo_pruebas",
+      "url": "",
+      "thumbnailUrl": ""
+    }
+  ]
+}
