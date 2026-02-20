@@ -7,24 +7,42 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
+import 'package:provider/provider.dart';
 import 'package:navy_pfa_armada_ecuador/main.dart';
+import 'package:navy_pfa_armada_ecuador/providers/content_provider.dart';
+import 'package:navy_pfa_armada_ecuador/providers/user_provider.dart';
+import 'package:navy_pfa_armada_ecuador/providers/pfa_history_provider.dart';
+import 'package:navy_pfa_armada_ecuador/providers/simulator_provider.dart';
+import 'package:navy_pfa_armada_ecuador/providers/chat_provider.dart';
+import 'package:navy_pfa_armada_ecuador/services/database_service.dart';
+import 'package:navy_pfa_armada_ecuador/services/scoring_service.dart';
+import 'package:navy_pfa_armada_ecuador/services/json_loader_service.dart';
+import 'package:navy_pfa_armada_ecuador/services/gemini_service.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('App smoke test', (WidgetTester tester) async {
+    // Provide mocks/dummies for providers
+    final dbService = DatabaseService();
+    final scoringService = ScoringService([]);
+    final geminiService = GeminiService();
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    await tester.pumpWidget(
+      MultiProvider(
+        providers: [
+          Provider.value(value: scoringService),
+          ChangeNotifierProvider(create: (_) => ContentProvider()),
+          ChangeNotifierProvider(create: (_) => UserProvider(dbService)),
+          ChangeNotifierProvider(create: (_) => PfaHistoryProvider(dbService)),
+          ChangeNotifierProvider(create: (_) => SimulatorProvider()),
+          ChangeNotifierProvider(create: (_) => ChatProvider(geminiService, dbService)),
+        ],
+        child: const NavyPFAApp(),
+      ),
+    );
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    await tester.pumpAndSettle();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Just verify the app loads without crashing
+    expect(find.byType(MaterialApp), findsOneWidget);
   });
 }

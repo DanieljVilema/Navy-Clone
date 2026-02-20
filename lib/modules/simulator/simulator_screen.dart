@@ -1,6 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../main.dart';
+import 'package:provider/provider.dart';
+import '../../providers/simulator_provider.dart';
+import '../../providers/user_provider.dart';
+import '../../providers/pfa_history_provider.dart';
+import '../../services/scoring_service.dart';
+import '../../core/constants.dart';
+
+// Dark theme helper colors
+const _bg = AppColors.darkBg;
+const _card = AppColors.darkCard;
+const _cardSec = AppColors.darkCardSec;
+const _textPri = AppColors.darkTextPrimary;
+const _textSec = AppColors.darkTextSecondary;
+const _textTer = AppColors.darkTextTertiary;
+const _border = AppColors.darkBorder;
 
 class SimulatorScreen extends StatefulWidget {
   const SimulatorScreen({super.key});
@@ -13,38 +27,23 @@ class _SimulatorScreenState extends State<SimulatorScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
-  // PFA Form
-  String _selectedGender = 'Masculino';
-  String _selectedAgeGroup = '17-19';
-  String _selectedAltitude = 'Bajo 5000 pies';
-
-  // BCA Form
-  final _heightController = TextEditingController(); // inches
-  final _waistController = TextEditingController(); // inches
-  final _weightController = TextEditingController(); // lbs
-
-  String? _bcaRatioResult;
-  String? _bcaStatus;
-  String? _bmiResult;
+  // BCA Form (metric: cm, kg)
+  final _heightController = TextEditingController(); // cm
+  final _waistController = TextEditingController(); // cm
+  final _weightController = TextEditingController(); // kg
 
   // PFA Events
   final _pushUpsController = TextEditingController();
   final _curlUpsController = TextEditingController();
   final _cardioMinController = TextEditingController();
   final _cardioSecController = TextEditingController();
-  String _selectedCardioType = 'Trote 2.4km';
-
-  // Results
-  String? _pfaResult;
-  String? _pfaLevel;
-  double? _bcaWaistToHeight;
 
   final List<String> _genders = ['Masculino', 'Femenino'];
   final List<String> _ageGroups = [
     '17-19', '20-24', '25-29', '30-34', '35-39',
     '40-44', '45-49', '50-54', '55-59', '60-64', '65+'
   ];
-  final List<String> _altitudes = ['Bajo 5000 pies', 'Sobre 5000 pies'];
+  final List<String> _altitudes = ['Bajo 1500m', 'Sobre 1500m'];
   final List<String> _cardioTypes = [
     'Trote 2.4km',
     'Natación 450m',
@@ -72,87 +71,62 @@ class _SimulatorScreenState extends State<SimulatorScreen>
   }
 
   void _calculatePFA() {
-    // PFA Calculation
+    final simProvider = context.read<SimulatorProvider>();
+    final userProvider = context.read<UserProvider>();
+    final historyProvider = context.read<PfaHistoryProvider>();
+    final scoringService = context.read<ScoringService>();
+
     int pushUps = int.tryParse(_pushUpsController.text) ?? 0;
     int curlUps = int.tryParse(_curlUpsController.text) ?? 0;
     int cardioMin = int.tryParse(_cardioMinController.text) ?? 0;
     int cardioSec = int.tryParse(_cardioSecController.text) ?? 0;
+    
+    // User enters metric (cm, kg) → convert to imperial for scoring engine
+    double? heightCm = double.tryParse(_heightController.text);
+    double? waistCm = double.tryParse(_waistController.text);
+    double? weightKg = double.tryParse(_weightController.text);
 
-    double pushUpScore = (pushUps / 50 * 20).clamp(0, 20);
-    double curlUpScore = (curlUps / 60 * 20).clamp(0, 20);
-    double totalCardioSec = (cardioMin * 60 + cardioSec).toDouble();
-    double cardioScore = totalCardioSec > 0
-        ? ((900 - totalCardioSec) / 900 * 60).clamp(0, 60)
-        : 0;
+    double? heightInch = heightCm != null ? heightCm / 2.54 : null;
+    double? waistInch = waistCm != null ? waistCm / 2.54 : null;
+    double? weightLb = weightKg != null ? weightKg * 2.205 : null;
 
-    double totalScore = pushUpScore + curlUpScore + cardioScore;
+    simProvider.calculate(
+      scorer: scoringService,
+      userId: userProvider.profile?.id ?? 1,
+      flexiones: pushUps,
+      abdominales: curlUps,
+      cardioMinutos: cardioMin,
+      cardioSegundos: cardioSec,
+      alturaPulg: heightInch,
+      cinturaPulg: waistInch,
+      pesoLb: weightLb,
+    );
 
-    String level;
-    if (totalScore >= 90) {
-      level = 'SOBRESALIENTE';
-    } else if (totalScore >= 75) {
-      level = 'EXCELENTE';
-    } else if (totalScore >= 60) {
-      level = 'BUENO';
-    } else if (totalScore >= 45) {
-      level = 'SATISFACTORIO';
-    } else {
-      level = 'NO APROBADO';
+    if (simProvider.lastResult != null) {
+      historyProvider.addResult(simProvider.lastResult!);
     }
-
-    // BCA Calculation
-    double height = double.tryParse(_heightController.text) ?? 0;
-    double waist = double.tryParse(_waistController.text) ?? 0;
-    double weight = double.tryParse(_weightController.text) ?? 0;
-
-    String? bcaRatioStr;
-    String? bcaStatus;
-    String? bmiStr;
-
-    if (height > 0) {
-      // Waist / Height Ratio
-      if (waist > 0) {
-        double ratio = waist / height;
-        bcaRatioStr = ratio.toStringAsFixed(4);
-        bcaStatus = ratio <= 0.5500 ? 'APROBADO' : 'FALLO';
-      }
-
-      // BMI Calculation
-      if (weight > 0) {
-        double bmi = (weight / (height * height)) * 703;
-        bmiStr = bmi.toStringAsFixed(1);
-      }
-    }
-
-    setState(() {
-      _pfaResult = '${totalScore.toStringAsFixed(1)} / 100';
-      _pfaLevel = level;
-      _bcaRatioResult = bcaRatioStr;
-      _bcaStatus = bcaStatus;
-      _bmiResult = bmiStr;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade50,
+      backgroundColor: _bg,
       body: Column(
         children: [
           // ── TABS ──
           Container(
-            color: Colors.white,
+            color: _card,
             child: TabBar(
               controller: _tabController,
-              indicatorColor: NavyPFAApp.navyPrimary,
+              indicatorColor: AppColors.primary,
               indicatorWeight: 3,
-              labelColor: NavyPFAApp.navyPrimary,
-              unselectedLabelColor: Colors.grey.shade600,
-              labelStyle: GoogleFonts.roboto(
+              labelColor: AppColors.primary,
+              unselectedLabelColor: _textSec,
+              labelStyle: GoogleFonts.inter(
                 fontWeight: FontWeight.w600,
                 fontSize: 14,
               ),
-              unselectedLabelStyle: GoogleFonts.roboto(
+              unselectedLabelStyle: GoogleFonts.inter(
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
               ),
@@ -187,28 +161,28 @@ class _SimulatorScreenState extends State<SimulatorScreen>
         children: [
           Text(
             'Simulador de Evaluación Física',
-            style: GoogleFonts.roboto(
+            style: GoogleFonts.inter(
               fontSize: 20,
               fontWeight: FontWeight.w700,
-              color: Colors.black87,
+              color: _textPri,
             ),
           ),
           const SizedBox(height: 12),
           Text(
             'Esta herramienta le permite calcular su nota de Evaluación Física basándose en el Control de Peso (IMC) y las Pruebas Físicas.',
-            style: GoogleFonts.roboto(
+            style: GoogleFonts.inter(
               fontSize: 14,
-              color: Colors.black54,
+              color: _textSec,
               height: 1.6,
             ),
           ),
           const SizedBox(height: 16),
           Text(
             'Presione la pestaña "Simulador" arriba para comenzar.',
-            style: GoogleFonts.roboto(
+            style: GoogleFonts.inter(
               fontSize: 14,
               fontWeight: FontWeight.w500,
-              color: NavyPFAApp.navyPrimary,
+              color: AppColors.primary,
             ),
           ),
         ],
@@ -224,7 +198,7 @@ class _SimulatorScreenState extends State<SimulatorScreen>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // ── DEMOGRAPHIC SELECTORS ROW ──
-          _buildDemographicRow(),
+          _buildDemographicRow(context),
           const SizedBox(height: 20),
 
           // ── BODY COMPOSITION ASSESSMENT (BCA) ──
@@ -234,13 +208,13 @@ class _SimulatorScreenState extends State<SimulatorScreen>
           const SizedBox(height: 8),
 
           // ── BCA RESULTS TABLE ──
-          _buildBCAResultsTable(),
+          _buildBCAResultsTable(context),
           const SizedBox(height: 20),
 
           // ── PHYSICAL READINESS TEST (PRT) ──
           _buildSectionLabel('Pruebas Físicas'),
           const SizedBox(height: 8),
-          _buildPRTForm(),
+          _buildPRTForm(context),
           const SizedBox(height: 20),
 
           // ── CALCULATE BUTTON ──
@@ -250,7 +224,7 @@ class _SimulatorScreenState extends State<SimulatorScreen>
             child: ElevatedButton(
               onPressed: _calculatePFA,
               style: ElevatedButton.styleFrom(
-                backgroundColor: NavyPFAApp.navyPrimary,
+                backgroundColor: AppColors.navyPrimary,
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -266,9 +240,9 @@ class _SimulatorScreenState extends State<SimulatorScreen>
             ),
           ),
 
-          if (_pfaResult != null) ...[
+          if (context.watch<SimulatorProvider>().lastResult != null) ...[
             const SizedBox(height: 16),
-            _buildPFAResultCard(),
+            _buildPFAResultCard(context),
           ],
           const SizedBox(height: 24),
         ],
@@ -276,40 +250,41 @@ class _SimulatorScreenState extends State<SimulatorScreen>
     );
   }
 
-  Widget _buildDemographicRow() {
+  Widget _buildDemographicRow(BuildContext context) {
+    final provider = context.watch<SimulatorProvider>();
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(Spacing.m),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.grey.shade300),
+        color: _card,
+        borderRadius: BorderRadius.circular(Radii.m),
+        border: Border.all(color: _border),
       ),
       child: Row(
         children: [
           Expanded(
             child: _buildCompactDropdown(
               label: 'Sexo',
-              value: _selectedGender,
+              value: provider.genero,
               items: _genders,
-              onChanged: (v) => setState(() => _selectedGender = v!),
+              onChanged: (v) => provider.updateGenero(v!),
             ),
           ),
           const SizedBox(width: 8),
           Expanded(
             child: _buildCompactDropdown(
               label: 'Edad',
-              value: _selectedAgeGroup,
+              value: provider.grupoEdad,
               items: _ageGroups,
-              onChanged: (v) => setState(() => _selectedAgeGroup = v!),
+              onChanged: (v) => provider.updateGrupoEdad(v!),
             ),
           ),
           const SizedBox(width: 8),
           Expanded(
             child: _buildCompactDropdown(
               label: 'Altitud',
-              value: _selectedAltitude,
+              value: provider.altitud,
               items: _altitudes,
-              onChanged: (v) => setState(() => _selectedAltitude = v!),
+              onChanged: (v) => provider.updateAltitud(v!),
             ),
           ),
         ],
@@ -370,26 +345,26 @@ class _SimulatorScreenState extends State<SimulatorScreen>
   Widget _buildSectionLabel(String title) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: Spacing.m, vertical: 10),
       decoration: BoxDecoration(
-        color: Colors.grey.shade100,
+        color: _cardSec,
         border: Border(
-          bottom: BorderSide(color: Colors.grey.shade300),
-          top: BorderSide(color: Colors.grey.shade300),
+          bottom: BorderSide(color: _border),
+          top: BorderSide(color: _border),
         ),
       ),
       child: Row(
         children: [
           Text(
             title,
-            style: GoogleFonts.roboto(
+            style: GoogleFonts.inter(
               fontSize: 14,
               fontWeight: FontWeight.w600,
-              color: Colors.black87,
+              color: _textPri,
             ),
           ),
           const SizedBox(width: 6),
-          Icon(Icons.keyboard_arrow_up, size: 20, color: Colors.grey.shade600),
+          const Icon(Icons.keyboard_arrow_up, size: 20, color: _textTer),
         ],
       ),
     );
@@ -404,21 +379,21 @@ class _SimulatorScreenState extends State<SimulatorScreen>
       ),
       child: Column(
         children: [
-          _buildFormInputRow('Altura', _heightController, 'pulg', Icons.height),
+          _buildFormInputRow('Altura', _heightController, 'cm', Icons.height),
           Divider(height: 1, color: Colors.grey.shade200),
-          _buildFormRowText('Ingrese altura en pulgadas', italic: true,
-              subtext: 'Ej: 68 para 5\'8"'),
+          _buildFormRowText('Ingrese su altura en centímetros', italic: true,
+              subtext: 'Ej: 170 para 1.70m'),
           Divider(height: 1, color: Colors.grey.shade200),
-          _buildFormInputRow('Cintura', _waistController, 'pulg', Icons.straighten),
+          _buildFormInputRow('Cintura', _waistController, 'cm', Icons.straighten),
           Divider(height: 1, color: Colors.grey.shade200),
-          _buildFormRowText('Ingrese cintura en pulgadas', italic: true,
-              subtext: 'Medida al ombligo'),
+          _buildFormRowText('Ingrese cintura en centímetros', italic: true,
+              subtext: 'Medida a la altura del ombligo'),
           Divider(height: 1, color: Colors.grey.shade200),
-          _buildFormInputRow('Peso', _weightController, 'lb',
+          _buildFormInputRow('Peso', _weightController, 'kg',
               Icons.monitor_weight_outlined),
           Divider(height: 1, color: Colors.grey.shade200),
           _buildFormRowText('', italic: false,
-              subtext: 'Ingrese peso en libras'),
+              subtext: 'Ingrese su peso en kilogramos'),
         ],
       ),
     );
@@ -462,7 +437,7 @@ class _SimulatorScreenState extends State<SimulatorScreen>
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(6),
-                  borderSide: BorderSide(color: NavyPFAApp.navyPrimary),
+                  borderSide: BorderSide(color: AppColors.navyPrimary),
                 ),
                 suffixText: unit,
                 suffixStyle: GoogleFonts.roboto(
@@ -511,7 +486,8 @@ class _SimulatorScreenState extends State<SimulatorScreen>
     );
   }
 
-  Widget _buildBCAResultsTable() {
+  Widget _buildBCAResultsTable(BuildContext context) {
+    final result = context.watch<SimulatorProvider>().lastResult;
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -523,94 +499,154 @@ class _SimulatorScreenState extends State<SimulatorScreen>
         children: [
           Padding(
             padding: const EdgeInsets.all(12),
-            child: Text(
-              'Resultados del Control de Peso',
-              style: GoogleFonts.roboto(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: Colors.black87,
-              ),
-            ),
-          ),
-          Divider(height: 1, color: Colors.grey.shade200),
-          // Table header
-          Container(
-            color: Colors.grey.shade50,
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
             child: Row(
               children: [
-                _tableHeaderCell('Paso', flex: 1),
-                _tableHeaderCell('Prueba', flex: 3),
-                _tableHeaderCell('Valor', flex: 2),
-                _tableHeaderCell('Máx', flex: 2),
-                _tableHeaderCell('Resultado', flex: 2),
-              ],
-            ),
-          ),
-          Divider(height: 1, color: Colors.grey.shade200),
-          // Table row
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    _tableCell('1', flex: 1),
-                    _tableCell('Relación\nCintura/Altura', flex: 3),
-                    _tableCell(_bcaRatioResult ?? '-', flex: 2),
-                    _tableCell('0.5500', flex: 2),
-                    _tableCell(_bcaStatus ?? '-', flex: 2),
-                  ],
-                ),
-                if (_bmiResult != null) ...[
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      _tableCell('2', flex: 1),
-                      _tableCell('IMC Simulado', flex: 3),
-                      _tableCell(_bmiResult!, flex: 2),
-                      _tableCell('27.0', flex: 2),
-                      _tableCell('-', flex: 2),
-                    ],
+                Icon(Icons.monitor_weight_outlined, size: 20, color: AppColors.navyPrimary),
+                const SizedBox(width: 8),
+                Text(
+                  'Resultados del Control de Peso',
+                  style: GoogleFonts.roboto(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black87,
                   ),
-                ],
+                ),
               ],
             ),
           ),
           Divider(height: 1, color: Colors.grey.shade200),
+
+          // ── RATIO CINTURA/ALTURA ──
+          if (result?.cinturaRatio != null)
+            _buildBCAMetricCard(
+              titulo: 'Relación Cintura / Altura',
+              valor: result!.cinturaRatio!,
+              maximo: 0.5500,
+              unidad: '',
+              decimales: 4,
+              aprobado: result.estadoBca == 'APROBADO',
+              iconData: Icons.straighten,
+              recomendacion: result.estadoBca == 'APROBADO'
+                  ? '✅ Su relación cintura/altura está dentro del estándar permitido.'
+                  : '⚠️ Su relación cintura/altura excede el límite de 0.5500. Reduzca la circunferencia de cintura mediante ejercicio cardiovascular y dieta controlada.',
+            ),
+
+          // ── IMC ──
+          if (result?.imc != null)
+            _buildBCAMetricCard(
+              titulo: 'Índice de Masa Corporal (IMC)',
+              valor: result!.imc!,
+              maximo: 27.0,
+              unidad: 'kg/m²',
+              decimales: 1,
+              aprobado: result.imc! <= 27.0,
+              iconData: Icons.speed,
+              recomendacion: result.imc! <= 18.5
+                  ? '💡 Su IMC indica bajo peso. Considere aumentar su ingesta calórica con alimentación balanceada.'
+                  : result.imc! <= 24.9
+                      ? '✅ Su IMC está en rango saludable. Mantenga su rutina actual.'
+                      : result.imc! <= 27.0
+                          ? '⚠️ Su IMC está en rango de sobrepeso pero dentro del límite naval. Vigile su alimentación.'
+                          : '🔴 Su IMC supera el límite de 27.0. Se recomienda un plan de pérdida de peso gradual: reduzca 500 calorías diarias y aumente la actividad cardiovascular.',
+            ),
+
+          if (result == null || (result.cinturaRatio == null && result.imc == null))
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Text(
+                'Ingrese los datos de altura, cintura y peso para ver los resultados.',
+                style: GoogleFonts.roboto(fontSize: 13, color: Colors.grey.shade500, fontStyle: FontStyle.italic),
+              ),
+            ),
         ],
       ),
     );
   }
 
-  Widget _tableHeaderCell(String text, {required int flex}) {
-    return Expanded(
-      flex: flex,
-      child: Text(
-        text,
-        style: GoogleFonts.roboto(
-          fontSize: 12,
-          fontWeight: FontWeight.w700,
-          color: Colors.black87,
-        ),
+  Widget _buildBCAMetricCard({
+    required String titulo,
+    required double valor,
+    required double maximo,
+    required String unidad,
+    required int decimales,
+    required bool aprobado,
+    required IconData iconData,
+    required String recomendacion,
+  }) {
+    final color = aprobado ? const Color(0xFF4CAF50) : const Color(0xFFF44336);
+    final ratio = (valor / maximo).clamp(0.0, 1.5);
+    final barRatio = ratio.clamp(0.0, 1.0);
+
+    return Padding(
+      padding: const EdgeInsets.all(12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(iconData, size: 18, color: color),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(titulo, style: GoogleFonts.roboto(fontSize: 13, fontWeight: FontWeight.w600, color: Colors.black87)),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                decoration: BoxDecoration(
+                  color: color.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(
+                  aprobado ? 'APROBADO' : 'NO APROBADO',
+                  style: GoogleFonts.roboto(fontSize: 11, fontWeight: FontWeight.w700, color: color),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          // Progress bar
+          Row(
+            children: [
+              Expanded(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(4),
+                  child: LinearProgressIndicator(
+                    value: barRatio,
+                    minHeight: 8,
+                    backgroundColor: Colors.grey.shade200,
+                    valueColor: AlwaysStoppedAnimation(color),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Text(
+                '${valor.toStringAsFixed(decimales)} / ${maximo.toStringAsFixed(decimales)} $unidad',
+                style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.black54),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          // Recommendation
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: color.withValues(alpha: 0.05),
+              borderRadius: BorderRadius.circular(6),
+              border: Border.all(color: color.withValues(alpha: 0.15)),
+            ),
+            child: Text(
+              recomendacion,
+              style: GoogleFonts.roboto(fontSize: 12, color: Colors.black87, height: 1.4),
+            ),
+          ),
+          const SizedBox(height: 4),
+        ],
       ),
     );
   }
 
-  Widget _tableCell(String text, {required int flex}) {
-    return Expanded(
-      flex: flex,
-      child: Text(
-        text,
-        style: GoogleFonts.roboto(
-          fontSize: 12,
-          color: Colors.black54,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildPRTForm() {
+  Widget _buildPRTForm(BuildContext context) {
+    final provider = context.watch<SimulatorProvider>();
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -690,7 +726,7 @@ class _SimulatorScreenState extends State<SimulatorScreen>
                   ),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton<String>(
-                      value: _selectedCardioType,
+                      value: provider.tipoCardio,
                       isExpanded: true,
                       isDense: true,
                       style: GoogleFonts.roboto(
@@ -698,8 +734,7 @@ class _SimulatorScreenState extends State<SimulatorScreen>
                       items: _cardioTypes.map((e) {
                         return DropdownMenuItem(value: e, child: Text(e));
                       }).toList(),
-                      onChanged: (v) =>
-                          setState(() => _selectedCardioType = v!),
+                      onChanged: (v) => provider.updateTipoCardio(v!),
                     ),
                   ),
                 ),
@@ -801,23 +836,26 @@ class _SimulatorScreenState extends State<SimulatorScreen>
     );
   }
 
-  Widget _buildPFAResultCard() {
+  Widget _buildPFAResultCard(BuildContext context) {
+    final result = context.watch<SimulatorProvider>().lastResult;
+    if (result == null) return const SizedBox.shrink();
+
     Color levelColor;
     IconData levelIcon;
-    switch (_pfaLevel) {
-      case 'OUTSTANDING':
+    switch (result.nivel) {
+      case 'SOBRESALIENTE':
         levelColor = const Color(0xFF4CAF50);
         levelIcon = Icons.emoji_events_rounded;
         break;
-      case 'EXCELLENT':
+      case 'EXCELENTE':
         levelColor = const Color(0xFF2196F3);
         levelIcon = Icons.star_rounded;
         break;
-      case 'GOOD':
+      case 'BUENO':
         levelColor = const Color(0xFF03A9F4);
         levelIcon = Icons.thumb_up_rounded;
         break;
-      case 'SATISFACTORY':
+      case 'SATISFACTORIO':
         levelColor = const Color(0xFFFFC107);
         levelIcon = Icons.warning_rounded;
         break;
@@ -828,43 +866,210 @@ class _SimulatorScreenState extends State<SimulatorScreen>
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: levelColor.withOpacity(0.05),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: levelColor.withOpacity(0.3)),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.shade200),
       ),
       child: Column(
         children: [
-          Icon(levelIcon, size: 40, color: levelColor),
-          const SizedBox(height: 10),
-          Text(
-            _pfaResult!,
-            style: GoogleFonts.roboto(
-              fontSize: 28,
-              fontWeight: FontWeight.w900,
-              color: Colors.black87,
+          // ── HEADER: Total Score ──
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [levelColor.withValues(alpha: 0.15), levelColor.withValues(alpha: 0.05)],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+            ),
+            child: Column(
+              children: [
+                Icon(levelIcon, size: 40, color: levelColor),
+                const SizedBox(height: 8),
+                Text(
+                  '${result.notaTotal.toStringAsFixed(1)} / 100',
+                  style: GoogleFonts.roboto(
+                    fontSize: 30, fontWeight: FontWeight.w900, color: Colors.black87,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+                  decoration: BoxDecoration(
+                    color: levelColor.withValues(alpha: 0.2),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Text(
+                    result.nivel,
+                    style: GoogleFonts.roboto(fontSize: 13, fontWeight: FontWeight.w800, color: levelColor, letterSpacing: 1),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          Divider(height: 1, color: Colors.grey.shade200),
+
+          // ── BREAKDOWN: Push-ups ──
+          _buildEventBreakdown(
+            titulo: 'Flexiones de Pecho',
+            icon: Icons.fitness_center,
+            nota: result.notaFlexiones,
+            rawValue: '${result.flexionesRaw ?? 0} repeticiones',
+            recomendacion: _getPushUpRecommendation(result.notaFlexiones, result.flexionesRaw ?? 0),
+          ),
+
+          Divider(height: 1, color: Colors.grey.shade200),
+
+          // ── BREAKDOWN: Abs ──
+          _buildEventBreakdown(
+            titulo: 'Plancha / Abdominales',
+            icon: Icons.accessibility_new,
+            nota: result.notaAbdominales,
+            rawValue: '${result.abdominalesRaw ?? 0} repeticiones',
+            recomendacion: _getAbsRecommendation(result.notaAbdominales, result.abdominalesRaw ?? 0),
+          ),
+
+          Divider(height: 1, color: Colors.grey.shade200),
+
+          // ── BREAKDOWN: Cardio ──
+          _buildEventBreakdown(
+            titulo: 'Evento Cardiovascular (${result.tipoCardio})',
+            icon: Icons.directions_run,
+            nota: result.notaCardio,
+            rawValue: _formatCardioTime(result.cardioSegundos ?? 0),
+            recomendacion: _getCardioRecommendation(result.notaCardio, result.cardioSegundos ?? 0),
+          ),
+
+          const SizedBox(height: 8),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildEventBreakdown({
+    required String titulo,
+    required IconData icon,
+    required double nota,
+    required String rawValue,
+    required String recomendacion,
+  }) {
+    final color = nota >= 90
+        ? const Color(0xFF4CAF50)
+        : nota >= 75
+            ? const Color(0xFF2196F3)
+            : nota >= 60
+                ? const Color(0xFF03A9F4)
+                : nota >= 45
+                    ? const Color(0xFFFFC107)
+                    : const Color(0xFFF44336);
+
+    final barValue = (nota / 100).clamp(0.0, 1.0);
+
+    return Padding(
+      padding: const EdgeInsets.all(14),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(icon, size: 18, color: AppColors.navyPrimary),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(titulo, style: GoogleFonts.roboto(fontSize: 13, fontWeight: FontWeight.w600, color: Colors.black87)),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                decoration: BoxDecoration(
+                  color: color.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(
+                  '${nota.toStringAsFixed(1)} pts',
+                  style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w700, color: color),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          Text(rawValue, style: GoogleFonts.roboto(fontSize: 12, color: Colors.black54)),
+          const SizedBox(height: 8),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(4),
+            child: LinearProgressIndicator(
+              value: barValue,
+              minHeight: 6,
+              backgroundColor: Colors.grey.shade200,
+              valueColor: AlwaysStoppedAnimation(color),
             ),
           ),
           const SizedBox(height: 8),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+            width: double.infinity,
+            padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: levelColor.withOpacity(0.15),
-              borderRadius: BorderRadius.circular(16),
+              color: color.withValues(alpha: 0.05),
+              borderRadius: BorderRadius.circular(6),
+              border: Border.all(color: color.withValues(alpha: 0.15)),
             ),
             child: Text(
-              _pfaLevel!,
-              style: GoogleFonts.roboto(
-                fontSize: 13,
-                fontWeight: FontWeight.w800,
-                color: levelColor,
-                letterSpacing: 1,
-              ),
+              recomendacion,
+              style: GoogleFonts.roboto(fontSize: 12, color: Colors.black87, height: 1.4),
             ),
           ),
         ],
       ),
     );
+  }
+
+  String _formatCardioTime(int totalSeconds) {
+    final min = totalSeconds ~/ 60;
+    final sec = totalSeconds % 60;
+    return '${min.toString().padLeft(2, '0')}:${sec.toString().padLeft(2, '0')} minutos';
+  }
+
+  String _getPushUpRecommendation(double nota, int reps) {
+    if (nota >= 90) {
+      return '🏆 ¡Excelente rendimiento en flexiones! Está por encima del estándar. Mantenga su entrenamiento actual.';
+    } else if (nota >= 75) {
+      return '👍 Buen rendimiento. Para alcanzar el nivel Sobresaliente, aumente ${(reps * 0.2).ceil()} repeticiones más. Agregue series de flexiones inclinadas y diamante.';
+    } else if (nota >= 60) {
+      return '📈 Rendimiento aceptable. Necesita mejorar al menos ${(reps * 0.3).ceil()} repeticiones más. Practique 3 series al fallo cada día y descanse 48h entre sesiones intensas.';
+    } else if (nota >= 45) {
+      return '⚠️ Rendimiento por debajo de lo esperado. Implemente un plan progresivo: empiece con flexiones de rodillas, agregue 2 repeticiones por semana.';
+    } else {
+      return '🔴 Necesita mejorar significativamente. Comience con flexiones asistidas (pared o rodillas), 3 series de 10 repeticiones diarias. Aumente gradualmente.';
+    }
+  }
+
+  String _getAbsRecommendation(double nota, int reps) {
+    if (nota >= 90) {
+      return '🏆 ¡Excelente rendimiento abdominal! Su core es fuerte. Diversifique con planchas laterales y ejercicios de anti-rotación.';
+    } else if (nota >= 75) {
+      return '👍 Buen rendimiento. Para subir de nivel, agregue planchas de 60 segundos y haga series de crunch biciclo para fortalecer oblicuos.';
+    } else if (nota >= 60) {
+      return '📈 Rendimiento aceptable. Fortalezca el core con 3 series de plancha (30-45 seg) + 20 abdominales diarios por 4 semanas.';
+    } else if (nota >= 45) {
+      return '⚠️ Su core necesita refuerzo. Haga plancha acumulando tiempo (meta: 60 seg) y 3 series de crunch 15 reps diarios.';
+    } else {
+      return '🔴 Área crítica de mejora. Comience con plancha de rodillas 20 seg × 3, y 10 abdominales parciales. Aumente cada semana.';
+    }
+  }
+
+  String _getCardioRecommendation(double nota, int totalSec) {
+    if (nota >= 90) {
+      return '🏆 ¡Excelente condición cardiovascular! Está en el rango superior. Mantenga su plan de entrenamiento aeróbico.';
+    } else if (nota >= 75) {
+      return '👍 Buena condición cardio. Para mejorar, agregue intervalos de alta intensidad (HIIT) 2 veces por semana y trote continuo 3 veces.';
+    } else if (nota >= 60) {
+      return '📈 Condición aceptable. Aumente la frecuencia de trote a 4x/semana. Alterne sesiones de 30 min a ritmo moderado con intervalos cortos.';
+    } else if (nota >= 45) {
+      return '⚠️ Necesita mejorar su resistencia. Comience con caminata rápida 20 min/día, progresando a trote ligero. Meta: reducir su tiempo actual un 10%.';
+    } else {
+      return '🔴 Condición cardiovascular baja. Plan de 6 semanas recomendado: Semana 1-2 caminata 20 min, Semana 3-4 alternancia caminata/trote, Semana 5-6 trote continuo.';
+    }
   }
 }

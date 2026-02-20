@@ -1,46 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../core/constants.dart';
 
 class ConstructionScreen extends StatelessWidget {
   final String title;
-
-  const ConstructionScreen({super.key, this.title = 'En Construcción'});
+  const ConstructionScreen({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.darkBg,
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              Icons.engineering,
-              size: 80,
-              color: Colors.grey.shade400,
-            ),
-            const SizedBox(height: 24),
-            Text(
-              title,
-              textAlign: TextAlign.center,
-              style: GoogleFonts.roboto(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: const Color(0xFF001F5B), // Navy Primary
+            Container(
+              width: 80, height: 80,
+              decoration: BoxDecoration(
+                color: AppColors.darkCardSec,
+                borderRadius: BorderRadius.circular(Radii.full),
               ),
+              child: const Icon(Icons.construction, size: 36, color: AppColors.darkTextTertiary),
             ),
-            const SizedBox(height: 16),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40),
-              child: Text(
-                'Esta funcionalidad está actualmente en desarrollo. Pronto estará disponible para el personal de la Armada.',
-                textAlign: TextAlign.center,
-                style: GoogleFonts.roboto(
-                  fontSize: 16,
-                  color: Colors.grey.shade600,
-                  height: 1.5,
-                ),
-              ),
+            const SizedBox(height: Spacing.m),
+            Text(title, style: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.w600, color: AppColors.darkTextPrimary)),
+            const SizedBox(height: Spacing.s),
+            SizedBox(
+              width: 280,
+              child: Text('Esta sección está en desarrollo.', textAlign: TextAlign.center,
+                  style: GoogleFonts.inter(fontSize: 14, color: AppColors.darkTextSecondary)),
             ),
           ],
         ),

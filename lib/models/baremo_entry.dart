@@ -1,18 +1,21 @@
 class BaremoThreshold {
-  final num min; // min reps for flexiones/abdominales, or max seconds for cardio
+  final num min;
   final double nota;
   final String nivel;
+  final int? maxSeg; // max seconds for cardio events
 
   BaremoThreshold({
     required this.min,
     required this.nota,
     required this.nivel,
+    this.maxSeg,
   });
 
   factory BaremoThreshold.fromJson(Map<String, dynamic> j) => BaremoThreshold(
         min: j['min'] as num? ?? 0,
         nota: (j['nota'] as num?)?.toDouble() ?? 0,
         nivel: j['nivel'] as String? ?? '',
+        maxSeg: j['maxSeg'] as int?,
       );
 }
 

@@ -8,7 +8,6 @@ class ChatProvider extends ChangeNotifier {
   final DatabaseService _db;
   List<ChatMessageModel> _messages = [];
   bool _isLoading = false;
-  bool _isInitialized = false;
 
   ChatProvider(this._gemini, this._db);
 
@@ -23,7 +22,6 @@ class ChatProvider extends ChangeNotifier {
       baremosContext: baremosContext,
       nutritionContext: nutritionContext,
     );
-    _isInitialized = true;
     notifyListeners();
   }
 

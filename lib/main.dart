@@ -1,9 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+
+import 'core/theme.dart';
 import 'main_screen.dart';
 
-void main() {
+// Services
+import 'services/database_service.dart';
+import 'services/json_loader_service.dart';
+import 'services/scoring_service.dart';
+import 'services/gemini_service.dart';
+
+// Providers
+import 'providers/content_provider.dart';
+import 'providers/user_provider.dart';
+import 'providers/pfa_history_provider.dart';
+import 'providers/simulator_provider.dart';
+import 'providers/chat_provider.dart';
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
@@ -11,95 +26,48 @@ void main() {
       statusBarIconBrightness: Brightness.light,
     ),
   );
-  runApp(const NavyPFAApp());
+
+  // Initialize Services
+  final dbService = DatabaseService();
+  final baremos = await JsonLoaderService.loadBaremos();
+  
+  final scoringService = ScoringService(baremos);
+  final geminiService = GeminiService();
+
+  runApp(
+    MultiProvider(
+      providers: [
+        Provider.value(value: scoringService),
+        ChangeNotifierProvider(
+          create: (_) => ContentProvider()..loadAllContent(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => UserProvider(dbService)..loadProfile(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => PfaHistoryProvider(dbService)..loadHistory(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => SimulatorProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ChatProvider(geminiService, dbService)..loadHistory(),
+        ),
+      ],
+      child: const NavyPFAApp(),
+    ),
+  );
 }
 
 class NavyPFAApp extends StatelessWidget {
   const NavyPFAApp({super.key});
-
-  // Colores oficiales Navy PFA
-  static const Color navyPrimary = Color(0xFF001F5B);
-  static const Color navyDark = Color(0xFF00133D);
-  static const Color goldAccent = Color(0xFFC5A44E);
-  static const Color lightGold = Color(0xFFE8D5A0);
-  static const Color surfaceWhite = Color(0xFFF5F6FA);
-  static const Color navyAppBar = Color(0xFF1B2A4A);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Evaluación Física Armada Ecuador',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        useMaterial3: true,
-        brightness: Brightness.light,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: navyPrimary,
-          primary: navyPrimary,
-          secondary: goldAccent,
-          surface: Colors.white,
-          onPrimary: Colors.white,
-          onSecondary: navyDark,
-        ),
-        scaffoldBackgroundColor: Colors.white,
-        textTheme: GoogleFonts.robotoTextTheme().apply(
-          bodyColor: Colors.black87,
-          displayColor: Colors.black87,
-        ),
-        appBarTheme: AppBarTheme(
-          backgroundColor: navyAppBar,
-          foregroundColor: Colors.white,
-          centerTitle: false,
-          elevation: 2,
-          shadowColor: Colors.black26,
-          titleTextStyle: GoogleFonts.roboto(
-            fontSize: 17,
-            fontWeight: FontWeight.w500,
-            color: Colors.white,
-          ),
-        ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: navyPrimary,
-            foregroundColor: Colors.white,
-            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            textStyle: GoogleFonts.roboto(
-              fontWeight: FontWeight.w600,
-              fontSize: 15,
-            ),
-          ),
-        ),
-        inputDecorationTheme: InputDecorationTheme(
-          filled: true,
-          fillColor: Colors.white,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide(color: Colors.grey.shade300),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide(color: Colors.grey.shade300),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: navyPrimary, width: 2),
-          ),
-          labelStyle: GoogleFonts.roboto(color: Colors.grey.shade600),
-        ),
-        dividerTheme: DividerThemeData(
-          color: Colors.grey.shade200,
-          thickness: 1,
-          space: 0,
-        ),
-        listTileTheme: ListTileThemeData(
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-          iconColor: Colors.grey.shade600,
-        ),
-      ),
+      theme: buildNavyTheme(),
       home: const MainScreen(),
     );
   }

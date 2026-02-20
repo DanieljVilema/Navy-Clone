@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../main.dart';
+import 'package:provider/provider.dart';
+import '../../providers/content_provider.dart';
+import '../../core/constants.dart';
 
 class ServicesScreen extends StatelessWidget {
   const ServicesScreen({super.key});
@@ -8,20 +10,20 @@ class ServicesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.darkBg,
       body: ListView(
         physics: const BouncingScrollPhysics(),
         padding: EdgeInsets.zero,
         children: [
           // ── HEADER DESCRIPTION ──
           Container(
-            padding: const EdgeInsets.all(20),
-            color: Colors.grey.shade50,
+            padding: const EdgeInsets.all(Spacing.m),
+            color: AppColors.darkCard,
             child: Text(
               'Todos los recursos de políticas del Programa de Preparación Física de la Armada, incluyendo lo siguiente:',
-              style: GoogleFonts.roboto(
+              style: GoogleFonts.inter(
                 fontSize: 14,
-                color: Colors.black54,
+                color: AppColors.darkTextSecondary,
                 height: 1.5,
               ),
             ),
@@ -29,51 +31,13 @@ class ServicesScreen extends StatelessWidget {
           Divider(height: 1, color: Colors.grey.shade200),
 
           // ── POLICY RESOURCE ITEMS ──
-          _PolicyItem(
-            title: 'Guía del Programa de Preparación Física',
-            subtitle: 'Reglamento General de Deportes',
-            onTap: () {},
-          ),
-          _PolicyItem(
-            title: 'Guía de Evaluación Física',
-            subtitle: 'Guía de políticas actualizada y preguntas frecuentes',
-            onTap: () {},
-          ),
-          _PolicyItem(
-            title: 'Estándares de Control de Peso',
-            subtitle: 'Estándares de Evaluación de Composición Corporal',
-            onTap: () {},
-          ),
-          _PolicyItem(
-            title: 'Estándares de Pruebas Físicas',
-            subtitle: 'Estándares de eventos de la Prueba de Preparación Física',
-            onTap: () {},
-          ),
-          _PolicyItem(
-            title: 'Guía del Líder de Fitness del Comando',
-            subtitle: 'Responsabilidades y procedimientos',
-            onTap: () {},
-          ),
-          _PolicyItem(
-            title: 'Guía de Usuario del Sistema de Gestión',
-            subtitle: 'Sistema de Gestión de Información de Preparación Física',
-            onTap: () {},
-          ),
-          _PolicyItem(
-            title: 'Programa de Mejora Física (FEP)',
-            subtitle: 'Requisitos y procedimientos del FEP',
-            onTap: () {},
-          ),
-          _PolicyItem(
-            title: 'Exenciones Médicas',
-            subtitle: 'Guía de autorización médica y exenciones',
-            onTap: () {},
-          ),
-          _PolicyItem(
-            title: 'Mensajes Oficiales y Radiogramas',
-            subtitle: 'Mensajes relacionados con la Evaluación Física',
-            onTap: () {},
-          ),
+          ...context.watch<ContentProvider>().regulations.where((r) => !r.isExternal).map(
+                (r) => _PolicyItem(
+                  title: r.titulo,
+                  subtitle: r.subtitulo,
+                  onTap: () {},
+                ),
+              ).toList(),
 
           const SizedBox(height: 20),
 
@@ -92,24 +56,14 @@ class ServicesScreen extends StatelessWidget {
           ),
           Divider(height: 1, color: Colors.grey.shade200),
 
-          _PolicyItem(
-            title: 'Sitio Web de Fitness Naval',
-            subtitle: 'www.armada.mil.ec',
-            trailing: Icons.open_in_new,
-            onTap: () {},
-          ),
-          _PolicyItem(
-            title: 'Dirección de Personal',
-            subtitle: 'Recursos del comando de personal',
-            trailing: Icons.open_in_new,
-            onTap: () {},
-          ),
-          _PolicyItem(
-            title: 'Sanidad Naval',
-            subtitle: 'Recursos de salud y bienestar',
-            trailing: Icons.open_in_new,
-            onTap: () {},
-          ),
+          ...context.watch<ContentProvider>().regulations.where((r) => r.isExternal).map(
+                (r) => _PolicyItem(
+                  title: r.titulo,
+                  subtitle: r.subtitulo,
+                  trailing: Icons.open_in_new,
+                  onTap: () {},
+                ),
+              ).toList(),
 
           const SizedBox(height: 32),
         ],

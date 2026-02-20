@@ -1,57 +1,84 @@
 import 'package:flutter/material.dart';
 
+// ── ArmadaFit Design System ──────────────────────────────────────────────────
+
+/// Color Palette
 class AppColors {
-  static const Color navyPrimary = Color(0xFF001F5B);
-  static const Color navyDark = Color(0xFF00133D);
-  static const Color goldAccent = Color(0xFFC5A44E);
-  static const Color lightGold = Color(0xFFE8D5A0);
-  static const Color surfaceWhite = Color(0xFFF5F6FA);
-  static const Color navyAppBar = Color(0xFF1B2A4A);
+  // Primary
+  static const Color primary = Color(0xFF0750F7);
+  static const Color primaryDark = Color(0xFF0640D1);
+  static const Color primaryLight = Color(0xFF2968F8);
 
-  // Performance level colors
-  static const Color outstanding = Color(0xFF4CAF50);
-  static const Color excellent = Color(0xFF2196F3);
-  static const Color good = Color(0xFF03A9F4);
-  static const Color satisfactory = Color(0xFFFFC107);
-  static const Color failure = Color(0xFFF44336);
+  // Status
+  static const Color success = Color(0xFF10B981);
+  static const Color danger = Color(0xFFEF4444);
+  static const Color warning = Color(0xFFFBBF24);
 
-  static Color colorForLevel(String level) {
-    switch (level.toUpperCase()) {
-      case 'SOBRESALIENTE':
-        return outstanding;
-      case 'EXCELENTE':
-        return excellent;
-      case 'BUENO':
-        return good;
-      case 'SATISFACTORIO':
-        return satisfactory;
-      default:
-        return failure;
-    }
-  }
+  // Dark Mode (default)
+  static const Color darkBg = Color(0xFF1C1C1E);
+  static const Color darkCard = Color(0xFF2C2C2E);
+  static const Color darkCardSec = Color(0xFF3A3A3C);
+  static const Color darkTextPrimary = Color(0xFFFFFFFF);
+  static const Color darkTextSecondary = Color(0xFF9CA3AF);
+  static const Color darkTextTertiary = Color(0xFF6B7280);
+  static const Color darkBorder = Color(0xFF3A3A3C);
+  static const Color darkInput = Color(0xFF2C2C2E);
 
-  static IconData iconForLevel(String level) {
-    switch (level.toUpperCase()) {
-      case 'SOBRESALIENTE':
-        return Icons.emoji_events_rounded;
-      case 'EXCELENTE':
-        return Icons.star_rounded;
-      case 'BUENO':
-        return Icons.thumb_up_rounded;
-      case 'SATISFACTORIO':
-        return Icons.warning_rounded;
-      default:
-        return Icons.dangerous_rounded;
-    }
-  }
+  // Light Mode
+  static const Color lightBg = Color(0xFFF5F5F7);
+  static const Color lightCard = Color(0xFFFFFFFF);
+  static const Color lightCardSec = Color(0xFFF0F0F2);
+  static const Color lightTextPrimary = Color(0xFF1C1C1E);
+  static const Color lightTextSecondary = Color(0xFF6B7280);
+  static const Color lightTextTertiary = Color(0xFF9CA3AF);
+  static const Color lightBorder = Color(0xFFE5E7EB);
+  static const Color lightInput = Color(0xFFFFFFFF);
+
+  // Legacy aliases (keep backward compat)
+  static const Color navyPrimary = primary;
+  static const Color goldAccent = Color(0xFFD4AF37);
+  static const Color lightGold = Color(0xFFF5E6B8);
 }
 
-class AppStrings {
-  static const String appTitle = 'Evaluación Física Armada Ecuador';
-  static const String appVersion = '3.0.29';
-  static const String drawerTitle = 'Evaluación Física Armada';
+/// Spacing (4px system)
+class Spacing {
+  static const double xs = 4;
+  static const double s = 8;
+  static const double m = 16;
+  static const double l = 24;
+  static const double xl = 32;
+  static const double xxl = 48;
+}
 
-  // Performance levels
+/// Border Radius
+class Radii {
+  static const double s = 8;
+  static const double m = 12;
+  static const double l = 16;
+  static const double xl = 24;
+  static const double full = 9999;
+}
+
+/// Shadows
+class AppShadows {
+  static List<BoxShadow> get card => [
+        BoxShadow(
+          color: Colors.black.withValues(alpha: 0.05),
+          offset: const Offset(0, 1),
+          blurRadius: 3,
+        ),
+      ];
+  static List<BoxShadow> get elevated => [
+        BoxShadow(
+          color: Colors.black.withValues(alpha: 0.10),
+          offset: const Offset(0, 2),
+          blurRadius: 8,
+        ),
+      ];
+}
+
+/// Level classification
+class AppStrings {
   static const String levelSobresaliente = 'SOBRESALIENTE';
   static const String levelExcelente = 'EXCELENTE';
   static const String levelBueno = 'BUENO';

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../main.dart';
+import 'package:provider/provider.dart';
+import '../../providers/content_provider.dart';
+import '../../core/constants.dart';
 
 class TrainingScreen extends StatelessWidget {
   const TrainingScreen({super.key});
@@ -8,24 +10,24 @@ class TrainingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.darkBg,
       body: ListView(
         physics: const BouncingScrollPhysics(),
         padding: EdgeInsets.zero,
         children: [
           // ── HEADER BANNER ──
           Container(
-            padding: const EdgeInsets.all(20),
-            color: Colors.grey.shade50,
+            padding: const EdgeInsets.all(Spacing.m),
+            color: AppColors.darkCard,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   'Biblioteca de Entrenamiento NOFFS',
-                  style: GoogleFonts.roboto(
+                  style: GoogleFonts.inter(
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
-                    color: Colors.black87,
+                    color: AppColors.darkTextPrimary,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -43,89 +45,11 @@ class TrainingScreen extends StatelessWidget {
           Divider(height: 1, color: Colors.grey.shade200),
 
           // ── WORKOUT CATEGORIES ──
-          const _WorkoutExpandableCategory(
-            title: 'Entrenamiento de Comando - Resistencia',
-            workoutCount: '15 rutinas',
-            exercises: [
-              'Carrera Continua 30 min',
-              'Intervalos 400m x 8',
-              'Carrera Fartlek 40 min',
-              'Carrera Progresiva',
-              'Carrera Tempo 25 min',
-            ],
-          ),
-          const _WorkoutExpandableCategory(
-            title: 'FEP - Fuerza Tren Superior',
-            workoutCount: '12 rutinas',
-            exercises: [
-              'Flexiones Progresivas',
-              'Flexiones Diamante',
-              'Plancha Militar',
-              'Fondos en Barras Paralelas',
-              'Flexiones Brazos Abiertos',
-            ],
-          ),
-          const _WorkoutExpandableCategory(
-            title: 'Core y Abdominales',
-            workoutCount: '10 rutinas',
-            exercises: [
-              'Abdominales Estándar',
-              'Sostener Plancha Frontal',
-              'Escalada de Montaña',
-              'Giros Rusos',
-              'Abdominales Bicicleta',
-            ],
-          ),
-          const _WorkoutExpandableCategory(
-            title: 'Natación y Cardio',
-            workoutCount: '8 rutinas',
-            exercises: [
-              'Técnica de Nado 450m',
-              'Intervalos en Piscina',
-              'Resistencia Acuática',
-              'Cardio Combinado',
-            ],
-          ),
-          const _WorkoutExpandableCategory(
-            title: 'Flexibilidad y Movilidad',
-            workoutCount: '8 rutinas',
-            exercises: [
-              'Estiramiento Dinámico',
-              'Yoga Militar',
-              'Movilidad Articular',
-              'Vuelta a la Calma Completa',
-            ],
-          ),
-          const _WorkoutExpandableCategory(
-            title: 'Ciclismo y Remo',
-            workoutCount: '6 rutinas',
-            exercises: [
-              'Prueba de Bici 12 min',
-              'Preparación Remo 2000m',
-              'Intervalos en Bici',
-              'Resistencia Cardio Alt.',
-            ],
-          ),
-          const _WorkoutExpandableCategory(
-            title: 'Entrenamiento Cuerpo Completo',
-            workoutCount: '10 rutinas',
-            exercises: [
-              'Circuito Cuerpo Total',
-              'Resistencia de Fuerza',
-              'Acondicionamiento de Combate',
-              'Fitness Funcional',
-            ],
-          ),
-          const _WorkoutExpandableCategory(
-            title: 'Preparación Pre-Evaluación',
-            workoutCount: '6 rutinas',
-            exercises: [
-              'Simulacro de Evaluación',
-              'Entrenamiento Específico',
-              'Protocolo Semana Pico',
-              'Rutina de Recuperación',
-            ],
-          ),
+          ...context.watch<ContentProvider>().training.map((t) => _WorkoutExpandableCategory(
+                title: t.titulo,
+                workoutCount: t.cantidadRutinas,
+                exercises: t.ejercicios,
+              )).toList(),
 
           const SizedBox(height: 32),
         ],
@@ -220,7 +144,7 @@ class _WorkoutExpandableCategoryState
                         width: 5,
                         height: 5,
                         decoration: BoxDecoration(
-                          color: NavyPFAApp.navyPrimary,
+                          color: AppColors.navyPrimary,
                           shape: BoxShape.circle,
                         ),
                       ),

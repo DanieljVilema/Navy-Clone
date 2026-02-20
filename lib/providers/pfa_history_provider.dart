@@ -12,7 +12,7 @@ class PfaHistoryProvider extends ChangeNotifier {
   PfaResult? get latestResult => _history.isNotEmpty ? _history.first : null;
   bool get hasHistory => _history.isNotEmpty;
 
-  Future<void> loadHistory(int userId) async {
+  Future<void> loadHistory([int userId = 1]) async {
     _history = await _db.getPfaHistory(userId);
     if (_history.isEmpty) {
       // Load all results if no user-specific ones found

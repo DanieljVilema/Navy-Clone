@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../main.dart';
+import 'package:provider/provider.dart';
+import '../../providers/user_provider.dart';
+import '../../providers/pfa_history_provider.dart';
+import '../../core/constants.dart';
+import 'widgets/score_history_chart.dart';
 
 class PerformanceScreen extends StatefulWidget {
   const PerformanceScreen({super.key});
@@ -11,9 +15,15 @@ class PerformanceScreen extends StatefulWidget {
 
 class _PerformanceScreenState extends State<PerformanceScreen> {
   @override
+  @override
   Widget build(BuildContext context) {
+    final userProvider = context.watch<UserProvider>();
+    final historyProvider = context.watch<PfaHistoryProvider>();
+    final user = userProvider.profile;
+    final latestHistory = historyProvider.latestResult;
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.darkBg,
       body: ListView(
         physics: const BouncingScrollPhysics(),
         padding: EdgeInsets.zero,
@@ -29,16 +39,16 @@ class _PerformanceScreenState extends State<PerformanceScreen> {
                   height: 60,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: NavyPFAApp.navyPrimary.withOpacity(0.1),
+                    color: AppColors.navyPrimary.withOpacity(0.1),
                     border: Border.all(
-                      color: NavyPFAApp.navyPrimary.withOpacity(0.3),
+                      color: AppColors.navyPrimary.withOpacity(0.3),
                       width: 2,
                     ),
                   ),
                   child: Icon(
                     Icons.person_rounded,
                     size: 32,
-                    color: NavyPFAApp.navyPrimary,
+                    color: AppColors.navyPrimary,
                   ),
                 ),
                 const SizedBox(width: 16),
@@ -47,7 +57,7 @@ class _PerformanceScreenState extends State<PerformanceScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'User Profile',
+                        user?.nombre ?? 'Usuario',
                         style: GoogleFonts.roboto(
                           fontSize: 18,
                           fontWeight: FontWeight.w700,
@@ -56,7 +66,7 @@ class _PerformanceScreenState extends State<PerformanceScreen> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'View your PFA history and performance data',
+                        'Revisa tu progreso y evaluaciones',
                         style: GoogleFonts.roboto(
                           fontSize: 13,
                           color: Colors.black54,
@@ -71,45 +81,51 @@ class _PerformanceScreenState extends State<PerformanceScreen> {
           Divider(height: 1, color: Colors.grey.shade200),
 
           // ── PFA HISTORY ──
-          _buildSectionHeader('PFA History'),
-
-          _HistoryItem(
-            cycle: 'Cycle 1 - 2024',
-            score: '82 / 100',
-            level: 'GOOD',
-            levelColor: const Color(0xFF03A9F4),
-          ),
-          _HistoryItem(
-            cycle: 'Cycle 2 - 2023',
-            score: '68 / 100',
-            level: 'SATISFACTORY',
-            levelColor: const Color(0xFFFFC107),
-          ),
-          _HistoryItem(
-            cycle: 'Cycle 1 - 2023',
-            score: '55 / 100',
-            level: 'FAILURE',
-            levelColor: const Color(0xFFF44336),
-          ),
+          _buildSectionHeader('Historial de Evaluaciones'),
+          
+          if (!historyProvider.hasHistory)
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Text(
+                'Aún no hay evaluaciones registradas. Utiliza el Simulador para guardar tus resultados.',
+                style: GoogleFonts.roboto(color: Colors.black54),
+              ),
+            )
+          else ...[
+            ...historyProvider.history.take(5).map((r) => _HistoryItem(
+              cycle: '${r.fecha.day.toString().padLeft(2, '0')}/${r.fecha.month.toString().padLeft(2, '0')}/${r.fecha.year}',
+              score: '${r.notaTotal.toStringAsFixed(1)} / 100',
+              level: r.nivel,
+            )),
+            const SizedBox(height: 16),
+            _buildSectionHeader('Evolución del Puntaje'),
+            ScoreHistoryChart(history: historyProvider.history),
+          ],
 
           // ── PERSONAL RECORDS ──
-          _buildSectionHeader('Personal Records'),
+          _buildSectionHeader('Mejores Marcas'),
 
           Container(
             padding: const EdgeInsets.all(16),
             child: Row(
               children: [
-                _RecordCard(label: 'Push-ups', value: '35', unit: 'reps'),
+                _RecordCard(label: 'Flexiones', value: latestHistory?.flexionesRaw?.toString() ?? '-', unit: 'reps'),
                 const SizedBox(width: 12),
-                _RecordCard(label: 'Curl-ups', value: '42', unit: 'reps'),
+                _RecordCard(label: 'Abdominales', value: latestHistory?.abdominalesRaw?.toString() ?? '-', unit: 'reps'),
                 const SizedBox(width: 12),
-                _RecordCard(label: 'Cardio', value: '13:20', unit: 'time'),
+                _RecordCard(
+                  label: 'Cardio', 
+                  value: latestHistory?.cardioSegundos != null 
+                      ? '${latestHistory!.cardioSegundos! ~/ 60}:${(latestHistory.cardioSegundos! % 60).toString().padLeft(2, '0')}' 
+                      : '-', 
+                  unit: 'tiempo'
+                ),
               ],
             ),
           ),
 
           // ── BCA DATA ──
-          _buildSectionHeader('BCA Information'),
+          _buildSectionHeader('Información Biométrica'),
 
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -119,42 +135,38 @@ class _PerformanceScreenState extends State<PerformanceScreen> {
             ),
             child: Column(
               children: [
-                _BCARow(label: 'Weight', value: '75 kg'),
+                _BCARow(label: 'Peso', value: user?.pesoLb?.toStringAsFixed(1) ?? '-'),
                 Divider(height: 1, color: Colors.grey.shade200),
-                _BCARow(label: 'Height', value: '175 cm'),
+                _BCARow(label: 'Altura', value: user?.alturaPulg?.toStringAsFixed(1) ?? '-'),
                 Divider(height: 1, color: Colors.grey.shade200),
-                _BCARow(label: 'BMI', value: '24.5'),
+                _BCARow(label: 'IMC Último', value: latestHistory?.imc?.toStringAsFixed(1) ?? '-'),
                 Divider(height: 1, color: Colors.grey.shade200),
-                _BCARow(label: 'Neck', value: '38 cm'),
-                Divider(height: 1, color: Colors.grey.shade200),
-                _BCARow(label: 'Waist', value: '82 cm'),
-                Divider(height: 1, color: Colors.grey.shade200),
-                _BCARow(label: 'Status', value: 'WITHIN STANDARDS'),
+                _BCARow(label: 'Estado BCA', value: latestHistory?.estadoBca ?? '-'),
               ],
             ),
           ),
 
           // ── SETTINGS ──
-          _buildSectionHeader('Settings'),
+          _buildSectionHeader('Ajustes y Más'),
 
           _SettingItem(
             icon: Icons.edit_outlined,
-            title: 'Edit Profile',
+            title: 'Editar Perfil',
             onTap: () {},
           ),
           _SettingItem(
             icon: Icons.notifications_outlined,
-            title: 'Training Reminders',
+            title: 'Recordatorios de Entrenamiento',
             onTap: () {},
           ),
           _SettingItem(
             icon: Icons.info_outline,
-            title: 'About the App',
+            title: 'Acerca de la App',
             onTap: () {},
           ),
           _SettingItem(
             icon: Icons.description_outlined,
-            title: 'Official Regulations',
+            title: 'Reglamentos Oficiales',
             onTap: () {},
           ),
 
@@ -173,7 +185,7 @@ class _PerformanceScreenState extends State<PerformanceScreen> {
         style: GoogleFonts.roboto(
           fontSize: 14,
           fontWeight: FontWeight.w700,
-          color: NavyPFAApp.navyPrimary,
+          color: AppColors.navyPrimary,
           letterSpacing: 0.5,
         ),
       ),
@@ -186,17 +198,31 @@ class _HistoryItem extends StatelessWidget {
   final String cycle;
   final String score;
   final String level;
-  final Color levelColor;
 
   const _HistoryItem({
     required this.cycle,
     required this.score,
     required this.level,
-    required this.levelColor,
   });
+
+  Color _getLevelColor(String lvl) {
+    switch (lvl) {
+      case 'SOBRESALIENTE':
+        return const Color(0xFF4CAF50);
+      case 'EXCELENTE':
+        return const Color(0xFF2196F3);
+      case 'BUENO':
+        return const Color(0xFF03A9F4);
+      case 'SATISFACTORIO':
+        return const Color(0xFFFFC107);
+      default:
+        return const Color(0xFFF44336);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final levelColor = _getLevelColor(level);
     return Column(
       children: [
         Padding(
@@ -226,7 +252,7 @@ class _HistoryItem extends StatelessWidget {
                     ),
                     const SizedBox(height: 3),
                     Text(
-                      'Score: $score',
+                      'Puntaje: $score',
                       style: GoogleFonts.roboto(
                         fontSize: 12,
                         color: Colors.grey.shade500,
@@ -289,7 +315,7 @@ class _RecordCard extends StatelessWidget {
               style: GoogleFonts.roboto(
                 fontSize: 22,
                 fontWeight: FontWeight.w800,
-                color: NavyPFAApp.navyPrimary,
+                color: AppColors.navyPrimary,
               ),
             ),
             const SizedBox(height: 4),

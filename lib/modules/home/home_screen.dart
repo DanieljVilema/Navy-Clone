@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../main.dart';
+import '../../core/constants.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -8,22 +8,20 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.darkBg,
       body: SingleChildScrollView(
+        padding: const EdgeInsets.all(Spacing.m),
         physics: const BouncingScrollPhysics(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const SizedBox(height: 32),
-
-            // ── NAVY PFA LOGO ──
+            const SizedBox(height: Spacing.xl),
             _buildLogo(),
-            const SizedBox(height: 28),
-
-            // ── WELCOME TEXT ──
-            _buildWelcomeText(),
-            const SizedBox(height: 32),
-
+            const SizedBox(height: Spacing.xl),
+            _buildWelcomeCard(),
+            const SizedBox(height: Spacing.m),
+            _buildQuickActions(),
+            const SizedBox(height: Spacing.l),
           ],
         ),
       ),
@@ -33,120 +31,98 @@ class HomeScreen extends StatelessWidget {
   Widget _buildLogo() {
     return Column(
       children: [
-        // Star logo with CULTURE AND FORCE RESILIENCE text
-        SizedBox(
-          width: 180,
-          height: 180,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              // Star background
-              Icon(
-                Icons.star,
-                size: 140,
-                color: NavyPFAApp.goldAccent,
-              ),
-              // Anchor in center
-              const Icon(
-                Icons.anchor_rounded,
-                size: 50,
-                color: Color(0xFF001F5B),
-              ),
-              // Top text
-              Positioned(
-                top: 12,
-                child: Text(
-                  'CULTURA Y',
-                  style: GoogleFonts.roboto(
-                    fontSize: 8,
-                    fontWeight: FontWeight.w800,
-                    color: NavyPFAApp.navyPrimary,
-                    letterSpacing: 1.5,
-                  ),
-                ),
-              ),
-              // Bottom text
-              Positioned(
-                bottom: 12,
-                child: Text(
-                  'RESILIENCIA NAVAL',
-                  style: GoogleFonts.roboto(
-                    fontSize: 8,
-                    fontWeight: FontWeight.w800,
-                    color: NavyPFAApp.navyPrimary,
-                    letterSpacing: 1.5,
-                  ),
-                ),
+        Container(
+          width: 80,
+          height: 80,
+          decoration: BoxDecoration(
+            color: AppColors.primary,
+            borderRadius: BorderRadius.circular(Radii.l),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.primary.withValues(alpha: 0.3),
+                offset: const Offset(0, 4),
+                blurRadius: 12,
               ),
             ],
           ),
+          child: const Icon(Icons.anchor_rounded, color: Colors.white, size: 40),
         ),
-        FittedBox(
-          fit: BoxFit.scaleDown,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'ARMADA',
-                style: GoogleFonts.roboto(
-                  fontSize: 28,
-                  fontWeight: FontWeight.w900,
-                  color: NavyPFAApp.navyPrimary,
-                  letterSpacing: 2,
-                ),
-              ),
-              const SizedBox(width: 8),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: NavyPFAApp.navyPrimary,
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: Text(
-                  'ECUADOR',
-                  style: GoogleFonts.roboto(
-                    fontSize: 28,
-                    fontWeight: FontWeight.w900,
-                    color: Colors.white,
-                    letterSpacing: 2,
-                  ),
-                ),
-              ),
-            ],
+        const SizedBox(height: Spacing.m),
+        Text(
+          'ArmadaFit',
+          style: GoogleFonts.inter(
+            fontSize: 28,
+            fontWeight: FontWeight.w700,
+            color: AppColors.darkTextPrimary,
+            letterSpacing: -0.3,
+          ),
+        ),
+        const SizedBox(height: Spacing.xs),
+        Text(
+          'Evaluación Física • Armada del Ecuador',
+          style: GoogleFonts.inter(
+            fontSize: 14,
+            color: AppColors.darkTextSecondary,
           ),
         ),
       ],
     );
   }
 
-  Widget _buildWelcomeText() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
+  Widget _buildWelcomeCard() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(Spacing.m),
+      decoration: BoxDecoration(
+        color: AppColors.darkCard,
+        borderRadius: BorderRadius.circular(Radii.m),
+        boxShadow: AppShadows.card,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Row(
+            children: [
+              Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(Radii.m),
+                ),
+                child: const Icon(Icons.info_outline, color: AppColors.primary, size: 22),
+              ),
+              const SizedBox(width: Spacing.m),
+              Expanded(
+                child: Text(
+                  'Bienvenido',
+                  style: GoogleFonts.inter(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.darkTextPrimary,
+                    letterSpacing: -0.3,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: Spacing.m),
           Text(
-            'Bienvenido a la Aplicación Oficial de Evaluación Física de la Armada del Ecuador',
-            style: GoogleFonts.roboto(
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-              color: Colors.black87,
+            'Esta aplicación proporciona una herramienta integral para toda la información '
+            'del Programa de Evaluación Física de la Armada del Ecuador.',
+            style: GoogleFonts.inter(
+              fontSize: 14,
+              color: AppColors.darkTextSecondary,
+              height: 1.5,
             ),
           ),
-          const SizedBox(height: 12),
-          RichText(
-            text: TextSpan(
-              style: GoogleFonts.roboto(
-                fontSize: 14,
-                color: Colors.black54,
-                height: 1.6,
-              ),
-              children: const [
-                TextSpan(
-                  text:
-                      'Esta aplicación proporciona una herramienta integral para toda la información del Programa de Evaluación Física de la Armada del Ecuador.\n\nUtilice el menú lateral izquierdo para navegar a través de las diferentes secciones.',
-                ),
-              ],
+          const SizedBox(height: Spacing.s),
+          Text(
+            'Utilice el menú lateral izquierdo para navegar a través de las diferentes secciones.',
+            style: GoogleFonts.inter(
+              fontSize: 14,
+              color: AppColors.darkTextTertiary,
+              height: 1.5,
             ),
           ),
         ],
@@ -154,4 +130,48 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
+  Widget _buildQuickActions() {
+    return Row(
+      children: [
+        Expanded(child: _buildStatCard('Simulador', Icons.calculate_outlined, AppColors.primary)),
+        const SizedBox(width: Spacing.s),
+        Expanded(child: _buildStatCard('I.A.', Icons.chat_bubble_outline, AppColors.success)),
+        const SizedBox(width: Spacing.s),
+        Expanded(child: _buildStatCard('Videos', Icons.play_circle_outline, AppColors.warning)),
+      ],
+    );
+  }
+
+  Widget _buildStatCard(String label, IconData icon, Color color) {
+    return Container(
+      padding: const EdgeInsets.all(Spacing.m),
+      decoration: BoxDecoration(
+        color: AppColors.darkCard,
+        borderRadius: BorderRadius.circular(Radii.m),
+        boxShadow: AppShadows.card,
+      ),
+      child: Column(
+        children: [
+          Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              color: color.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(Radii.m),
+            ),
+            child: Icon(icon, color: color, size: 22),
+          ),
+          const SizedBox(height: Spacing.s),
+          Text(
+            label,
+            style: GoogleFonts.inter(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: AppColors.darkTextSecondary,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

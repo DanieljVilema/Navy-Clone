@@ -1,17 +1,2028 @@
 {
   "baremos": [
     {
-      "edad": "18-25",
+      "grupoEdad": "17-19",
       "genero": "M",
       "flexiones": [
-        {"min": 40, "nota": 20, "nivel": "Excelente"},
-        {"min": 30, "nota": 15, "nivel": "Regular"}
+        {
+          "min": 62,
+          "nota": 100,
+          "nivel": "Sobresaliente"
+        },
+        {
+          "min": 51,
+          "nota": 90,
+          "nivel": "Excelente"
+        },
+        {
+          "min": 42,
+          "nota": 75,
+          "nivel": "Bueno"
+        },
+        {
+          "min": 37,
+          "nota": 60,
+          "nivel": "Satisfactorio"
+        },
+        {
+          "min": 0,
+          "nota": 30,
+          "nivel": "Insuficiente"
+        }
       ],
-      "trote": [
-        {"max": "12:00", "nota": 20, "nivel": "Excelente"},
-        {"max": "15:00", "nota": 10, "nivel": "Regular"}
-      ]
+      "abdominales": [
+        {
+          "min": 80,
+          "nota": 100,
+          "nivel": "Sobresaliente"
+        },
+        {
+          "min": 62,
+          "nota": 90,
+          "nivel": "Excelente"
+        },
+        {
+          "min": 50,
+          "nota": 75,
+          "nivel": "Bueno"
+        },
+        {
+          "min": 42,
+          "nota": 60,
+          "nivel": "Satisfactorio"
+        },
+        {
+          "min": 0,
+          "nota": 30,
+          "nivel": "Insuficiente"
+        }
+      ],
+      "cardio": {
+        "trote_2400m": [
+          {
+            "min": 0,
+            "nota": 100,
+            "nivel": "Sobresaliente",
+            "maxSeg": 570
+          },
+          {
+            "min": 0,
+            "nota": 90,
+            "nivel": "Excelente",
+            "maxSeg": 636
+          },
+          {
+            "min": 0,
+            "nota": 75,
+            "nivel": "Bueno",
+            "maxSeg": 720
+          },
+          {
+            "min": 0,
+            "nota": 60,
+            "nivel": "Satisfactorio",
+            "maxSeg": 810
+          },
+          {
+            "min": 0,
+            "nota": 30,
+            "nivel": "Insuficiente",
+            "maxSeg": 9999
+          }
+        ]
+      }
+    },
+    {
+      "grupoEdad": "20-24",
+      "genero": "M",
+      "flexiones": [
+        {
+          "min": 57,
+          "nota": 100,
+          "nivel": "Sobresaliente"
+        },
+        {
+          "min": 47,
+          "nota": 90,
+          "nivel": "Excelente"
+        },
+        {
+          "min": 37,
+          "nota": 75,
+          "nivel": "Bueno"
+        },
+        {
+          "min": 30,
+          "nota": 60,
+          "nivel": "Satisfactorio"
+        },
+        {
+          "min": 0,
+          "nota": 30,
+          "nivel": "Insuficiente"
+        }
+      ],
+      "abdominales": [
+        {
+          "min": 72,
+          "nota": 100,
+          "nivel": "Sobresaliente"
+        },
+        {
+          "min": 58,
+          "nota": 90,
+          "nivel": "Excelente"
+        },
+        {
+          "min": 46,
+          "nota": 75,
+          "nivel": "Bueno"
+        },
+        {
+          "min": 38,
+          "nota": 60,
+          "nivel": "Satisfactorio"
+        },
+        {
+          "min": 0,
+          "nota": 30,
+          "nivel": "Insuficiente"
+        }
+      ],
+      "cardio": {
+        "trote_2400m": [
+          {
+            "min": 0,
+            "nota": 100,
+            "nivel": "Sobresaliente",
+            "maxSeg": 585
+          },
+          {
+            "min": 0,
+            "nota": 90,
+            "nivel": "Excelente",
+            "maxSeg": 654
+          },
+          {
+            "min": 0,
+            "nota": 75,
+            "nivel": "Bueno",
+            "maxSeg": 750
+          },
+          {
+            "min": 0,
+            "nota": 60,
+            "nivel": "Satisfactorio",
+            "maxSeg": 840
+          },
+          {
+            "min": 0,
+            "nota": 30,
+            "nivel": "Insuficiente",
+            "maxSeg": 9999
+          }
+        ]
+      }
+    },
+    {
+      "grupoEdad": "25-29",
+      "genero": "M",
+      "flexiones": [
+        {
+          "min": 51,
+          "nota": 100,
+          "nivel": "Sobresaliente"
+        },
+        {
+          "min": 41,
+          "nota": 90,
+          "nivel": "Excelente"
+        },
+        {
+          "min": 34,
+          "nota": 75,
+          "nivel": "Bueno"
+        },
+        {
+          "min": 27,
+          "nota": 60,
+          "nivel": "Satisfactorio"
+        },
+        {
+          "min": 0,
+          "nota": 30,
+          "nivel": "Insuficiente"
+        }
+      ],
+      "abdominales": [
+        {
+          "min": 66,
+          "nota": 100,
+          "nivel": "Sobresaliente"
+        },
+        {
+          "min": 54,
+          "nota": 90,
+          "nivel": "Excelente"
+        },
+        {
+          "min": 42,
+          "nota": 75,
+          "nivel": "Bueno"
+        },
+        {
+          "min": 35,
+          "nota": 60,
+          "nivel": "Satisfactorio"
+        },
+        {
+          "min": 0,
+          "nota": 30,
+          "nivel": "Insuficiente"
+        }
+      ],
+      "cardio": {
+        "trote_2400m": [
+          {
+            "min": 0,
+            "nota": 100,
+            "nivel": "Sobresaliente",
+            "maxSeg": 600
+          },
+          {
+            "min": 0,
+            "nota": 90,
+            "nivel": "Excelente",
+            "maxSeg": 678
+          },
+          {
+            "min": 0,
+            "nota": 75,
+            "nivel": "Bueno",
+            "maxSeg": 780
+          },
+          {
+            "min": 0,
+            "nota": 60,
+            "nivel": "Satisfactorio",
+            "maxSeg": 870
+          },
+          {
+            "min": 0,
+            "nota": 30,
+            "nivel": "Insuficiente",
+            "maxSeg": 9999
+          }
+        ]
+      }
+    },
+    {
+      "grupoEdad": "30-34",
+      "genero": "M",
+      "flexiones": [
+        {
+          "min": 46,
+          "nota": 100,
+          "nivel": "Sobresaliente"
+        },
+        {
+          "min": 37,
+          "nota": 90,
+          "nivel": "Excelente"
+        },
+        {
+          "min": 30,
+          "nota": 75,
+          "nivel": "Bueno"
+        },
+        {
+          "min": 24,
+          "nota": 60,
+          "nivel": "Satisfactorio"
+        },
+        {
+          "min": 0,
+          "nota": 30,
+          "nivel": "Insuficiente"
+        }
+      ],
+      "abdominales": [
+        {
+          "min": 62,
+          "nota": 100,
+          "nivel": "Sobresaliente"
+        },
+        {
+          "min": 50,
+          "nota": 90,
+          "nivel": "Excelente"
+        },
+        {
+          "min": 38,
+          "nota": 75,
+          "nivel": "Bueno"
+        },
+        {
+          "min": 32,
+          "nota": 60,
+          "nivel": "Satisfactorio"
+        },
+        {
+          "min": 0,
+          "nota": 30,
+          "nivel": "Insuficiente"
+        }
+      ],
+      "cardio": {
+        "trote_2400m": [
+          {
+            "min": 0,
+            "nota": 100,
+            "nivel": "Sobresaliente",
+            "maxSeg": 630
+          },
+          {
+            "min": 0,
+            "nota": 90,
+            "nivel": "Excelente",
+            "maxSeg": 714
+          },
+          {
+            "min": 0,
+            "nota": 75,
+            "nivel": "Bueno",
+            "maxSeg": 810
+          },
+          {
+            "min": 0,
+            "nota": 60,
+            "nivel": "Satisfactorio",
+            "maxSeg": 900
+          },
+          {
+            "min": 0,
+            "nota": 30,
+            "nivel": "Insuficiente",
+            "maxSeg": 9999
+          }
+        ]
+      }
+    },
+    {
+      "grupoEdad": "35-39",
+      "genero": "M",
+      "flexiones": [
+        {
+          "min": 41,
+          "nota": 100,
+          "nivel": "Sobresaliente"
+        },
+        {
+          "min": 34,
+          "nota": 90,
+          "nivel": "Excelente"
+        },
+        {
+          "min": 27,
+          "nota": 75,
+          "nivel": "Bueno"
+        },
+        {
+          "min": 21,
+          "nota": 60,
+          "nivel": "Satisfactorio"
+        },
+        {
+          "min": 0,
+          "nota": 30,
+          "nivel": "Insuficiente"
+        }
+      ],
+      "abdominales": [
+        {
+          "min": 58,
+          "nota": 100,
+          "nivel": "Sobresaliente"
+        },
+        {
+          "min": 46,
+          "nota": 90,
+          "nivel": "Excelente"
+        },
+        {
+          "min": 36,
+          "nota": 75,
+          "nivel": "Bueno"
+        },
+        {
+          "min": 30,
+          "nota": 60,
+          "nivel": "Satisfactorio"
+        },
+        {
+          "min": 0,
+          "nota": 30,
+          "nivel": "Insuficiente"
+        }
+      ],
+      "cardio": {
+        "trote_2400m": [
+          {
+            "min": 0,
+            "nota": 100,
+            "nivel": "Sobresaliente",
+            "maxSeg": 660
+          },
+          {
+            "min": 0,
+            "nota": 90,
+            "nivel": "Excelente",
+            "maxSeg": 750
+          },
+          {
+            "min": 0,
+            "nota": 75,
+            "nivel": "Bueno",
+            "maxSeg": 840
+          },
+          {
+            "min": 0,
+            "nota": 60,
+            "nivel": "Satisfactorio",
+            "maxSeg": 930
+          },
+          {
+            "min": 0,
+            "nota": 30,
+            "nivel": "Insuficiente",
+            "maxSeg": 9999
+          }
+        ]
+      }
+    },
+    {
+      "grupoEdad": "40-44",
+      "genero": "M",
+      "flexiones": [
+        {
+          "min": 36,
+          "nota": 100,
+          "nivel": "Sobresaliente"
+        },
+        {
+          "min": 30,
+          "nota": 90,
+          "nivel": "Excelente"
+        },
+        {
+          "min": 24,
+          "nota": 75,
+          "nivel": "Bueno"
+        },
+        {
+          "min": 18,
+          "nota": 60,
+          "nivel": "Satisfactorio"
+        },
+        {
+          "min": 0,
+          "nota": 30,
+          "nivel": "Insuficiente"
+        }
+      ],
+      "abdominales": [
+        {
+          "min": 54,
+          "nota": 100,
+          "nivel": "Sobresaliente"
+        },
+        {
+          "min": 42,
+          "nota": 90,
+          "nivel": "Excelente"
+        },
+        {
+          "min": 32,
+          "nota": 75,
+          "nivel": "Bueno"
+        },
+        {
+          "min": 28,
+          "nota": 60,
+          "nivel": "Satisfactorio"
+        },
+        {
+          "min": 0,
+          "nota": 30,
+          "nivel": "Insuficiente"
+        }
+      ],
+      "cardio": {
+        "trote_2400m": [
+          {
+            "min": 0,
+            "nota": 100,
+            "nivel": "Sobresaliente",
+            "maxSeg": 690
+          },
+          {
+            "min": 0,
+            "nota": 90,
+            "nivel": "Excelente",
+            "maxSeg": 780
+          },
+          {
+            "min": 0,
+            "nota": 75,
+            "nivel": "Bueno",
+            "maxSeg": 870
+          },
+          {
+            "min": 0,
+            "nota": 60,
+            "nivel": "Satisfactorio",
+            "maxSeg": 960
+          },
+          {
+            "min": 0,
+            "nota": 30,
+            "nivel": "Insuficiente",
+            "maxSeg": 9999
+          }
+        ]
+      }
+    },
+    {
+      "grupoEdad": "45-49",
+      "genero": "M",
+      "flexiones": [
+        {
+          "min": 31,
+          "nota": 100,
+          "nivel": "Sobresaliente"
+        },
+        {
+          "min": 25,
+          "nota": 90,
+          "nivel": "Excelente"
+        },
+        {
+          "min": 20,
+          "nota": 75,
+          "nivel": "Bueno"
+        },
+        {
+          "min": 15,
+          "nota": 60,
+          "nivel": "Satisfactorio"
+        },
+        {
+          "min": 0,
+          "nota": 30,
+          "nivel": "Insuficiente"
+        }
+      ],
+      "abdominales": [
+        {
+          "min": 50,
+          "nota": 100,
+          "nivel": "Sobresaliente"
+        },
+        {
+          "min": 38,
+          "nota": 90,
+          "nivel": "Excelente"
+        },
+        {
+          "min": 28,
+          "nota": 75,
+          "nivel": "Bueno"
+        },
+        {
+          "min": 24,
+          "nota": 60,
+          "nivel": "Satisfactorio"
+        },
+        {
+          "min": 0,
+          "nota": 30,
+          "nivel": "Insuficiente"
+        }
+      ],
+      "cardio": {
+        "trote_2400m": [
+          {
+            "min": 0,
+            "nota": 100,
+            "nivel": "Sobresaliente",
+            "maxSeg": 720
+          },
+          {
+            "min": 0,
+            "nota": 90,
+            "nivel": "Excelente",
+            "maxSeg": 810
+          },
+          {
+            "min": 0,
+            "nota": 75,
+            "nivel": "Bueno",
+            "maxSeg": 900
+          },
+          {
+            "min": 0,
+            "nota": 60,
+            "nivel": "Satisfactorio",
+            "maxSeg": 1020
+          },
+          {
+            "min": 0,
+            "nota": 30,
+            "nivel": "Insuficiente",
+            "maxSeg": 9999
+          }
+        ]
+      }
+    },
+    {
+      "grupoEdad": "50-54",
+      "genero": "M",
+      "flexiones": [
+        {
+          "min": 26,
+          "nota": 100,
+          "nivel": "Sobresaliente"
+        },
+        {
+          "min": 21,
+          "nota": 90,
+          "nivel": "Excelente"
+        },
+        {
+          "min": 16,
+          "nota": 75,
+          "nivel": "Bueno"
+        },
+        {
+          "min": 12,
+          "nota": 60,
+          "nivel": "Satisfactorio"
+        },
+        {
+          "min": 0,
+          "nota": 30,
+          "nivel": "Insuficiente"
+        }
+      ],
+      "abdominales": [
+        {
+          "min": 46,
+          "nota": 100,
+          "nivel": "Sobresaliente"
+        },
+        {
+          "min": 36,
+          "nota": 90,
+          "nivel": "Excelente"
+        },
+        {
+          "min": 26,
+          "nota": 75,
+          "nivel": "Bueno"
+        },
+        {
+          "min": 20,
+          "nota": 60,
+          "nivel": "Satisfactorio"
+        },
+        {
+          "min": 0,
+          "nota": 30,
+          "nivel": "Insuficiente"
+        }
+      ],
+      "cardio": {
+        "trote_2400m": [
+          {
+            "min": 0,
+            "nota": 100,
+            "nivel": "Sobresaliente",
+            "maxSeg": 780
+          },
+          {
+            "min": 0,
+            "nota": 90,
+            "nivel": "Excelente",
+            "maxSeg": 870
+          },
+          {
+            "min": 0,
+            "nota": 75,
+            "nivel": "Bueno",
+            "maxSeg": 960
+          },
+          {
+            "min": 0,
+            "nota": 60,
+            "nivel": "Satisfactorio",
+            "maxSeg": 1080
+          },
+          {
+            "min": 0,
+            "nota": 30,
+            "nivel": "Insuficiente",
+            "maxSeg": 9999
+          }
+        ]
+      }
+    },
+    {
+      "grupoEdad": "55-59",
+      "genero": "M",
+      "flexiones": [
+        {
+          "min": 21,
+          "nota": 100,
+          "nivel": "Sobresaliente"
+        },
+        {
+          "min": 16,
+          "nota": 90,
+          "nivel": "Excelente"
+        },
+        {
+          "min": 12,
+          "nota": 75,
+          "nivel": "Bueno"
+        },
+        {
+          "min": 10,
+          "nota": 60,
+          "nivel": "Satisfactorio"
+        },
+        {
+          "min": 0,
+          "nota": 30,
+          "nivel": "Insuficiente"
+        }
+      ],
+      "abdominales": [
+        {
+          "min": 42,
+          "nota": 100,
+          "nivel": "Sobresaliente"
+        },
+        {
+          "min": 32,
+          "nota": 90,
+          "nivel": "Excelente"
+        },
+        {
+          "min": 22,
+          "nota": 75,
+          "nivel": "Bueno"
+        },
+        {
+          "min": 18,
+          "nota": 60,
+          "nivel": "Satisfactorio"
+        },
+        {
+          "min": 0,
+          "nota": 30,
+          "nivel": "Insuficiente"
+        }
+      ],
+      "cardio": {
+        "trote_2400m": [
+          {
+            "min": 0,
+            "nota": 100,
+            "nivel": "Sobresaliente",
+            "maxSeg": 840
+          },
+          {
+            "min": 0,
+            "nota": 90,
+            "nivel": "Excelente",
+            "maxSeg": 930
+          },
+          {
+            "min": 0,
+            "nota": 75,
+            "nivel": "Bueno",
+            "maxSeg": 1020
+          },
+          {
+            "min": 0,
+            "nota": 60,
+            "nivel": "Satisfactorio",
+            "maxSeg": 1140
+          },
+          {
+            "min": 0,
+            "nota": 30,
+            "nivel": "Insuficiente",
+            "maxSeg": 9999
+          }
+        ]
+      }
+    },
+    {
+      "grupoEdad": "60-64",
+      "genero": "M",
+      "flexiones": [
+        {
+          "min": 16,
+          "nota": 100,
+          "nivel": "Sobresaliente"
+        },
+        {
+          "min": 12,
+          "nota": 90,
+          "nivel": "Excelente"
+        },
+        {
+          "min": 10,
+          "nota": 75,
+          "nivel": "Bueno"
+        },
+        {
+          "min": 8,
+          "nota": 60,
+          "nivel": "Satisfactorio"
+        },
+        {
+          "min": 0,
+          "nota": 30,
+          "nivel": "Insuficiente"
+        }
+      ],
+      "abdominales": [
+        {
+          "min": 38,
+          "nota": 100,
+          "nivel": "Sobresaliente"
+        },
+        {
+          "min": 28,
+          "nota": 90,
+          "nivel": "Excelente"
+        },
+        {
+          "min": 20,
+          "nota": 75,
+          "nivel": "Bueno"
+        },
+        {
+          "min": 16,
+          "nota": 60,
+          "nivel": "Satisfactorio"
+        },
+        {
+          "min": 0,
+          "nota": 30,
+          "nivel": "Insuficiente"
+        }
+      ],
+      "cardio": {
+        "trote_2400m": [
+          {
+            "min": 0,
+            "nota": 100,
+            "nivel": "Sobresaliente",
+            "maxSeg": 900
+          },
+          {
+            "min": 0,
+            "nota": 90,
+            "nivel": "Excelente",
+            "maxSeg": 990
+          },
+          {
+            "min": 0,
+            "nota": 75,
+            "nivel": "Bueno",
+            "maxSeg": 1080
+          },
+          {
+            "min": 0,
+            "nota": 60,
+            "nivel": "Satisfactorio",
+            "maxSeg": 1200
+          },
+          {
+            "min": 0,
+            "nota": 30,
+            "nivel": "Insuficiente",
+            "maxSeg": 9999
+          }
+        ]
+      }
+    },
+    {
+      "grupoEdad": "65+",
+      "genero": "M",
+      "flexiones": [
+        {
+          "min": 12,
+          "nota": 100,
+          "nivel": "Sobresaliente"
+        },
+        {
+          "min": 10,
+          "nota": 90,
+          "nivel": "Excelente"
+        },
+        {
+          "min": 8,
+          "nota": 75,
+          "nivel": "Bueno"
+        },
+        {
+          "min": 6,
+          "nota": 60,
+          "nivel": "Satisfactorio"
+        },
+        {
+          "min": 0,
+          "nota": 30,
+          "nivel": "Insuficiente"
+        }
+      ],
+      "abdominales": [
+        {
+          "min": 34,
+          "nota": 100,
+          "nivel": "Sobresaliente"
+        },
+        {
+          "min": 24,
+          "nota": 90,
+          "nivel": "Excelente"
+        },
+        {
+          "min": 18,
+          "nota": 75,
+          "nivel": "Bueno"
+        },
+        {
+          "min": 14,
+          "nota": 60,
+          "nivel": "Satisfactorio"
+        },
+        {
+          "min": 0,
+          "nota": 30,
+          "nivel": "Insuficiente"
+        }
+      ],
+      "cardio": {
+        "trote_2400m": [
+          {
+            "min": 0,
+            "nota": 100,
+            "nivel": "Sobresaliente",
+            "maxSeg": 960
+          },
+          {
+            "min": 0,
+            "nota": 90,
+            "nivel": "Excelente",
+            "maxSeg": 1050
+          },
+          {
+            "min": 0,
+            "nota": 75,
+            "nivel": "Bueno",
+            "maxSeg": 1140
+          },
+          {
+            "min": 0,
+            "nota": 60,
+            "nivel": "Satisfactorio",
+            "maxSeg": 1260
+          },
+          {
+            "min": 0,
+            "nota": 30,
+            "nivel": "Insuficiente",
+            "maxSeg": 9999
+          }
+        ]
+      }
+    },
+    {
+      "grupoEdad": "17-19",
+      "genero": "F",
+      "flexiones": [
+        {
+          "min": 42,
+          "nota": 100,
+          "nivel": "Sobresaliente"
+        },
+        {
+          "min": 33,
+          "nota": 90,
+          "nivel": "Excelente"
+        },
+        {
+          "min": 24,
+          "nota": 75,
+          "nivel": "Bueno"
+        },
+        {
+          "min": 18,
+          "nota": 60,
+          "nivel": "Satisfactorio"
+        },
+        {
+          "min": 0,
+          "nota": 30,
+          "nivel": "Insuficiente"
+        }
+      ],
+      "abdominales": [
+        {
+          "min": 72,
+          "nota": 100,
+          "nivel": "Sobresaliente"
+        },
+        {
+          "min": 55,
+          "nota": 90,
+          "nivel": "Excelente"
+        },
+        {
+          "min": 42,
+          "nota": 75,
+          "nivel": "Bueno"
+        },
+        {
+          "min": 32,
+          "nota": 60,
+          "nivel": "Satisfactorio"
+        },
+        {
+          "min": 0,
+          "nota": 30,
+          "nivel": "Insuficiente"
+        }
+      ],
+      "cardio": {
+        "trote_2400m": [
+          {
+            "min": 0,
+            "nota": 100,
+            "nivel": "Sobresaliente",
+            "maxSeg": 690
+          },
+          {
+            "min": 0,
+            "nota": 90,
+            "nivel": "Excelente",
+            "maxSeg": 774
+          },
+          {
+            "min": 0,
+            "nota": 75,
+            "nivel": "Bueno",
+            "maxSeg": 870
+          },
+          {
+            "min": 0,
+            "nota": 60,
+            "nivel": "Satisfactorio",
+            "maxSeg": 960
+          },
+          {
+            "min": 0,
+            "nota": 30,
+            "nivel": "Insuficiente",
+            "maxSeg": 9999
+          }
+        ]
+      }
+    },
+    {
+      "grupoEdad": "20-24",
+      "genero": "F",
+      "flexiones": [
+        {
+          "min": 38,
+          "nota": 100,
+          "nivel": "Sobresaliente"
+        },
+        {
+          "min": 30,
+          "nota": 90,
+          "nivel": "Excelente"
+        },
+        {
+          "min": 21,
+          "nota": 75,
+          "nivel": "Bueno"
+        },
+        {
+          "min": 15,
+          "nota": 60,
+          "nivel": "Satisfactorio"
+        },
+        {
+          "min": 0,
+          "nota": 30,
+          "nivel": "Insuficiente"
+        }
+      ],
+      "abdominales": [
+        {
+          "min": 66,
+          "nota": 100,
+          "nivel": "Sobresaliente"
+        },
+        {
+          "min": 52,
+          "nota": 90,
+          "nivel": "Excelente"
+        },
+        {
+          "min": 38,
+          "nota": 75,
+          "nivel": "Bueno"
+        },
+        {
+          "min": 30,
+          "nota": 60,
+          "nivel": "Satisfactorio"
+        },
+        {
+          "min": 0,
+          "nota": 30,
+          "nivel": "Insuficiente"
+        }
+      ],
+      "cardio": {
+        "trote_2400m": [
+          {
+            "min": 0,
+            "nota": 100,
+            "nivel": "Sobresaliente",
+            "maxSeg": 720
+          },
+          {
+            "min": 0,
+            "nota": 90,
+            "nivel": "Excelente",
+            "maxSeg": 810
+          },
+          {
+            "min": 0,
+            "nota": 75,
+            "nivel": "Bueno",
+            "maxSeg": 906
+          },
+          {
+            "min": 0,
+            "nota": 60,
+            "nivel": "Satisfactorio",
+            "maxSeg": 1020
+          },
+          {
+            "min": 0,
+            "nota": 30,
+            "nivel": "Insuficiente",
+            "maxSeg": 9999
+          }
+        ]
+      }
+    },
+    {
+      "grupoEdad": "25-29",
+      "genero": "F",
+      "flexiones": [
+        {
+          "min": 34,
+          "nota": 100,
+          "nivel": "Sobresaliente"
+        },
+        {
+          "min": 27,
+          "nota": 90,
+          "nivel": "Excelente"
+        },
+        {
+          "min": 18,
+          "nota": 75,
+          "nivel": "Bueno"
+        },
+        {
+          "min": 13,
+          "nota": 60,
+          "nivel": "Satisfactorio"
+        },
+        {
+          "min": 0,
+          "nota": 30,
+          "nivel": "Insuficiente"
+        }
+      ],
+      "abdominales": [
+        {
+          "min": 60,
+          "nota": 100,
+          "nivel": "Sobresaliente"
+        },
+        {
+          "min": 48,
+          "nota": 90,
+          "nivel": "Excelente"
+        },
+        {
+          "min": 36,
+          "nota": 75,
+          "nivel": "Bueno"
+        },
+        {
+          "min": 28,
+          "nota": 60,
+          "nivel": "Satisfactorio"
+        },
+        {
+          "min": 0,
+          "nota": 30,
+          "nivel": "Insuficiente"
+        }
+      ],
+      "cardio": {
+        "trote_2400m": [
+          {
+            "min": 0,
+            "nota": 100,
+            "nivel": "Sobresaliente",
+            "maxSeg": 750
+          },
+          {
+            "min": 0,
+            "nota": 90,
+            "nivel": "Excelente",
+            "maxSeg": 840
+          },
+          {
+            "min": 0,
+            "nota": 75,
+            "nivel": "Bueno",
+            "maxSeg": 930
+          },
+          {
+            "min": 0,
+            "nota": 60,
+            "nivel": "Satisfactorio",
+            "maxSeg": 1050
+          },
+          {
+            "min": 0,
+            "nota": 30,
+            "nivel": "Insuficiente",
+            "maxSeg": 9999
+          }
+        ]
+      }
+    },
+    {
+      "grupoEdad": "30-34",
+      "genero": "F",
+      "flexiones": [
+        {
+          "min": 30,
+          "nota": 100,
+          "nivel": "Sobresaliente"
+        },
+        {
+          "min": 24,
+          "nota": 90,
+          "nivel": "Excelente"
+        },
+        {
+          "min": 16,
+          "nota": 75,
+          "nivel": "Bueno"
+        },
+        {
+          "min": 11,
+          "nota": 60,
+          "nivel": "Satisfactorio"
+        },
+        {
+          "min": 0,
+          "nota": 30,
+          "nivel": "Insuficiente"
+        }
+      ],
+      "abdominales": [
+        {
+          "min": 54,
+          "nota": 100,
+          "nivel": "Sobresaliente"
+        },
+        {
+          "min": 44,
+          "nota": 90,
+          "nivel": "Excelente"
+        },
+        {
+          "min": 32,
+          "nota": 75,
+          "nivel": "Bueno"
+        },
+        {
+          "min": 26,
+          "nota": 60,
+          "nivel": "Satisfactorio"
+        },
+        {
+          "min": 0,
+          "nota": 30,
+          "nivel": "Insuficiente"
+        }
+      ],
+      "cardio": {
+        "trote_2400m": [
+          {
+            "min": 0,
+            "nota": 100,
+            "nivel": "Sobresaliente",
+            "maxSeg": 780
+          },
+          {
+            "min": 0,
+            "nota": 90,
+            "nivel": "Excelente",
+            "maxSeg": 870
+          },
+          {
+            "min": 0,
+            "nota": 75,
+            "nivel": "Bueno",
+            "maxSeg": 960
+          },
+          {
+            "min": 0,
+            "nota": 60,
+            "nivel": "Satisfactorio",
+            "maxSeg": 1080
+          },
+          {
+            "min": 0,
+            "nota": 30,
+            "nivel": "Insuficiente",
+            "maxSeg": 9999
+          }
+        ]
+      }
+    },
+    {
+      "grupoEdad": "35-39",
+      "genero": "F",
+      "flexiones": [
+        {
+          "min": 26,
+          "nota": 100,
+          "nivel": "Sobresaliente"
+        },
+        {
+          "min": 20,
+          "nota": 90,
+          "nivel": "Excelente"
+        },
+        {
+          "min": 13,
+          "nota": 75,
+          "nivel": "Bueno"
+        },
+        {
+          "min": 9,
+          "nota": 60,
+          "nivel": "Satisfactorio"
+        },
+        {
+          "min": 0,
+          "nota": 30,
+          "nivel": "Insuficiente"
+        }
+      ],
+      "abdominales": [
+        {
+          "min": 50,
+          "nota": 100,
+          "nivel": "Sobresaliente"
+        },
+        {
+          "min": 40,
+          "nota": 90,
+          "nivel": "Excelente"
+        },
+        {
+          "min": 28,
+          "nota": 75,
+          "nivel": "Bueno"
+        },
+        {
+          "min": 24,
+          "nota": 60,
+          "nivel": "Satisfactorio"
+        },
+        {
+          "min": 0,
+          "nota": 30,
+          "nivel": "Insuficiente"
+        }
+      ],
+      "cardio": {
+        "trote_2400m": [
+          {
+            "min": 0,
+            "nota": 100,
+            "nivel": "Sobresaliente",
+            "maxSeg": 810
+          },
+          {
+            "min": 0,
+            "nota": 90,
+            "nivel": "Excelente",
+            "maxSeg": 900
+          },
+          {
+            "min": 0,
+            "nota": 75,
+            "nivel": "Bueno",
+            "maxSeg": 990
+          },
+          {
+            "min": 0,
+            "nota": 60,
+            "nivel": "Satisfactorio",
+            "maxSeg": 1110
+          },
+          {
+            "min": 0,
+            "nota": 30,
+            "nivel": "Insuficiente",
+            "maxSeg": 9999
+          }
+        ]
+      }
+    },
+    {
+      "grupoEdad": "40-44",
+      "genero": "F",
+      "flexiones": [
+        {
+          "min": 22,
+          "nota": 100,
+          "nivel": "Sobresaliente"
+        },
+        {
+          "min": 16,
+          "nota": 90,
+          "nivel": "Excelente"
+        },
+        {
+          "min": 11,
+          "nota": 75,
+          "nivel": "Bueno"
+        },
+        {
+          "min": 7,
+          "nota": 60,
+          "nivel": "Satisfactorio"
+        },
+        {
+          "min": 0,
+          "nota": 30,
+          "nivel": "Insuficiente"
+        }
+      ],
+      "abdominales": [
+        {
+          "min": 46,
+          "nota": 100,
+          "nivel": "Sobresaliente"
+        },
+        {
+          "min": 36,
+          "nota": 90,
+          "nivel": "Excelente"
+        },
+        {
+          "min": 24,
+          "nota": 75,
+          "nivel": "Bueno"
+        },
+        {
+          "min": 20,
+          "nota": 60,
+          "nivel": "Satisfactorio"
+        },
+        {
+          "min": 0,
+          "nota": 30,
+          "nivel": "Insuficiente"
+        }
+      ],
+      "cardio": {
+        "trote_2400m": [
+          {
+            "min": 0,
+            "nota": 100,
+            "nivel": "Sobresaliente",
+            "maxSeg": 840
+          },
+          {
+            "min": 0,
+            "nota": 90,
+            "nivel": "Excelente",
+            "maxSeg": 930
+          },
+          {
+            "min": 0,
+            "nota": 75,
+            "nivel": "Bueno",
+            "maxSeg": 1020
+          },
+          {
+            "min": 0,
+            "nota": 60,
+            "nivel": "Satisfactorio",
+            "maxSeg": 1140
+          },
+          {
+            "min": 0,
+            "nota": 30,
+            "nivel": "Insuficiente",
+            "maxSeg": 9999
+          }
+        ]
+      }
+    },
+    {
+      "grupoEdad": "45-49",
+      "genero": "F",
+      "flexiones": [
+        {
+          "min": 18,
+          "nota": 100,
+          "nivel": "Sobresaliente"
+        },
+        {
+          "min": 13,
+          "nota": 90,
+          "nivel": "Excelente"
+        },
+        {
+          "min": 9,
+          "nota": 75,
+          "nivel": "Bueno"
+        },
+        {
+          "min": 5,
+          "nota": 60,
+          "nivel": "Satisfactorio"
+        },
+        {
+          "min": 0,
+          "nota": 30,
+          "nivel": "Insuficiente"
+        }
+      ],
+      "abdominales": [
+        {
+          "min": 42,
+          "nota": 100,
+          "nivel": "Sobresaliente"
+        },
+        {
+          "min": 32,
+          "nota": 90,
+          "nivel": "Excelente"
+        },
+        {
+          "min": 22,
+          "nota": 75,
+          "nivel": "Bueno"
+        },
+        {
+          "min": 18,
+          "nota": 60,
+          "nivel": "Satisfactorio"
+        },
+        {
+          "min": 0,
+          "nota": 30,
+          "nivel": "Insuficiente"
+        }
+      ],
+      "cardio": {
+        "trote_2400m": [
+          {
+            "min": 0,
+            "nota": 100,
+            "nivel": "Sobresaliente",
+            "maxSeg": 870
+          },
+          {
+            "min": 0,
+            "nota": 90,
+            "nivel": "Excelente",
+            "maxSeg": 960
+          },
+          {
+            "min": 0,
+            "nota": 75,
+            "nivel": "Bueno",
+            "maxSeg": 1050
+          },
+          {
+            "min": 0,
+            "nota": 60,
+            "nivel": "Satisfactorio",
+            "maxSeg": 1200
+          },
+          {
+            "min": 0,
+            "nota": 30,
+            "nivel": "Insuficiente",
+            "maxSeg": 9999
+          }
+        ]
+      }
+    },
+    {
+      "grupoEdad": "50-54",
+      "genero": "F",
+      "flexiones": [
+        {
+          "min": 14,
+          "nota": 100,
+          "nivel": "Sobresaliente"
+        },
+        {
+          "min": 10,
+          "nota": 90,
+          "nivel": "Excelente"
+        },
+        {
+          "min": 7,
+          "nota": 75,
+          "nivel": "Bueno"
+        },
+        {
+          "min": 4,
+          "nota": 60,
+          "nivel": "Satisfactorio"
+        },
+        {
+          "min": 0,
+          "nota": 30,
+          "nivel": "Insuficiente"
+        }
+      ],
+      "abdominales": [
+        {
+          "min": 38,
+          "nota": 100,
+          "nivel": "Sobresaliente"
+        },
+        {
+          "min": 28,
+          "nota": 90,
+          "nivel": "Excelente"
+        },
+        {
+          "min": 20,
+          "nota": 75,
+          "nivel": "Bueno"
+        },
+        {
+          "min": 16,
+          "nota": 60,
+          "nivel": "Satisfactorio"
+        },
+        {
+          "min": 0,
+          "nota": 30,
+          "nivel": "Insuficiente"
+        }
+      ],
+      "cardio": {
+        "trote_2400m": [
+          {
+            "min": 0,
+            "nota": 100,
+            "nivel": "Sobresaliente",
+            "maxSeg": 930
+          },
+          {
+            "min": 0,
+            "nota": 90,
+            "nivel": "Excelente",
+            "maxSeg": 1020
+          },
+          {
+            "min": 0,
+            "nota": 75,
+            "nivel": "Bueno",
+            "maxSeg": 1110
+          },
+          {
+            "min": 0,
+            "nota": 60,
+            "nivel": "Satisfactorio",
+            "maxSeg": 1260
+          },
+          {
+            "min": 0,
+            "nota": 30,
+            "nivel": "Insuficiente",
+            "maxSeg": 9999
+          }
+        ]
+      }
+    },
+    {
+      "grupoEdad": "55-59",
+      "genero": "F",
+      "flexiones": [
+        {
+          "min": 10,
+          "nota": 100,
+          "nivel": "Sobresaliente"
+        },
+        {
+          "min": 7,
+          "nota": 90,
+          "nivel": "Excelente"
+        },
+        {
+          "min": 5,
+          "nota": 75,
+          "nivel": "Bueno"
+        },
+        {
+          "min": 3,
+          "nota": 60,
+          "nivel": "Satisfactorio"
+        },
+        {
+          "min": 0,
+          "nota": 30,
+          "nivel": "Insuficiente"
+        }
+      ],
+      "abdominales": [
+        {
+          "min": 34,
+          "nota": 100,
+          "nivel": "Sobresaliente"
+        },
+        {
+          "min": 24,
+          "nota": 90,
+          "nivel": "Excelente"
+        },
+        {
+          "min": 18,
+          "nota": 75,
+          "nivel": "Bueno"
+        },
+        {
+          "min": 14,
+          "nota": 60,
+          "nivel": "Satisfactorio"
+        },
+        {
+          "min": 0,
+          "nota": 30,
+          "nivel": "Insuficiente"
+        }
+      ],
+      "cardio": {
+        "trote_2400m": [
+          {
+            "min": 0,
+            "nota": 100,
+            "nivel": "Sobresaliente",
+            "maxSeg": 990
+          },
+          {
+            "min": 0,
+            "nota": 90,
+            "nivel": "Excelente",
+            "maxSeg": 1080
+          },
+          {
+            "min": 0,
+            "nota": 75,
+            "nivel": "Bueno",
+            "maxSeg": 1170
+          },
+          {
+            "min": 0,
+            "nota": 60,
+            "nivel": "Satisfactorio",
+            "maxSeg": 1320
+          },
+          {
+            "min": 0,
+            "nota": 30,
+            "nivel": "Insuficiente",
+            "maxSeg": 9999
+          }
+        ]
+      }
+    },
+    {
+      "grupoEdad": "60-64",
+      "genero": "F",
+      "flexiones": [
+        {
+          "min": 8,
+          "nota": 100,
+          "nivel": "Sobresaliente"
+        },
+        {
+          "min": 5,
+          "nota": 90,
+          "nivel": "Excelente"
+        },
+        {
+          "min": 3,
+          "nota": 75,
+          "nivel": "Bueno"
+        },
+        {
+          "min": 2,
+          "nota": 60,
+          "nivel": "Satisfactorio"
+        },
+        {
+          "min": 0,
+          "nota": 30,
+          "nivel": "Insuficiente"
+        }
+      ],
+      "abdominales": [
+        {
+          "min": 30,
+          "nota": 100,
+          "nivel": "Sobresaliente"
+        },
+        {
+          "min": 22,
+          "nota": 90,
+          "nivel": "Excelente"
+        },
+        {
+          "min": 16,
+          "nota": 75,
+          "nivel": "Bueno"
+        },
+        {
+          "min": 12,
+          "nota": 60,
+          "nivel": "Satisfactorio"
+        },
+        {
+          "min": 0,
+          "nota": 30,
+          "nivel": "Insuficiente"
+        }
+      ],
+      "cardio": {
+        "trote_2400m": [
+          {
+            "min": 0,
+            "nota": 100,
+            "nivel": "Sobresaliente",
+            "maxSeg": 1050
+          },
+          {
+            "min": 0,
+            "nota": 90,
+            "nivel": "Excelente",
+            "maxSeg": 1140
+          },
+          {
+            "min": 0,
+            "nota": 75,
+            "nivel": "Bueno",
+            "maxSeg": 1230
+          },
+          {
+            "min": 0,
+            "nota": 60,
+            "nivel": "Satisfactorio",
+            "maxSeg": 1380
+          },
+          {
+            "min": 0,
+            "nota": 30,
+            "nivel": "Insuficiente",
+            "maxSeg": 9999
+          }
+        ]
+      }
+    },
+    {
+      "grupoEdad": "65+",
+      "genero": "F",
+      "flexiones": [
+        {
+          "min": 6,
+          "nota": 100,
+          "nivel": "Sobresaliente"
+        },
+        {
+          "min": 4,
+          "nota": 90,
+          "nivel": "Excelente"
+        },
+        {
+          "min": 2,
+          "nota": 75,
+          "nivel": "Bueno"
+        },
+        {
+          "min": 1,
+          "nota": 60,
+          "nivel": "Satisfactorio"
+        },
+        {
+          "min": 0,
+          "nota": 30,
+          "nivel": "Insuficiente"
+        }
+      ],
+      "abdominales": [
+        {
+          "min": 26,
+          "nota": 100,
+          "nivel": "Sobresaliente"
+        },
+        {
+          "min": 18,
+          "nota": 90,
+          "nivel": "Excelente"
+        },
+        {
+          "min": 14,
+          "nota": 75,
+          "nivel": "Bueno"
+        },
+        {
+          "min": 10,
+          "nota": 60,
+          "nivel": "Satisfactorio"
+        },
+        {
+          "min": 0,
+          "nota": 30,
+          "nivel": "Insuficiente"
+        }
+      ],
+      "cardio": {
+        "trote_2400m": [
+          {
+            "min": 0,
+            "nota": 100,
+            "nivel": "Sobresaliente",
+            "maxSeg": 1110
+          },
+          {
+            "min": 0,
+            "nota": 90,
+            "nivel": "Excelente",
+            "maxSeg": 1200
+          },
+          {
+            "min": 0,
+            "nota": 75,
+            "nivel": "Bueno",
+            "maxSeg": 1290
+          },
+          {
+            "min": 0,
+            "nota": 60,
+            "nivel": "Satisfactorio",
+            "maxSeg": 1440
+          },
+          {
+            "min": 0,
+            "nota": 30,
+            "nivel": "Insuficiente",
+            "maxSeg": 9999
+          }
+        ]
+      }
     }
-    // ...más datos
   ]
 }

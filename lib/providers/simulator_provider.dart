@@ -5,7 +5,7 @@ import '../services/scoring_service.dart';
 class SimulatorProvider extends ChangeNotifier {
   String genero = 'Masculino';
   String grupoEdad = '17-19';
-  String altitud = 'Bajo 5000 pies';
+  String altitud = 'Bajo 1500m';
   String tipoCardio = 'Trote 2.4km';
 
   PfaResult? lastResult;

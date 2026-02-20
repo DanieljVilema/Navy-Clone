@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:dash_chat_2/dash_chat_2.dart';
+import 'package:provider/provider.dart';
+import '../../providers/chat_provider.dart';
+import '../../core/constants.dart';
 
 class ChatbotScreen extends StatefulWidget {
   const ChatbotScreen({super.key});
@@ -9,59 +12,58 @@ class ChatbotScreen extends StatefulWidget {
 }
 
 class _ChatbotScreenState extends State<ChatbotScreen> {
-  // 1. Definimos los usuarios (Tú y el Bot)
-  final ChatUser _currentUser = ChatUser(
-    id: '1',
-    firstName: 'Marino',
-  );
-
+  final ChatUser _currentUser = ChatUser(id: '1', firstName: 'Marino');
   final ChatUser _navyBot = ChatUser(
     id: '2',
     firstName: 'Asistente Naval',
-    // Un icono de ancla temporal para el perfil del bot
-    profileImage: 'https://cdn-icons-png.flaticon.com/512/3260/3260867.png', 
+    profileImage: 'https://cdn-icons-png.flaticon.com/512/3260/3260867.png',
   );
-
-  // 2. Lista de mensajes en la pantalla
   final List<ChatMessage> _messages = [];
 
   @override
   void initState() {
     super.initState();
-    // Mensaje de bienvenida que aparece al abrir la pantalla
-    _messages.add(
-      ChatMessage(
-        text: '¡Saludos! Soy el Asistente Virtual de la Armada del Ecuador. ¿En qué te puedo ayudar sobre el reglamento de pruebas físicas hoy?',
-        user: _navyBot,
-        createdAt: DateTime.now(),
-      ),
-    );
+    _messages.add(ChatMessage(
+      text: '¡Saludos! Soy el Asistente Virtual de la Armada del Ecuador. '
+          '¿En qué te puedo ayudar sobre el reglamento de pruebas físicas hoy?',
+      user: _navyBot,
+      createdAt: DateTime.now(),
+    ));
   }
 
-  // 3. Función que se ejecuta cuando el usuario presiona "Enviar"
   void _onSend(ChatMessage message) {
-    setState(() {
-      _messages.insert(0, message); // Añade tu mensaje a la pantalla
-    });
-
-    // Llamamos a la función que simulará la respuesta de la IA
-    _simulateGeminiResponse(message.text);
+    setState(() => _messages.insert(0, message));
+    final chatProvider = context.read<ChatProvider>();
+    if (chatProvider.isGeminiReady) {
+      chatProvider.sendMessage(message.text).then((_) {
+        if (mounted) {
+          final lastMsg = chatProvider.messages.last;
+          setState(() {
+            _messages.insert(0, ChatMessage(
+              text: lastMsg.text,
+              user: _navyBot,
+              createdAt: lastMsg.timestamp,
+            ));
+          });
+        }
+      });
+    } else {
+      _simulateResponse(message.text);
+    }
   }
 
-  // 4. El "Cerebro" Temporal (Aquí conectaremos Gemini después)
-  void _simulateGeminiResponse(String userText) {
-    // Simulamos que el bot está "escribiendo" durante 1.5 segundos
+  void _simulateResponse(String userText) {
     Future.delayed(const Duration(milliseconds: 1500), () {
       if (mounted) {
         setState(() {
-          _messages.insert(
-            0,
-            ChatMessage(
-              text: 'He recibido tu consulta sobre: "$userText". \n\n(Nota técnica: Esta es una respuesta de prueba. Pronto conectaremos el motor de Inteligencia Artificial para leer los Baremos oficiales).',
-              user: _navyBot,
-              createdAt: DateTime.now(),
-            ),
-          );
+          _messages.insert(0, ChatMessage(
+            text: 'He recibido tu consulta sobre: "$userText".\n\n'
+                'Actualmente el motor de I.A. no está configurado. '
+                'Configure su API Key de Gemini para activarlo.\n\n'
+                'Mientras tanto, consulte los reglamentos desde el menú lateral.',
+            user: _navyBot,
+            createdAt: DateTime.now(),
+          ));
         });
       }
     });
@@ -69,36 +71,39 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Azul oficial de tu app
-    const navyColor = Color(0xFF001F5B);
-
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Consultas I.A.', 
-          style: TextStyle(color: Colors.white, fontSize: 18)
-        ),
-        backgroundColor: navyColor,
-        iconTheme: const IconThemeData(color: Colors.white), // Flecha de volver blanca
-      ),
+      backgroundColor: AppColors.darkBg,
       body: DashChat(
         currentUser: _currentUser,
         onSend: _onSend,
         messages: _messages,
         messageOptions: const MessageOptions(
-          currentUserContainerColor: navyColor, // Burbujas del usuario en Azul Navy
-          containerColor: Color(0xFFE0E0E0), // Burbujas del bot en gris claro militar
-          textColor: Colors.black,
+          currentUserContainerColor: AppColors.primary,
+          containerColor: AppColors.darkCardSec,
+          textColor: AppColors.darkTextPrimary,
           currentUserTextColor: Colors.white,
           showOtherUsersAvatar: true,
         ),
-        inputOptions: const InputOptions(
+        inputOptions: InputOptions(
           inputDecoration: InputDecoration(
-            hintText: "Escribe tu consulta sobre el reglamento...",
-            border: OutlineInputBorder(),
+            hintText: 'Escribe tu consulta...',
+            hintStyle: TextStyle(color: AppColors.darkTextTertiary),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(Radii.m),
+              borderSide: const BorderSide(color: AppColors.darkBorder),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(Radii.m),
+              borderSide: const BorderSide(color: AppColors.darkBorder),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(Radii.m),
+              borderSide: const BorderSide(color: AppColors.primary),
+            ),
             filled: true,
-            fillColor: Colors.white,
+            fillColor: AppColors.darkCard,
           ),
+          inputTextStyle: const TextStyle(color: AppColors.darkTextPrimary),
         ),
       ),
     );

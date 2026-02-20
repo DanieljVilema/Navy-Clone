@@ -20,34 +20,33 @@ class ScoringService {
     double? cinturaPulg,
     double? pesoLb,
   }) {
-    // Try to find matching baremo
     final baremo = _findBaremo(genero, grupoEdad);
+    final totalCardioSec = cardioMinutos * 60 + cardioSegundos;
 
     double pushUpScore;
     double curlUpScore;
     double cardioScore;
 
     if (baremo != null && baremo.flexiones.isNotEmpty) {
-      pushUpScore = _scoreFromBaremo(baremo.flexiones, flexiones.toDouble());
-      curlUpScore =
-          _scoreFromBaremo(baremo.abdominales, abdominales.toDouble());
-      final totalCardioSec = cardioMinutos * 60 + cardioSegundos;
+      pushUpScore = _scoreReps(baremo.flexiones, flexiones);
+      curlUpScore = baremo.abdominales.isNotEmpty
+          ? _scoreReps(baremo.abdominales, abdominales)
+          : _fallbackRepScore(abdominales, 60);
       final cardioThresholds = baremo.cardio.forType(tipoCardio);
       cardioScore = cardioThresholds.isNotEmpty
-          ? _scoreFromBaremo(cardioThresholds, totalCardioSec.toDouble())
+          ? _scoreCardio(cardioThresholds, totalCardioSec)
           : _fallbackCardioScore(totalCardioSec);
     } else {
-      // Fallback: hardcoded formulas (current behavior)
-      pushUpScore = (flexiones / 50 * 20).clamp(0, 20).toDouble();
-      curlUpScore = (abdominales / 60 * 20).clamp(0, 20).toDouble();
-      final totalCardioSec = cardioMinutos * 60 + cardioSegundos;
+      pushUpScore = _fallbackRepScore(flexiones, 50);
+      curlUpScore = _fallbackRepScore(abdominales, 60);
       cardioScore = _fallbackCardioScore(totalCardioSec);
     }
 
-    final totalScore = pushUpScore + curlUpScore + cardioScore;
+    // Total = average of three component scores (each 0-100)
+    final totalScore = (pushUpScore + curlUpScore + cardioScore) / 3.0;
     final nivel = AppStrings.levelForScore(totalScore);
 
-    // BCA calculations
+    // BCA calculations (imperial inputs)
     double? cinturaRatio;
     String? estadoBca;
     double? imc;
@@ -68,7 +67,7 @@ class ScoringService {
       tipoCardio: tipoCardio,
       flexionesRaw: flexiones,
       abdominalesRaw: abdominales,
-      cardioSegundos: cardioMinutos * 60 + cardioSegundos,
+      cardioSegundos: totalCardioSec,
       notaFlexiones: double.parse(pushUpScore.toStringAsFixed(1)),
       notaAbdominales: double.parse(curlUpScore.toStringAsFixed(1)),
       notaCardio: double.parse(cardioScore.toStringAsFixed(1)),
@@ -84,25 +83,53 @@ class ScoringService {
     final generoCode = genero == 'Masculino' ? 'M' : 'F';
     for (final b in _baremos) {
       if ((b.genero == generoCode || b.genero == genero) &&
-          (b.grupoEdad == grupoEdad)) {
+          b.grupoEdad == grupoEdad) {
         return b;
       }
     }
     return null;
   }
 
-  double _scoreFromBaremo(List<BaremoThreshold> thresholds, double value) {
-    // Thresholds are sorted desc by min: first match wins
+  /// Score reps-based events: thresholds sorted desc by min, first match wins
+  double _scoreReps(List<BaremoThreshold> thresholds, int reps) {
     for (final t in thresholds) {
-      if (value >= t.min) {
+      if (reps >= t.min) {
         return t.nota;
       }
     }
     return 0;
   }
 
+  /// Score cardio by time: thresholds have maxSeg, lower time = better
+  double _scoreCardio(List<BaremoThreshold> thresholds, int totalSec) {
+    if (totalSec <= 0) return 0;
+    // Thresholds sorted best→worst (highest nota first, lowest maxSeg first)
+    for (final t in thresholds) {
+      if (t.maxSeg != null && totalSec <= t.maxSeg!) {
+        return t.nota;
+      }
+    }
+    return 30; // worst tier
+  }
+
+  double _fallbackRepScore(int reps, int excellentThreshold) {
+    if (reps <= 0) return 0;
+    final ratio = reps / excellentThreshold;
+    if (ratio >= 1.2) return 100;
+    if (ratio >= 1.0) return 90;
+    if (ratio >= 0.8) return 75;
+    if (ratio >= 0.6) return 60;
+    if (ratio >= 0.4) return 45;
+    return 30;
+  }
+
   double _fallbackCardioScore(int totalSeconds) {
     if (totalSeconds <= 0) return 0;
-    return ((900 - totalSeconds) / 900 * 60).clamp(0, 60).toDouble();
+    if (totalSeconds <= 570) return 100.0;
+    if (totalSeconds <= 636) return 90.0;
+    if (totalSeconds <= 750) return 75.0;
+    if (totalSeconds <= 870) return 60.0;
+    if (totalSeconds <= 1020) return 45.0;
+    return 30.0;
   }
 }
