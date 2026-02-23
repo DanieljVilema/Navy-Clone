@@ -1,0 +1,29 @@
+{
+  "regulations_content": [
+    {
+      "id": "cogmar_normas",
+      "titulo": "COGMAR-EDU-001-2019-O: Normas para la Evaluación de Condiciones Físicas",
+      "contenido": "[Aquí irá el contenido extraído del PDF COGMAR-EDU-001-2019-O.pdf - Puedes copiar y pegar el texto del PDF aquí]"
+    },
+    {
+      "id": "pruebas_reclutamiento",
+      "titulo": "Pruebas Físicas Reclutamiento",
+      "contenido": "[Aquí irá el contenido extraído del PDF 'Pruebas Fisicas Reclutamiento.pdf' - Puedes copiar y pegar el texto del PDF aquí]"
+    },
+    {
+      "id": "tabla_control_1",
+      "titulo": "Tabla Control Prueba Física FF.AA. (Parte 1)",
+      "contenido": "[Aquí irá el contenido extraído - Puedes copiar y pegar el texto del PDF aquí]"
+    },
+    {
+      "id": "tabla_control_2",
+      "titulo": "Tabla Control Prueba Física FF.AA. (Parte 2)",
+      "contenido": "[Aquí irá el contenido extraído - Puedes copiar y pegar el texto del PDF aquí]"
+    },
+    {
+      "id": "tabla_control_3",
+      "titulo": "Tabla Control Prueba Física FF.AA. (Parte 3)",
+      "contenido": "[Aquí irá el contenido extraído - Puedes copiar y pegar el texto del PDF aquí]"
+    }
+  ]
+}

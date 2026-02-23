@@ -73,4 +73,24 @@ class JsonLoaderService {
       return [];
     }
   }
+
+  static Future<Map<String, String>> loadRegulationsContent() async {
+    try {
+      final data =
+          await rootBundle.loadString('assets/regulations_text.json');
+      final json = jsonDecode(data);
+      final result = <String, String>{};
+      for (final item in json['regulations_content'] as List) {
+        final id = item['id'] as String? ?? '';
+        final titulo = item['titulo'] as String? ?? '';
+        final contenido = item['contenido'] as String? ?? '';
+        if (id.isNotEmpty) {
+          result[id] = '$titulo\n$contenido';
+        }
+      }
+      return result;
+    } catch (e) {
+      return {};
+    }
+  }
 }

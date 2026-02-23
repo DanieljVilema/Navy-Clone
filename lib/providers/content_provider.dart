@@ -12,6 +12,7 @@ class ContentProvider extends ChangeNotifier {
   List<RegulationItem> _regulations = [];
   List<TrainingCategory> _training = [];
   List<BaremoEntry> _baremos = [];
+  Map<String, String> _regulationsContent = {};
   bool _isLoaded = false;
 
   List<VideoItem> get videos => _videos;
@@ -20,6 +21,7 @@ class ContentProvider extends ChangeNotifier {
   List<TrainingCategory> get training => _training;
   List<BaremoEntry> get baremos => _baremos;
   bool get isLoaded => _isLoaded;
+  Map<String, String> get regulationsContent => _regulationsContent;
 
   List<VideoItem> videosByCategory(String cat) =>
       _videos.where((v) => v.categoria == cat).toList();
@@ -61,7 +63,16 @@ class ContentProvider extends ChangeNotifier {
     _videos = await JsonLoaderService.loadVideos();
     _regulations = await JsonLoaderService.loadRegulations();
     _training = await JsonLoaderService.loadTraining();
+    _regulationsContent = await JsonLoaderService.loadRegulationsContent();
     _isLoaded = true;
     notifyListeners();
+  }
+
+  /// Returns regulations data as a concise string for Gemini system instructions
+  String get regulationsContext {
+    if (_regulationsContent.isEmpty) {
+      return 'Datos de reglamentos pendientes de carga.';
+    }
+    return _regulationsContent.values.join('\n---\n');
   }
 }

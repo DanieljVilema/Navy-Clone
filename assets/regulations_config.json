@@ -1,58 +1,34 @@
 {
   "regulaciones": [
     {
-      "titulo": "Guía del Programa de Preparación Física",
-      "subtitulo": "Reglamento General de Deportes",
-      "pdfAsset": "",
-      "externalUrl": ""
+      "titulo": "COGMAR-EDU-001-2019: Normas para Evaluación de Condiciones Físicas",
+      "subtitulo": "Normas Oficiales de la Armada del Ecuador",
+      "pdfAsset": "assets/pdfs/COGMAR-EDU-001-2019-O (NORMAS PARA LA EVALUACIÓN DE LAS CONDICIONES FÍSICAS Y LA RECUPERACIÓN DE PRUEBAS FÍSICAS).pdf",
+      "externalUrl": null
     },
     {
-      "titulo": "Guía de Evaluación Física",
-      "subtitulo": "Guía de políticas actualizada y preguntas frecuentes",
-      "pdfAsset": "",
-      "externalUrl": ""
+      "titulo": "Pruebas Físicas Reclutamiento",
+      "subtitulo": "Estándares para Reclutamiento Militar",
+      "pdfAsset": "assets/pdfs/Pruebas Fisicas Reclutamiento.pdf",
+      "externalUrl": null
     },
     {
-      "titulo": "Estándares de Control de Peso",
-      "subtitulo": "Estándares de Evaluación de Composición Corporal",
-      "pdfAsset": "",
-      "externalUrl": ""
+      "titulo": "Tabla Control Prueba Física FF.AA. (Parte 1)",
+      "subtitulo": "Estándares de Evaluación Física",
+      "pdfAsset": "assets/pdfs/TABLA CONTROL PRUEBA FISICA DE FF.AA. (1).pdf",
+      "externalUrl": null
     },
     {
-      "titulo": "Estándares de Pruebas Físicas",
-      "subtitulo": "Estándares de eventos de la Prueba de Preparación Física",
-      "pdfAsset": "",
-      "externalUrl": ""
+      "titulo": "Tabla Control Prueba Física FF.AA. (Parte 2)",
+      "subtitulo": "Estándares de Evaluación Física",
+      "pdfAsset": "assets/pdfs/TABLA CONTROL PRUEBA FISICA DE FF.AA. (2).pdf",
+      "externalUrl": null
     },
     {
-      "titulo": "Guía del Líder de Fitness del Comando",
-      "subtitulo": "Responsabilidades y procedimientos",
-      "pdfAsset": "",
-      "externalUrl": ""
-    },
-    {
-      "titulo": "Guía de Usuario del Sistema de Gestión",
-      "subtitulo": "Sistema de Gestión de Información de Preparación Física",
-      "pdfAsset": "",
-      "externalUrl": ""
-    },
-    {
-      "titulo": "Programa de Mejora Física (FEP)",
-      "subtitulo": "Requisitos y procedimientos del FEP",
-      "pdfAsset": "",
-      "externalUrl": ""
-    },
-    {
-      "titulo": "Exenciones Médicas",
-      "subtitulo": "Guía de autorización médica y exenciones",
-      "pdfAsset": "",
-      "externalUrl": ""
-    },
-    {
-      "titulo": "Mensajes Oficiales y Radiogramas",
-      "subtitulo": "Mensajes relacionados con la Evaluación Física",
-      "pdfAsset": "",
-      "externalUrl": ""
+      "titulo": "Tabla Control Prueba Física FF.AA. (Parte 3)",
+      "subtitulo": "Estándares de Evaluación Física",
+      "pdfAsset": "assets/pdfs/TABLA CONTROL PRUEBA FISICA DE FF.AA. (3).pdf",
+      "externalUrl": null
     }
   ],
   "recursos_adicionales": [

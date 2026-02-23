@@ -35,3 +35,5 @@ flutter:
     - assets/videos_config.json
     - assets/regulations_config.json
     - assets/training_config.json
+    - assets/regulations_text.json
+    - assets/pdfs/
