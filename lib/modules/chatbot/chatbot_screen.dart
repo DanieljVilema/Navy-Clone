@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:provider/provider.dart';
 import '../../providers/chat_provider.dart';
-import '../../providers/content_provider.dart';
 import '../../core/constants.dart';
 
 class ChatbotScreen extends StatefulWidget {

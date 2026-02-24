@@ -9,6 +9,7 @@ import 'modules/nutrition/nutrition_screen.dart';
 import 'modules/videos/videos_screen.dart';
 import 'modules/training/training_screen.dart';
 import 'modules/offline/offline_screen.dart';
+import 'modules/exercise_tracking/exercise_tracking_screen.dart';
 import 'core/constants.dart';
 
 class MainScreen extends StatefulWidget {
@@ -170,6 +171,13 @@ class _MainScreenState extends State<MainScreen> {
                     isSelected: _currentTitle == 'Simulador de Evaluación',
                     onTap: () =>
                         _navigateTo(const SimulatorScreen(), 'Simulador de Evaluación'),
+                  ),
+                  _DrawerItem(
+                    icon: Icons.timeline_outlined,
+                    title: 'Registro de Ejercicios',
+                    isSelected: _currentTitle == 'Registro de Ejercicios',
+                    onTap: () => _navigateTo(
+                        const ExerciseTrackingScreen(), 'Registro de Ejercicios'),
                   ),
                   _DrawerItem(
                     icon: Icons.chat_bubble_outline,

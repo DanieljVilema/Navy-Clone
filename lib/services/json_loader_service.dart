@@ -74,23 +74,29 @@ class JsonLoaderService {
     }
   }
 
-  static Future<Map<String, String>> loadRegulationsContent() async {
+  static Future<Map<String, dynamic>> loadRegulationsContent() async {
     try {
       final data =
           await rootBundle.loadString('assets/regulations_text.json');
       final json = jsonDecode(data);
-      final result = <String, String>{};
+      final descriptions = <String, String>{};
+      final pdfPaths = <String>[];
       for (final item in json['regulations_content'] as List) {
         final id = item['id'] as String? ?? '';
         final titulo = item['titulo'] as String? ?? '';
-        final contenido = item['contenido'] as String? ?? '';
+        final descripcion = item['descripcion'] as String? ?? '';
+        final pdfAsset = item['pdfAsset'] as String? ?? '';
+        final sendToGemini = item['sendToGemini'] as bool? ?? false;
         if (id.isNotEmpty) {
-          result[id] = '$titulo\n$contenido';
+          descriptions[id] = '$titulo: $descripcion';
+        }
+        if (sendToGemini && pdfAsset.isNotEmpty) {
+          pdfPaths.add(pdfAsset);
         }
       }
-      return result;
+      return {'descriptions': descriptions, 'pdfPaths': pdfPaths};
     } catch (e) {
-      return {};
+      return {'descriptions': <String, String>{}, 'pdfPaths': <String>[]};
     }
   }
 }

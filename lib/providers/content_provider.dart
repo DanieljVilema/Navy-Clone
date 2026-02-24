@@ -12,7 +12,8 @@ class ContentProvider extends ChangeNotifier {
   List<RegulationItem> _regulations = [];
   List<TrainingCategory> _training = [];
   List<BaremoEntry> _baremos = [];
-  Map<String, String> _regulationsContent = {};
+  Map<String, String> _regulationsDescriptions = {};
+  List<String> _pdfPathsForGemini = [];
   bool _isLoaded = false;
 
   List<VideoItem> get videos => _videos;
@@ -21,7 +22,8 @@ class ContentProvider extends ChangeNotifier {
   List<TrainingCategory> get training => _training;
   List<BaremoEntry> get baremos => _baremos;
   bool get isLoaded => _isLoaded;
-  Map<String, String> get regulationsContent => _regulationsContent;
+  Map<String, String> get regulationsDescriptions => _regulationsDescriptions;
+  List<String> get pdfPathsForGemini => _pdfPathsForGemini;
 
   List<VideoItem> videosByCategory(String cat) =>
       _videos.where((v) => v.categoria == cat).toList();
@@ -56,6 +58,14 @@ class ContentProvider extends ChangeNotifier {
         .join('\n');
   }
 
+  /// Returns regulations descriptions as context for Gemini
+  String get regulationsContext {
+    if (_regulationsDescriptions.isEmpty) {
+      return 'Datos de reglamentos pendientes de carga.';
+    }
+    return _regulationsDescriptions.values.join('\n---\n');
+  }
+
   Future<void> loadAllContent() async {
     if (_isLoaded) return;
     _baremos = await JsonLoaderService.loadBaremos();
@@ -63,16 +73,14 @@ class ContentProvider extends ChangeNotifier {
     _videos = await JsonLoaderService.loadVideos();
     _regulations = await JsonLoaderService.loadRegulations();
     _training = await JsonLoaderService.loadTraining();
-    _regulationsContent = await JsonLoaderService.loadRegulationsContent();
+
+    final regData = await JsonLoaderService.loadRegulationsContent();
+    _regulationsDescriptions =
+        (regData['descriptions'] as Map<String, String>?) ?? {};
+    _pdfPathsForGemini =
+        (regData['pdfPaths'] as List<String>?) ?? [];
+
     _isLoaded = true;
     notifyListeners();
-  }
-
-  /// Returns regulations data as a concise string for Gemini system instructions
-  String get regulationsContext {
-    if (_regulationsContent.isEmpty) {
-      return 'Datos de reglamentos pendientes de carga.';
-    }
-    return _regulationsContent.values.join('\n---\n');
   }
 }

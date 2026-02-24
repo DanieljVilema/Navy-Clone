@@ -33,23 +33,26 @@ class TrainingScreen extends StatelessWidget {
                 const SizedBox(height: 8),
                 Text(
                   'Serie de Acondicionamiento Físico Operacional Naval - Seleccione una categoría de entrenamiento a continuación.',
-                  style: GoogleFonts.roboto(
+                  style: GoogleFonts.inter(
                     fontSize: 13,
-                    color: Colors.black54,
+                    color: AppColors.darkTextSecondary,
                     height: 1.5,
                   ),
                 ),
               ],
             ),
           ),
-          Divider(height: 1, color: Colors.grey.shade200),
 
           // ── WORKOUT CATEGORIES ──
-          ...context.watch<ContentProvider>().training.map((t) => _WorkoutExpandableCategory(
-                title: t.titulo,
-                workoutCount: t.cantidadRutinas,
-                exercises: t.ejercicios,
-              )).toList(),
+          ...context
+              .watch<ContentProvider>()
+              .training
+              .map((t) => _WorkoutExpandableCategory(
+                    title: t.titulo,
+                    workoutCount: t.cantidadRutinas,
+                    exercises: t.ejercicios,
+                  ))
+              .toList(),
 
           const SizedBox(height: 32),
         ],
@@ -83,9 +86,10 @@ class _WorkoutExpandableCategoryState
     return Column(
       children: [
         Material(
-          color: Colors.white,
+          color: AppColors.darkCard,
           child: InkWell(
             onTap: () => setState(() => _isExpanded = !_isExpanded),
+            splashColor: AppColors.primary.withValues(alpha: 0.08),
             child: Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
@@ -97,18 +101,18 @@ class _WorkoutExpandableCategoryState
                       children: [
                         Text(
                           widget.title,
-                          style: GoogleFonts.roboto(
+                          style: GoogleFonts.inter(
                             fontSize: 15,
                             fontWeight: FontWeight.w500,
-                            color: Colors.black87,
+                            color: AppColors.darkTextPrimary,
                           ),
                         ),
                         const SizedBox(height: 3),
                         Text(
                           widget.workoutCount,
-                          style: GoogleFonts.roboto(
+                          style: GoogleFonts.inter(
                             fontSize: 12,
-                            color: Colors.grey.shade500,
+                            color: AppColors.darkTextSecondary,
                           ),
                         ),
                       ],
@@ -117,10 +121,10 @@ class _WorkoutExpandableCategoryState
                   AnimatedRotation(
                     turns: _isExpanded ? 0.25 : 0,
                     duration: const Duration(milliseconds: 200),
-                    child: Icon(
+                    child: const Icon(
                       Icons.chevron_right,
                       size: 22,
-                      color: Colors.grey.shade400,
+                      color: AppColors.darkTextTertiary,
                     ),
                   ),
                 ],
@@ -132,7 +136,7 @@ class _WorkoutExpandableCategoryState
           firstChild: const SizedBox.shrink(),
           secondChild: Container(
             width: double.infinity,
-            color: Colors.grey.shade50,
+            color: AppColors.darkCardSec,
             padding: const EdgeInsets.fromLTRB(36, 4, 20, 12),
             child: Column(
               children: widget.exercises.map((exercise) {
@@ -143,8 +147,8 @@ class _WorkoutExpandableCategoryState
                       Container(
                         width: 5,
                         height: 5,
-                        decoration: BoxDecoration(
-                          color: AppColors.navyPrimary,
+                        decoration: const BoxDecoration(
+                          color: AppColors.primary,
                           shape: BoxShape.circle,
                         ),
                       ),
@@ -152,9 +156,9 @@ class _WorkoutExpandableCategoryState
                       Expanded(
                         child: Text(
                           exercise,
-                          style: GoogleFonts.roboto(
+                          style: GoogleFonts.inter(
                             fontSize: 13,
-                            color: Colors.black54,
+                            color: AppColors.darkTextSecondary,
                           ),
                         ),
                       ),
@@ -169,7 +173,7 @@ class _WorkoutExpandableCategoryState
               : CrossFadeState.showFirst,
           duration: const Duration(milliseconds: 200),
         ),
-        Divider(height: 1, color: Colors.grey.shade200),
+        const Divider(height: 1, color: AppColors.darkBorder),
       ],
     );
   }

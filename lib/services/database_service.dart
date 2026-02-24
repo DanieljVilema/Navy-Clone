@@ -3,6 +3,8 @@ import 'package:path/path.dart';
 import '../models/user_profile.dart';
 import '../models/pfa_result.dart';
 import '../models/chat_message.dart';
+import '../models/exercise_type.dart';
+import '../models/exercise_log.dart';
 
 class DatabaseService {
   static Database? _db;
@@ -17,8 +19,9 @@ class DatabaseService {
     final path = join(dbPath, 'navy_pfa.db');
     return openDatabase(
       path,
-      version: 1,
+      version: 2,
       onCreate: _createTables,
+      onUpgrade: _onUpgrade,
     );
   }
 
@@ -66,6 +69,62 @@ class DatabaseService {
         timestamp TEXT NOT NULL
       )
     ''');
+
+    // v2 tables
+    await _createExerciseTables(db);
+    await _seedExerciseTypes(db);
+  }
+
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      await _createExerciseTables(db);
+      await _seedExerciseTypes(db);
+    }
+  }
+
+  Future<void> _createExerciseTables(Database db) async {
+    await db.execute('''
+      CREATE TABLE exercise_types (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nombre TEXT NOT NULL,
+        clave TEXT NOT NULL UNIQUE,
+        categoria TEXT NOT NULL,
+        metrica_principal TEXT NOT NULL,
+        icono TEXT NOT NULL
+      )
+    ''');
+
+    await db.execute('''
+      CREATE TABLE exercise_logs (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER NOT NULL,
+        exercise_type_id INTEGER NOT NULL,
+        fecha TEXT NOT NULL,
+        repeticiones INTEGER,
+        duracion_segundos INTEGER,
+        distancia_metros REAL,
+        frecuencia_cardiaca INTEGER,
+        notas TEXT,
+        fuente TEXT NOT NULL DEFAULT 'manual',
+        created_at TEXT NOT NULL,
+        FOREIGN KEY (user_id) REFERENCES user_profiles(id),
+        FOREIGN KEY (exercise_type_id) REFERENCES exercise_types(id)
+      )
+    ''');
+  }
+
+  Future<void> _seedExerciseTypes(Database db) async {
+    final types = [
+      {'nombre': 'Flexiones', 'clave': 'flexiones', 'categoria': 'fuerza_superior', 'metrica_principal': 'repeticiones', 'icono': 'fitness_center'},
+      {'nombre': 'Abdominales', 'clave': 'abdominales', 'categoria': 'fuerza_core', 'metrica_principal': 'repeticiones', 'icono': 'accessibility_new'},
+      {'nombre': 'Barras', 'clave': 'barras', 'categoria': 'fuerza_superior', 'metrica_principal': 'repeticiones', 'icono': 'iron'},
+      {'nombre': 'Fondos en Paralela', 'clave': 'fondos', 'categoria': 'fuerza_superior', 'metrica_principal': 'repeticiones', 'icono': 'sports_gymnastics'},
+      {'nombre': 'Trote', 'clave': 'trote', 'categoria': 'cardio', 'metrica_principal': 'distancia', 'icono': 'directions_run'},
+      {'nombre': 'Natación', 'clave': 'natacion', 'categoria': 'cardio', 'metrica_principal': 'distancia', 'icono': 'pool'},
+    ];
+    for (final t in types) {
+      await db.insert('exercise_types', t);
+    }
   }
 
   // ── USER PROFILE ──
@@ -136,5 +195,75 @@ class DatabaseService {
   Future<void> clearChatHistory() async {
     final db = await database;
     await db.delete('chat_messages');
+  }
+
+  // ── EXERCISE TYPES ──
+
+  Future<List<ExerciseType>> getExerciseTypes() async {
+    final db = await database;
+    final maps = await db.query('exercise_types', orderBy: 'id ASC');
+    return maps.map((m) => ExerciseType.fromMap(m)).toList();
+  }
+
+  // ── EXERCISE LOGS ──
+
+  Future<int> insertExerciseLog(ExerciseLog log) async {
+    final db = await database;
+    return db.insert('exercise_logs', log.toMap());
+  }
+
+  Future<List<ExerciseLog>> getExerciseLogs({
+    required int userId,
+    DateTime? from,
+    DateTime? to,
+    String? exerciseTypeClave,
+  }) async {
+    final db = await database;
+    final types = await getExerciseTypes();
+    final typeMap = {for (final t in types) t.id!: t};
+
+    String where = 'el.user_id = ?';
+    final args = <dynamic>[userId];
+
+    if (from != null) {
+      where += ' AND el.fecha >= ?';
+      args.add(from.toIso8601String());
+    }
+    if (to != null) {
+      where += ' AND el.fecha <= ?';
+      args.add(to.toIso8601String());
+    }
+    if (exerciseTypeClave != null) {
+      final typeId = types
+          .where((t) => t.clave == exerciseTypeClave)
+          .map((t) => t.id)
+          .firstOrNull;
+      if (typeId != null) {
+        where += ' AND el.exercise_type_id = ?';
+        args.add(typeId);
+      }
+    }
+
+    final maps = await db.rawQuery(
+      'SELECT el.* FROM exercise_logs el WHERE $where ORDER BY el.fecha DESC, el.created_at DESC',
+      args,
+    );
+
+    return maps
+        .map((m) =>
+            ExerciseLog.fromMap(m, exerciseType: typeMap[m['exercise_type_id']]))
+        .toList();
+  }
+
+  Future<List<ExerciseLog>> getExerciseLogsByMonth(
+      int userId, int year, int month) async {
+    final from = DateTime(year, month, 1);
+    final to = DateTime(year, month + 1, 0, 23, 59, 59);
+    return getExerciseLogs(userId: userId, from: from, to: to);
+  }
+
+  Future<int> deleteExerciseLog(int id) async {
+    final db = await database;
+    return db.delete('exercise_logs', where: 'id = ?', whereArgs: [id]);
   }
 }

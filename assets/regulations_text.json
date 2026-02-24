@@ -3,27 +3,30 @@
     {
       "id": "cogmar_normas",
       "titulo": "COGMAR-EDU-001-2019-O: Normas para la Evaluación de Condiciones Físicas",
-      "contenido": "[Aquí irá el contenido extraído del PDF COGMAR-EDU-001-2019-O.pdf - Puedes copiar y pegar el texto del PDF aquí]"
+      "descripcion": "Normas oficiales de la Armada del Ecuador para la evaluación de condiciones físicas y recuperación de pruebas físicas. Incluye procedimientos, baremos, requisitos y protocolos de evaluación.",
+      "pdfAsset": "assets/COGMAR-EDU-001-2019-O (NORMAS PARA LA EVALUACIÓN DE LAS CONDICIONES FÍSICAS Y LA RECUPERACIÓN DE PRUEBAS FÍSICAS) (1).pdf",
+      "sendToGemini": true
     },
     {
-      "id": "pruebas_reclutamiento",
-      "titulo": "Pruebas Físicas Reclutamiento",
-      "contenido": "[Aquí irá el contenido extraído del PDF 'Pruebas Fisicas Reclutamiento.pdf' - Puedes copiar y pegar el texto del PDF aquí]"
+      "id": "reg_cult_fisica",
+      "titulo": "Reglamento de Cultura Física MIDENA 2018",
+      "descripcion": "Reglamento aprobado por el Ministerio de Defensa Nacional que establece las normas de cultura física para las Fuerzas Armadas del Ecuador. Define los estándares, procedimientos y evaluaciones de condición física.",
+      "pdfAsset": "assets/8. reg.cult.fisica_aprobado_midena-_2018-1.pdf",
+      "sendToGemini": true
     },
     {
-      "id": "tabla_control_1",
-      "titulo": "Tabla Control Prueba Física FF.AA. (Parte 1)",
-      "contenido": "[Aquí irá el contenido extraído - Puedes copiar y pegar el texto del PDF aquí]"
+      "id": "ley_organica",
+      "titulo": "Ley Orgánica de Personal y Disciplina de FF.AA. 2023",
+      "descripcion": "Legislación vigente que regula el personal y la disciplina de las Fuerzas Armadas del Ecuador. Establece los derechos, obligaciones, régimen disciplinario y estructura de personal militar.",
+      "pdfAsset": "assets/LEY ORGANICA DE PERSONAL Y DISCIPLINA DE FFAA 2023.pdf",
+      "sendToGemini": true
     },
     {
-      "id": "tabla_control_2",
-      "titulo": "Tabla Control Prueba Física FF.AA. (Parte 2)",
-      "contenido": "[Aquí irá el contenido extraído - Puedes copiar y pegar el texto del PDF aquí]"
-    },
-    {
-      "id": "tabla_control_3",
-      "titulo": "Tabla Control Prueba Física FF.AA. (Parte 3)",
-      "contenido": "[Aquí irá el contenido extraído - Puedes copiar y pegar el texto del PDF aquí]"
+      "id": "reglamento_ley_personal",
+      "titulo": "Reglamento General Ley de Personal FF.AA. 2023",
+      "descripcion": "Reglamento general de la Ley de Personal de las Fuerzas Armadas, firmado en julio 2023. Detalla la aplicación de la ley orgánica de personal incluyendo ascensos, calificaciones y evaluaciones.",
+      "pdfAsset": "assets/REGLAMENTO GENERAL LEY PERSONAL FF.AA 20230718-signed.pdf",
+      "sendToGemini": true
     }
   ]
 }
