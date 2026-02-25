@@ -35,7 +35,15 @@ class _ExerciseTrackingScreenState extends State<ExerciseTrackingScreen> {
 
   void _openLogForm() {
     final provider = context.read<ExerciseLogProvider>();
-    if (provider.exerciseTypes.isEmpty) return;
+    if (provider.exerciseTypes.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Cargando ejercicios, intenta de nuevo en un momento'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
     final userId = context.read<UserProvider>().userId;
 
     showModalBottomSheet(

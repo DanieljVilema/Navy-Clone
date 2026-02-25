@@ -19,9 +19,15 @@ class DatabaseService {
     final path = join(dbPath, 'navy_pfa.db');
     return openDatabase(
       path,
-      version: 2,
+      version: 3,
       onCreate: _createTables,
       onUpgrade: _onUpgrade,
+      onOpen: (db) async {
+        // Always ensure exercise tables + seed data exist, regardless of migration state.
+        // Both calls are idempotent: IF NOT EXISTS + INSERT OR IGNORE.
+        await _createExerciseTables(db);
+        await _seedExerciseTypes(db);
+      },
     );
   }
 
@@ -80,11 +86,16 @@ class DatabaseService {
       await _createExerciseTables(db);
       await _seedExerciseTypes(db);
     }
+    if (oldVersion < 3) {
+      // Ensure exercise tables exist (handles DBs at v2 that missed the migration)
+      await _createExerciseTables(db);
+      await _seedExerciseTypes(db);
+    }
   }
 
   Future<void> _createExerciseTables(Database db) async {
     await db.execute('''
-      CREATE TABLE exercise_types (
+      CREATE TABLE IF NOT EXISTS exercise_types (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         nombre TEXT NOT NULL,
         clave TEXT NOT NULL UNIQUE,
@@ -95,7 +106,7 @@ class DatabaseService {
     ''');
 
     await db.execute('''
-      CREATE TABLE exercise_logs (
+      CREATE TABLE IF NOT EXISTS exercise_logs (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         user_id INTEGER NOT NULL,
         exercise_type_id INTEGER NOT NULL,
@@ -123,7 +134,7 @@ class DatabaseService {
       {'nombre': 'Natación', 'clave': 'natacion', 'categoria': 'cardio', 'metrica_principal': 'distancia', 'icono': 'pool'},
     ];
     for (final t in types) {
-      await db.insert('exercise_types', t);
+      await db.insert('exercise_types', t, conflictAlgorithm: ConflictAlgorithm.ignore);
     }
   }
 
@@ -200,9 +211,18 @@ class DatabaseService {
   // ── EXERCISE TYPES ──
 
   Future<List<ExerciseType>> getExerciseTypes() async {
-    final db = await database;
-    final maps = await db.query('exercise_types', orderBy: 'id ASC');
-    return maps.map((m) => ExerciseType.fromMap(m)).toList();
+    try {
+      final db = await database;
+      var maps = await db.query('exercise_types', orderBy: 'id ASC');
+      if (maps.isEmpty) {
+        await _createExerciseTables(db);
+        await _seedExerciseTypes(db);
+        maps = await db.query('exercise_types', orderBy: 'id ASC');
+      }
+      return maps.map((m) => ExerciseType.fromMap(m)).toList();
+    } catch (_) {
+      return [];
+    }
   }
 
   // ── EXERCISE LOGS ──

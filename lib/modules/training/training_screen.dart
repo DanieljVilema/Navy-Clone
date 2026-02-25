@@ -48,8 +48,8 @@ class _TrainingScreenState extends State<TrainingScreen> {
       final data = await rootBundle.load(assetPath);
       final bytes = data.buffer.asUint8List();
       final tempDir = await getTemporaryDirectory();
-      final fileName = assetPath.split('/').last;
-      final file = File('${tempDir.path}/$fileName');
+      final safeName = 'navy_training_${assetPath.hashCode.abs()}.pdf';
+      final file = File('${tempDir.path}/$safeName');
       await file.writeAsBytes(bytes);
       await OpenFile.open(file.path);
     } catch (e) {
