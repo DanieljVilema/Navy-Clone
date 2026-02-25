@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import '../models/exercise_type.dart';
 import '../models/exercise_log.dart';
 import '../services/database_service.dart';
+import '../services/scoring_service.dart';
 
 class ExerciseLogProvider extends ChangeNotifier {
   final DatabaseService _db;
@@ -125,5 +126,40 @@ class ExerciseLogProvider extends ChangeNotifier {
 
   ExerciseType? getTypeByKey(String clave) {
     return _exerciseTypes.where((t) => t.clave == clave).firstOrNull;
+  }
+
+  /// Returns a score (0–100) for a given log entry using the baremos.
+  /// Returns null if the exercise type is not scoreable or user profile is missing.
+  double? getScoreForLog(
+    ExerciseLog log,
+    ScoringService scorer,
+    String genero,
+    String grupoEdad,
+  ) {
+    final clave = log.exerciseType?.clave;
+    if (clave == null) return null;
+
+    if (log.exerciseType?.isRepsBased == true && log.repeticiones != null) {
+      if (clave == 'flexiones' || clave == 'abdominales') {
+        return scorer.scoreReps(clave, log.repeticiones!, genero, grupoEdad);
+      }
+    }
+
+    if ((clave == 'trote' || clave == 'natacion') &&
+        log.duracionSegundos != null) {
+      return scorer.scoreCardio(
+          clave, log.duracionSegundos!, genero, grupoEdad);
+    }
+
+    return null;
+  }
+
+  /// Returns all logs for a given date (all exercise types, no filter).
+  List<ExerciseLog> getLogsForDate(DateTime date) {
+    return _logs.where((l) {
+      return l.fecha.year == date.year &&
+          l.fecha.month == date.month &&
+          l.fecha.day == date.day;
+    }).toList();
   }
 }

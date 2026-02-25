@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'modules/home/home_screen.dart';
-import 'modules/simulator/simulator_screen.dart';
 import 'modules/services/services_screen.dart';
 import 'modules/chatbot/chatbot_screen.dart';
 import 'modules/nutrition/nutrition_screen.dart';
@@ -166,18 +165,11 @@ class _MainScreenState extends State<MainScreen> {
                     onTap: () => _navigateTo(const HomeScreen(), 'Bienvenido'),
                   ),
                   _DrawerItem(
-                    icon: Icons.calculate_outlined,
-                    title: 'Simulador de Evaluación',
-                    isSelected: _currentTitle == 'Simulador de Evaluación',
-                    onTap: () =>
-                        _navigateTo(const SimulatorScreen(), 'Simulador de Evaluación'),
-                  ),
-                  _DrawerItem(
-                    icon: Icons.timeline_outlined,
-                    title: 'Registro de Ejercicios',
-                    isSelected: _currentTitle == 'Registro de Ejercicios',
+                    icon: Icons.sports_score_outlined,
+                    title: 'Registro & Evaluación',
+                    isSelected: _currentTitle == 'Registro & Evaluación',
                     onTap: () => _navigateTo(
-                        const ExerciseTrackingScreen(), 'Registro de Ejercicios'),
+                        const ExerciseTrackingScreen(), 'Registro & Evaluación'),
                   ),
                   _DrawerItem(
                     icon: Icons.chat_bubble_outline,

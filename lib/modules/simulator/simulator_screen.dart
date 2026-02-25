@@ -80,7 +80,7 @@ class _SimulatorScreenState extends State<SimulatorScreen>
     int curlUps = int.tryParse(_curlUpsController.text) ?? 0;
     int cardioMin = int.tryParse(_cardioMinController.text) ?? 0;
     int cardioSec = int.tryParse(_cardioSecController.text) ?? 0;
-    
+
     // User enters metric (cm, kg) → convert to imperial for scoring engine
     double? heightCm = double.tryParse(_heightController.text);
     double? waistCm = double.tryParse(_waistController.text);
@@ -306,7 +306,7 @@ class _SimulatorScreenState extends State<SimulatorScreen>
           style: GoogleFonts.roboto(
             fontSize: 11,
             fontWeight: FontWeight.w600,
-            color: Colors.grey.shade600,
+            color: _textSec,
           ),
         ),
         const SizedBox(height: 4),
@@ -314,7 +314,7 @@ class _SimulatorScreenState extends State<SimulatorScreen>
           height: 36,
           padding: const EdgeInsets.symmetric(horizontal: 8),
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey.shade300),
+            border: Border.all(color: _border),
             borderRadius: BorderRadius.circular(6),
           ),
           child: DropdownButtonHideUnderline(
@@ -322,12 +322,13 @@ class _SimulatorScreenState extends State<SimulatorScreen>
               value: value,
               isExpanded: true,
               isDense: true,
+              dropdownColor: _card,
               style: GoogleFonts.roboto(
                 fontSize: 12,
-                color: Colors.black87,
+                color: _textPri,
               ),
-              icon: Icon(Icons.arrow_drop_down,
-                  size: 18, color: Colors.grey.shade600),
+              icon: const Icon(Icons.arrow_drop_down,
+                  size: 18, color: _textSec),
               items: items.map((e) {
                 return DropdownMenuItem(
                   value: e,
@@ -346,7 +347,7 @@ class _SimulatorScreenState extends State<SimulatorScreen>
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: Spacing.m, vertical: 10),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: _cardSec,
         border: Border(
           bottom: BorderSide(color: _border),
@@ -373,25 +374,25 @@ class _SimulatorScreenState extends State<SimulatorScreen>
   Widget _buildBCAForm() {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: Colors.grey.shade200),
+        color: _card,
+        border: Border.all(color: _border),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
         children: [
           _buildFormInputRow('Altura', _heightController, 'cm', Icons.height),
-          Divider(height: 1, color: Colors.grey.shade200),
+          const Divider(height: 1, color: _border),
           _buildFormRowText('Ingrese su altura en centímetros', italic: true,
               subtext: 'Ej: 170 para 1.70m'),
-          Divider(height: 1, color: Colors.grey.shade200),
+          const Divider(height: 1, color: _border),
           _buildFormInputRow('Cintura', _waistController, 'cm', Icons.straighten),
-          Divider(height: 1, color: Colors.grey.shade200),
+          const Divider(height: 1, color: _border),
           _buildFormRowText('Ingrese cintura en centímetros', italic: true,
               subtext: 'Medida a la altura del ombligo'),
-          Divider(height: 1, color: Colors.grey.shade200),
+          const Divider(height: 1, color: _border),
           _buildFormInputRow('Peso', _weightController, 'kg',
               Icons.monitor_weight_outlined),
-          Divider(height: 1, color: Colors.grey.shade200),
+          const Divider(height: 1, color: _border),
           _buildFormRowText('', italic: false,
               subtext: 'Ingrese su peso en kilogramos'),
         ],
@@ -412,7 +413,7 @@ class _SimulatorScreenState extends State<SimulatorScreen>
               style: GoogleFonts.roboto(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
-                color: Colors.black87,
+                color: _textPri,
               ),
             ),
           ),
@@ -421,28 +422,28 @@ class _SimulatorScreenState extends State<SimulatorScreen>
             child: TextField(
               controller: controller,
               keyboardType: TextInputType.number,
-              style: GoogleFonts.roboto(fontSize: 14),
+              style: GoogleFonts.roboto(fontSize: 14, color: _textPri),
               decoration: InputDecoration(
                 hintText: '0',
-                hintStyle: GoogleFonts.roboto(color: Colors.grey.shade400),
+                hintStyle: GoogleFonts.roboto(color: _textTer),
                 contentPadding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(6),
-                  borderSide: BorderSide(color: Colors.grey.shade300),
+                  borderSide: const BorderSide(color: _border),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(6),
-                  borderSide: BorderSide(color: Colors.grey.shade300),
+                  borderSide: const BorderSide(color: _border),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(6),
-                  borderSide: BorderSide(color: AppColors.navyPrimary),
+                  borderSide: const BorderSide(color: AppColors.navyPrimary),
                 ),
                 suffixText: unit,
                 suffixStyle: GoogleFonts.roboto(
                   fontSize: 12,
-                  color: Colors.grey.shade500,
+                  color: _textTer,
                 ),
               ),
             ),
@@ -451,8 +452,6 @@ class _SimulatorScreenState extends State<SimulatorScreen>
       ),
     );
   }
-
-
 
   Widget _buildFormRowText(String text,
       {bool italic = false, String? subtext}) {
@@ -467,7 +466,7 @@ class _SimulatorScreenState extends State<SimulatorScreen>
               style: GoogleFonts.roboto(
                 fontSize: 13,
                 fontStyle: italic ? FontStyle.italic : FontStyle.normal,
-                color: Colors.grey.shade500,
+                color: _textTer,
               ),
             ),
           if (subtext != null) ...[
@@ -477,7 +476,7 @@ class _SimulatorScreenState extends State<SimulatorScreen>
               style: GoogleFonts.roboto(
                 fontSize: 11,
                 fontStyle: FontStyle.italic,
-                color: Colors.grey.shade400,
+                color: _textTer,
               ),
             ),
           ],
@@ -490,8 +489,8 @@ class _SimulatorScreenState extends State<SimulatorScreen>
     final result = context.watch<SimulatorProvider>().lastResult;
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: Colors.grey.shade200),
+        color: _card,
+        border: Border.all(color: _border),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
@@ -501,20 +500,20 @@ class _SimulatorScreenState extends State<SimulatorScreen>
             padding: const EdgeInsets.all(12),
             child: Row(
               children: [
-                Icon(Icons.monitor_weight_outlined, size: 20, color: AppColors.navyPrimary),
+                const Icon(Icons.monitor_weight_outlined, size: 20, color: AppColors.navyPrimary),
                 const SizedBox(width: 8),
                 Text(
                   'Resultados del Control de Peso',
                   style: GoogleFonts.roboto(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
-                    color: Colors.black87,
+                    color: _textPri,
                   ),
                 ),
               ],
             ),
           ),
-          Divider(height: 1, color: Colors.grey.shade200),
+          const Divider(height: 1, color: _border),
 
           // ── RATIO CINTURA/ALTURA ──
           if (result?.cinturaRatio != null)
@@ -555,7 +554,7 @@ class _SimulatorScreenState extends State<SimulatorScreen>
               padding: const EdgeInsets.all(16),
               child: Text(
                 'Ingrese los datos de altura, cintura y peso para ver los resultados.',
-                style: GoogleFonts.roboto(fontSize: 13, color: Colors.grey.shade500, fontStyle: FontStyle.italic),
+                style: GoogleFonts.roboto(fontSize: 13, color: _textTer, fontStyle: FontStyle.italic),
               ),
             ),
         ],
@@ -587,7 +586,7 @@ class _SimulatorScreenState extends State<SimulatorScreen>
               Icon(iconData, size: 18, color: color),
               const SizedBox(width: 8),
               Expanded(
-                child: Text(titulo, style: GoogleFonts.roboto(fontSize: 13, fontWeight: FontWeight.w600, color: Colors.black87)),
+                child: Text(titulo, style: GoogleFonts.roboto(fontSize: 13, fontWeight: FontWeight.w600, color: _textPri)),
               ),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
@@ -612,7 +611,7 @@ class _SimulatorScreenState extends State<SimulatorScreen>
                   child: LinearProgressIndicator(
                     value: barRatio,
                     minHeight: 8,
-                    backgroundColor: Colors.grey.shade200,
+                    backgroundColor: _border,
                     valueColor: AlwaysStoppedAnimation(color),
                   ),
                 ),
@@ -620,7 +619,7 @@ class _SimulatorScreenState extends State<SimulatorScreen>
               const SizedBox(width: 12),
               Text(
                 '${valor.toStringAsFixed(decimales)} / ${maximo.toStringAsFixed(decimales)} $unidad',
-                style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.black54),
+                style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w600, color: _textSec),
               ),
             ],
           ),
@@ -636,7 +635,7 @@ class _SimulatorScreenState extends State<SimulatorScreen>
             ),
             child: Text(
               recomendacion,
-              style: GoogleFonts.roboto(fontSize: 12, color: Colors.black87, height: 1.4),
+              style: GoogleFonts.roboto(fontSize: 12, color: _textPri, height: 1.4),
             ),
           ),
           const SizedBox(height: 4),
@@ -649,8 +648,8 @@ class _SimulatorScreenState extends State<SimulatorScreen>
     final provider = context.watch<SimulatorProvider>();
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: Colors.grey.shade200),
+        color: _card,
+        border: Border.all(color: _border),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
@@ -662,26 +661,26 @@ class _SimulatorScreenState extends State<SimulatorScreen>
             child: TextField(
               controller: _pushUpsController,
               keyboardType: TextInputType.number,
-              style: GoogleFonts.roboto(fontSize: 14),
+              style: GoogleFonts.roboto(fontSize: 14, color: _textPri),
               decoration: InputDecoration(
                 hintText: 'Ingrese repeticiones',
                 hintStyle: GoogleFonts.roboto(
-                    fontSize: 13, color: Colors.grey.shade400),
+                    fontSize: 13, color: _textTer),
                 isDense: true,
                 contentPadding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(6),
-                  borderSide: BorderSide(color: Colors.grey.shade300),
+                  borderSide: const BorderSide(color: _border),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(6),
-                  borderSide: BorderSide(color: Colors.grey.shade300),
+                  borderSide: const BorderSide(color: _border),
                 ),
               ),
             ),
           ),
-          Divider(height: 1, color: Colors.grey.shade200),
+          const Divider(height: 1, color: _border),
 
           // Forearm Plank (or Curl-ups)
           _buildPRTSectionHeader('Plancha Abdominal / Abdominales'),
@@ -690,26 +689,26 @@ class _SimulatorScreenState extends State<SimulatorScreen>
             child: TextField(
               controller: _curlUpsController,
               keyboardType: TextInputType.number,
-              style: GoogleFonts.roboto(fontSize: 14),
+              style: GoogleFonts.roboto(fontSize: 14, color: _textPri),
               decoration: InputDecoration(
                 hintText: 'Ingrese tiempo (mm:ss) o reps',
                 hintStyle: GoogleFonts.roboto(
-                    fontSize: 13, color: Colors.grey.shade400),
+                    fontSize: 13, color: _textTer),
                 isDense: true,
                 contentPadding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(6),
-                  borderSide: BorderSide(color: Colors.grey.shade300),
+                  borderSide: const BorderSide(color: _border),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(6),
-                  borderSide: BorderSide(color: Colors.grey.shade300),
+                  borderSide: const BorderSide(color: _border),
                 ),
               ),
             ),
           ),
-          Divider(height: 1, color: Colors.grey.shade200),
+          const Divider(height: 1, color: _border),
 
           // Cardio
           _buildPRTSectionHeader('Evento Cardiovascular'),
@@ -721,7 +720,7 @@ class _SimulatorScreenState extends State<SimulatorScreen>
                   height: 36,
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey.shade300),
+                    border: Border.all(color: _border),
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: DropdownButtonHideUnderline(
@@ -729,8 +728,9 @@ class _SimulatorScreenState extends State<SimulatorScreen>
                       value: provider.tipoCardio,
                       isExpanded: true,
                       isDense: true,
+                      dropdownColor: _card,
                       style: GoogleFonts.roboto(
-                          fontSize: 13, color: Colors.black87),
+                          fontSize: 13, color: _textPri),
                       items: _cardioTypes.map((e) {
                         return DropdownMenuItem(value: e, child: Text(e));
                       }).toList(),
@@ -745,23 +745,21 @@ class _SimulatorScreenState extends State<SimulatorScreen>
                       child: TextField(
                         controller: _cardioMinController,
                         keyboardType: TextInputType.number,
-                        style: GoogleFonts.roboto(fontSize: 14),
+                        style: GoogleFonts.roboto(fontSize: 14, color: _textPri),
                         decoration: InputDecoration(
                           hintText: 'Min',
                           hintStyle: GoogleFonts.roboto(
-                              fontSize: 13, color: Colors.grey.shade400),
+                              fontSize: 13, color: _textTer),
                           isDense: true,
                           contentPadding: const EdgeInsets.symmetric(
                               horizontal: 12, vertical: 10),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(6),
-                            borderSide:
-                                BorderSide(color: Colors.grey.shade300),
+                            borderSide: const BorderSide(color: _border),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(6),
-                            borderSide:
-                                BorderSide(color: Colors.grey.shade300),
+                            borderSide: const BorderSide(color: _border),
                           ),
                         ),
                       ),
@@ -771,30 +769,28 @@ class _SimulatorScreenState extends State<SimulatorScreen>
                       child: Text(
                         ':',
                         style: GoogleFonts.roboto(
-                            fontSize: 18, fontWeight: FontWeight.bold),
+                            fontSize: 18, fontWeight: FontWeight.bold, color: _textPri),
                       ),
                     ),
                     Expanded(
                       child: TextField(
                         controller: _cardioSecController,
                         keyboardType: TextInputType.number,
-                        style: GoogleFonts.roboto(fontSize: 14),
+                        style: GoogleFonts.roboto(fontSize: 14, color: _textPri),
                         decoration: InputDecoration(
                           hintText: 'Seg',
                           hintStyle: GoogleFonts.roboto(
-                              fontSize: 13, color: Colors.grey.shade400),
+                              fontSize: 13, color: _textTer),
                           isDense: true,
                           contentPadding: const EdgeInsets.symmetric(
                               horizontal: 12, vertical: 10),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(6),
-                            borderSide:
-                                BorderSide(color: Colors.grey.shade300),
+                            borderSide: const BorderSide(color: _border),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(6),
-                            borderSide:
-                                BorderSide(color: Colors.grey.shade300),
+                            borderSide: const BorderSide(color: _border),
                           ),
                         ),
                       ),
@@ -813,10 +809,10 @@ class _SimulatorScreenState extends State<SimulatorScreen>
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-      decoration: BoxDecoration(
-        color: Colors.grey.shade50,
+      decoration: const BoxDecoration(
+        color: _cardSec,
         border: Border(
-          bottom: BorderSide(color: Colors.grey.shade200),
+          bottom: BorderSide(color: _border),
         ),
       ),
       child: Row(
@@ -826,11 +822,11 @@ class _SimulatorScreenState extends State<SimulatorScreen>
             style: GoogleFonts.roboto(
               fontSize: 13,
               fontWeight: FontWeight.w600,
-              color: Colors.black87,
+              color: _textPri,
             ),
           ),
           const SizedBox(width: 6),
-          Icon(Icons.keyboard_arrow_up, size: 18, color: Colors.grey.shade500),
+          const Icon(Icons.keyboard_arrow_up, size: 18, color: _textTer),
         ],
       ),
     );
@@ -867,9 +863,9 @@ class _SimulatorScreenState extends State<SimulatorScreen>
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: _card,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: _border),
       ),
       child: Column(
         children: [
@@ -892,7 +888,7 @@ class _SimulatorScreenState extends State<SimulatorScreen>
                 Text(
                   '${result.notaTotal.toStringAsFixed(1)} / 100',
                   style: GoogleFonts.roboto(
-                    fontSize: 30, fontWeight: FontWeight.w900, color: Colors.black87,
+                    fontSize: 30, fontWeight: FontWeight.w900, color: _textPri,
                   ),
                 ),
                 const SizedBox(height: 6),
@@ -911,7 +907,7 @@ class _SimulatorScreenState extends State<SimulatorScreen>
             ),
           ),
 
-          Divider(height: 1, color: Colors.grey.shade200),
+          const Divider(height: 1, color: _border),
 
           // ── BREAKDOWN: Push-ups ──
           _buildEventBreakdown(
@@ -922,7 +918,7 @@ class _SimulatorScreenState extends State<SimulatorScreen>
             recomendacion: _getPushUpRecommendation(result.notaFlexiones, result.flexionesRaw ?? 0),
           ),
 
-          Divider(height: 1, color: Colors.grey.shade200),
+          const Divider(height: 1, color: _border),
 
           // ── BREAKDOWN: Abs ──
           _buildEventBreakdown(
@@ -933,7 +929,7 @@ class _SimulatorScreenState extends State<SimulatorScreen>
             recomendacion: _getAbsRecommendation(result.notaAbdominales, result.abdominalesRaw ?? 0),
           ),
 
-          Divider(height: 1, color: Colors.grey.shade200),
+          const Divider(height: 1, color: _border),
 
           // ── BREAKDOWN: Cardio ──
           _buildEventBreakdown(
@@ -979,7 +975,7 @@ class _SimulatorScreenState extends State<SimulatorScreen>
               Icon(icon, size: 18, color: AppColors.navyPrimary),
               const SizedBox(width: 8),
               Expanded(
-                child: Text(titulo, style: GoogleFonts.roboto(fontSize: 13, fontWeight: FontWeight.w600, color: Colors.black87)),
+                child: Text(titulo, style: GoogleFonts.roboto(fontSize: 13, fontWeight: FontWeight.w600, color: _textPri)),
               ),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
@@ -995,14 +991,14 @@ class _SimulatorScreenState extends State<SimulatorScreen>
             ],
           ),
           const SizedBox(height: 6),
-          Text(rawValue, style: GoogleFonts.roboto(fontSize: 12, color: Colors.black54)),
+          Text(rawValue, style: GoogleFonts.roboto(fontSize: 12, color: _textSec)),
           const SizedBox(height: 8),
           ClipRRect(
             borderRadius: BorderRadius.circular(4),
             child: LinearProgressIndicator(
               value: barValue,
               minHeight: 6,
-              backgroundColor: Colors.grey.shade200,
+              backgroundColor: _border,
               valueColor: AlwaysStoppedAnimation(color),
             ),
           ),
@@ -1017,7 +1013,7 @@ class _SimulatorScreenState extends State<SimulatorScreen>
             ),
             child: Text(
               recomendacion,
-              style: GoogleFonts.roboto(fontSize: 12, color: Colors.black87, height: 1.4),
+              style: GoogleFonts.roboto(fontSize: 12, color: _textPri, height: 1.4),
             ),
           ),
         ],

@@ -79,6 +79,48 @@ class ScoringService {
     );
   }
 
+  /// Public: score a reps-based exercise (flexiones, abdominales) from a log entry.
+  double scoreReps(String clave, int reps, String genero, String grupoEdad) {
+    if (reps <= 0) return 0;
+    final baremo = _findBaremo(genero, grupoEdad);
+    if (baremo == null) {
+      final threshold = clave == 'abdominales' ? 60 : 50;
+      return _fallbackRepScore(reps, threshold);
+    }
+    switch (clave) {
+      case 'flexiones':
+        return baremo.flexiones.isNotEmpty
+            ? _scoreReps(baremo.flexiones, reps)
+            : _fallbackRepScore(reps, 50);
+      case 'abdominales':
+        return baremo.abdominales.isNotEmpty
+            ? _scoreReps(baremo.abdominales, reps)
+            : _fallbackRepScore(reps, 60);
+      default:
+        return 0;
+    }
+  }
+
+  /// Public: score a cardio exercise (trote) from a log entry (duration in seconds).
+  double scoreCardio(String clave, int totalSec, String genero, String grupoEdad) {
+    if (totalSec <= 0) return 0;
+    final baremo = _findBaremo(genero, grupoEdad);
+    if (baremo == null) return _fallbackCardioScore(totalSec);
+    if (clave == 'trote') {
+      final thresholds = baremo.cardio.forType('Trote 2.4km');
+      return thresholds.isNotEmpty
+          ? _scoreCardio(thresholds, totalSec)
+          : _fallbackCardioScore(totalSec);
+    }
+    if (clave == 'natacion') {
+      final thresholds = baremo.cardio.forType('Natación 450m');
+      return thresholds.isNotEmpty
+          ? _scoreCardio(thresholds, totalSec)
+          : _fallbackCardioScore(totalSec);
+    }
+    return _fallbackCardioScore(totalSec);
+  }
+
   BaremoEntry? _findBaremo(String genero, String grupoEdad) {
     final generoCode = genero == 'Masculino' ? 'M' : 'F';
     for (final b in _baremos) {

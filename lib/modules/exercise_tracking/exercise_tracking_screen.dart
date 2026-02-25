@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants.dart';
+import '../../models/exercise_log.dart';
 import '../../providers/exercise_log_provider.dart';
 import '../../providers/user_provider.dart';
+import '../../services/scoring_service.dart';
 import 'widgets/exercise_type_selector.dart';
 import 'widgets/exercise_log_card.dart';
 import 'widgets/exercise_log_form.dart';
@@ -33,6 +35,7 @@ class _ExerciseTrackingScreenState extends State<ExerciseTrackingScreen> {
 
   void _openLogForm() {
     final provider = context.read<ExerciseLogProvider>();
+    if (provider.exerciseTypes.isEmpty) return;
     final userId = context.read<UserProvider>().userId;
 
     showModalBottomSheet(
@@ -67,7 +70,7 @@ class _ExerciseTrackingScreenState extends State<ExerciseTrackingScreen> {
         return Scaffold(
           backgroundColor: AppColors.darkBg,
           floatingActionButton: FloatingActionButton(
-            onPressed: provider.exerciseTypes.isNotEmpty ? _openLogForm : null,
+            onPressed: _openLogForm,
             backgroundColor: AppColors.primary,
             child: const Icon(Icons.add, color: Colors.white),
           ),
@@ -305,6 +308,8 @@ class _ExerciseTrackingScreenState extends State<ExerciseTrackingScreen> {
   Widget _buildHistoryView(ExerciseLogProvider provider) {
     final logsByDate = provider.logsByDate;
     final userId = context.read<UserProvider>().userId;
+    final userProvider = context.read<UserProvider>();
+    final scorer = context.read<ScoringService>();
 
     if (logsByDate.isEmpty) {
       return Center(
@@ -343,6 +348,10 @@ class _ExerciseTrackingScreenState extends State<ExerciseTrackingScreen> {
       );
     }
 
+    final genero = userProvider.profile?.genero ?? '';
+    final grupoEdad = userProvider.profile?.grupoEdad ?? '';
+    final hasProfile = genero.isNotEmpty && grupoEdad.isNotEmpty;
+
     final sortedDates = logsByDate.keys.toList()
       ..sort((a, b) => b.compareTo(a));
 
@@ -352,6 +361,12 @@ class _ExerciseTrackingScreenState extends State<ExerciseTrackingScreen> {
       itemBuilder: (_, i) {
         final date = sortedDates[i];
         final logs = logsByDate[date]!;
+
+        // Get ALL logs for this date (unfiltered) to check PFA completeness
+        final allLogsForDate = provider.getLogsForDate(date);
+        final pfaSummary = hasProfile
+            ? _buildPfaSummary(allLogsForDate, provider, scorer, genero, grupoEdad)
+            : null;
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -368,17 +383,163 @@ class _ExerciseTrackingScreenState extends State<ExerciseTrackingScreen> {
                 ),
               ),
             ),
-            ...logs.map((log) => Padding(
-                  padding: const EdgeInsets.only(bottom: Spacing.s),
-                  child: ExerciseLogCard(
-                    log: log,
-                    onDelete: () => provider.deleteLog(log.id!, userId),
-                  ),
-                )),
+            // PFA summary card if complete evaluation detected
+            if (pfaSummary != null) ...[
+              pfaSummary,
+              const SizedBox(height: Spacing.s),
+            ],
+            ...logs.map((log) {
+              final score = hasProfile
+                  ? provider.getScoreForLog(log, scorer, genero, grupoEdad)
+                  : null;
+              return Padding(
+                padding: const EdgeInsets.only(bottom: Spacing.s),
+                child: ExerciseLogCard(
+                  log: log,
+                  score: score,
+                  onDelete: () => provider.deleteLog(log.id!, userId),
+                ),
+              );
+            }),
           ],
         );
       },
     );
+  }
+
+  /// Returns a PFA summary card if flexiones + abdominales + cardio all present on the same date.
+  Widget? _buildPfaSummary(
+    List<ExerciseLog> allLogs,
+    ExerciseLogProvider provider,
+    ScoringService scorer,
+    String genero,
+    String grupoEdad,
+  ) {
+    final flex = allLogs.where((l) => l.exerciseType?.clave == 'flexiones').toList();
+    final abd = allLogs.where((l) => l.exerciseType?.clave == 'abdominales').toList();
+    final cardio = allLogs
+        .where((l) =>
+            l.exerciseType?.clave == 'trote' ||
+            l.exerciseType?.clave == 'natacion')
+        .toList();
+
+    if (flex.isEmpty || abd.isEmpty || cardio.isEmpty) return null;
+
+    // Use the best result for each event that day
+    double? flexScore;
+    double? abdScore;
+    double? cardioScore;
+
+    for (final log in flex) {
+      final s = provider.getScoreForLog(log, scorer, genero, grupoEdad);
+      if (s != null && (flexScore == null || s > flexScore)) flexScore = s;
+    }
+    for (final log in abd) {
+      final s = provider.getScoreForLog(log, scorer, genero, grupoEdad);
+      if (s != null && (abdScore == null || s > abdScore)) abdScore = s;
+    }
+    for (final log in cardio) {
+      final s = provider.getScoreForLog(log, scorer, genero, grupoEdad);
+      if (s != null && (cardioScore == null || s > cardioScore)) cardioScore = s;
+    }
+
+    if (flexScore == null || abdScore == null || cardioScore == null) return null;
+
+    final total = (flexScore + abdScore + cardioScore) / 3;
+    final nivel = _levelLabel(total);
+    final levelColor = _scoreColor(total);
+
+    return Container(
+      padding: const EdgeInsets.all(Spacing.m),
+      decoration: BoxDecoration(
+        color: levelColor.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(Radii.m),
+        border: Border.all(color: levelColor.withValues(alpha: 0.3)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.military_tech, size: 18, color: levelColor),
+              const SizedBox(width: Spacing.xs),
+              Text(
+                'Evaluación PFA del día',
+                style: GoogleFonts.inter(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w700,
+                  color: levelColor,
+                ),
+              ),
+              const Spacer(),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                decoration: BoxDecoration(
+                  color: levelColor.withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(Radii.full),
+                ),
+                child: Text(
+                  '${total.toStringAsFixed(1)} pts · $nivel',
+                  style: GoogleFonts.inter(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w700,
+                    color: levelColor,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: Spacing.s),
+          _pfaRow('Flexiones', flexScore),
+          _pfaRow('Abdominales', abdScore),
+          _pfaRow(cardio.first.exerciseType?.nombre ?? 'Cardio', cardioScore),
+        ],
+      ),
+    );
+  }
+
+  Widget _pfaRow(String label, double score) {
+    final color = _scoreColor(score);
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 4),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              label,
+              style: GoogleFonts.inter(
+                fontSize: 12,
+                color: AppColors.darkTextSecondary,
+              ),
+            ),
+          ),
+          Text(
+            '${score.toStringAsFixed(1)} pts',
+            style: GoogleFonts.inter(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: color,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _levelLabel(double s) {
+    if (s >= 90) return 'Sobresaliente';
+    if (s >= 75) return 'Bueno';
+    if (s >= 60) return 'Satisfactorio';
+    if (s >= 45) return 'Regular';
+    return 'Fallo';
+  }
+
+  Color _scoreColor(double s) {
+    if (s >= 90) return AppColors.success;
+    if (s >= 75) return AppColors.primary;
+    if (s >= 60) return AppColors.warning;
+    if (s >= 45) return const Color(0xFFFF9800);
+    return AppColors.danger;
   }
 
   String _formatMonth(DateTime date) {

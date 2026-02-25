@@ -6,11 +6,13 @@ import '../../../models/exercise_log.dart';
 class ExerciseLogCard extends StatelessWidget {
   final ExerciseLog log;
   final VoidCallback? onDelete;
+  final double? score; // 0–100, null = no badge shown
 
   const ExerciseLogCard({
     super.key,
     required this.log,
     this.onDelete,
+    this.score,
   });
 
   IconData _getIcon() {
@@ -43,6 +45,22 @@ class ExerciseLogCard extends StatelessWidget {
       default:
         return AppColors.primary;
     }
+  }
+
+  String _levelLabel(double s) {
+    if (s >= 90) return 'Sobresaliente';
+    if (s >= 75) return 'Bueno';
+    if (s >= 60) return 'Satisfactorio';
+    if (s >= 45) return 'Regular';
+    return 'Fallo';
+  }
+
+  Color _scoreColor(double s) {
+    if (s >= 90) return AppColors.success;
+    if (s >= 75) return AppColors.primary;
+    if (s >= 60) return AppColors.warning;
+    if (s >= 45) return const Color(0xFFFF9800);
+    return AppColors.danger;
   }
 
   @override
@@ -118,7 +136,40 @@ class ExerciseLogCard extends StatelessWidget {
                 ],
               ),
             ),
-            if (log.frecuenciaCardiaca != null)
+            // ── SCORE BADGE ──
+            if (score != null) ...[
+              const SizedBox(width: Spacing.s),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: _scoreColor(score!).withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(Radii.s),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      '${score!.toStringAsFixed(0)} pts',
+                      style: GoogleFonts.inter(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w700,
+                        color: _scoreColor(score!),
+                      ),
+                    ),
+                    Text(
+                      _levelLabel(score!),
+                      style: GoogleFonts.inter(
+                        fontSize: 9,
+                        color: _scoreColor(score!),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+            // ── HEART RATE BADGE ──
+            if (log.frecuenciaCardiaca != null) ...[
+              const SizedBox(width: Spacing.xs),
               Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -142,6 +193,7 @@ class ExerciseLogCard extends StatelessWidget {
                   ],
                 ),
               ),
+            ],
           ],
         ),
       ),
