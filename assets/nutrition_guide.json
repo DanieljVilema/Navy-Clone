@@ -1,13 +1,89 @@
 {
   "plan_nutricional": [
     {
-      "titulo": "Desayuno",
-      "descripcion": "Ejemplo de desayuno equilibrado."
+      "titulo": "Come Limpio (Eat Clean)",
+      "descripcion": "Elige alimentos poco procesados y ricos en nutrientes que estén lo más cerca posible de su estado natural.",
+      "categoria": "Fundamentos NOFFS",
+      "alimentos": [
+        "Frutas frescas",
+        "Verduras",
+        "Granos enteros",
+        "Proteínas magras"
+      ],
+      "calorias_aprox": "N/A"
     },
     {
-      "titulo": "Almuerzo",
-      "descripcion": "Ejemplo de almuerzo equilibrado."
+      "titulo": "Come con Frecuencia (Eat Often)",
+      "descripcion": "Mantén un flujo constante de energía y acelera tu metabolismo dividiendo tus comidas a lo largo del día cada 2-3 horas.",
+      "categoria": "Fundamentos NOFFS",
+      "alimentos": [
+        "Snacks saludables",
+        "Porciones moderadas"
+      ],
+      "calorias_aprox": "N/A"
+    },
+    {
+      "titulo": "Hidrátate (Hydrate)",
+      "descripcion": "La hidratación es fundamental para el rendimiento físico y mental. Bebe agua regularmente antes, durante y después del esfuerzo.",
+      "categoria": "Fundamentos NOFFS",
+      "alimentos": [
+        "Agua",
+        "Bebidas deportivas (en entrenamientos intensos)"
+      ],
+      "calorias_aprox": "0"
+    },
+    {
+      "titulo": "Recupérate (Recover)",
+      "descripcion": "La recuperación es clave. Consume alimentos ricos en proteínas y carbohidratos dentro de los 30 minutos posteriores al ejercicio.",
+      "categoria": "Fundamentos NOFFS",
+      "alimentos": [
+        "Batido de proteínas",
+        "Plátano",
+        "Yogur griego",
+        "Avena"
+      ],
+      "calorias_aprox": "250-400 kcal"
+    },
+    {
+      "titulo": "Mentalidad (Mindset)",
+      "descripcion": "La educación nutricional debe traducirse en un cambio de hábitos a largo plazo. Mantén la disciplina.",
+      "categoria": "Fundamentos NOFFS",
+      "alimentos": [],
+      "calorias_aprox": "N/A"
+    },
+    {
+      "titulo": "Desayuno para el Rendimiento",
+      "descripcion": "Una comida rica en carbohidratos complejos y proteínas para iniciar el día con la energía necesaria para el entrenamiento militar.",
+      "categoria": "Constructor de Comidas (Meal Builder)",
+      "alimentos": [
+        "Huevos revueltos",
+        "Avena con frutos rojos",
+        "Pan integral",
+        "Café o té"
+      ],
+      "calorias_aprox": "450-600 kcal"
+    },
+    {
+      "titulo": "Almuerzo de Construcción",
+      "descripcion": "Diseñado para mantener los niveles de energía altos durante las operaciones diurnas o turnos de trabajo prolongados.",
+      "categoria": "Constructor de Comidas (Meal Builder)",
+      "alimentos": [
+        "Pechuga de pollo a la plancha",
+        "Quinoa o arroz integral",
+        "Ensalada verde con aceite de oliva"
+      ],
+      "calorias_aprox": "500-700 kcal"
+    },
+    {
+      "titulo": "Cena de Reparación Muscular",
+      "descripcion": "Una comida balanceada orientada a la recuperación y al descanso nocturno, con proteínas magras y menos carbohidratos pesados.",
+      "categoria": "Constructor de Comidas (Meal Builder)",
+      "alimentos": [
+        "Pescado (salmón o atún)",
+        "Vegetales al vapor (brócoli, zanahorias)",
+        "Porción pequeña de patata dulce"
+      ],
+      "calorias_aprox": "400-600 kcal"
     }
-    // ...más datos
   ]
 }

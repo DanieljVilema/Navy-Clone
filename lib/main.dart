@@ -1,32 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-import 'core/theme.dart';
-import 'main_screen.dart';
+import 'package:navy_pfa_armada_ecuador/core/theme/theme.dart';
+import 'package:navy_pfa_armada_ecuador/core/routing/main_screen.dart';
+
+import 'package:flutter/foundation.dart';
+import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
+import 'package:sqflite/sqflite.dart';
 
 // Services
-import 'services/database_service.dart';
-import 'services/json_loader_service.dart';
-import 'services/scoring_service.dart';
-import 'services/gemini_service.dart';
+import 'package:navy_pfa_armada_ecuador/shared/services/database_service.dart';
+import 'package:navy_pfa_armada_ecuador/shared/services/json_loader_service.dart';
+import 'package:navy_pfa_armada_ecuador/shared/services/scoring_service.dart';
+import 'package:navy_pfa_armada_ecuador/features/chatbot/services/gemini_service.dart';
 
 // Providers
-import 'providers/content_provider.dart';
-import 'providers/user_provider.dart';
-import 'providers/pfa_history_provider.dart';
-import 'providers/simulator_provider.dart';
-import 'providers/chat_provider.dart';
-import 'providers/exercise_log_provider.dart';
+import 'package:navy_pfa_armada_ecuador/shared/providers/content_provider.dart';
+import 'package:navy_pfa_armada_ecuador/shared/providers/user_provider.dart';
+import 'package:navy_pfa_armada_ecuador/features/performance/providers/pfa_history_provider.dart';
+import 'package:navy_pfa_armada_ecuador/features/simulator/providers/simulator_provider.dart';
+import 'package:navy_pfa_armada_ecuador/features/chatbot/providers/chat_provider.dart';
+import 'package:navy_pfa_armada_ecuador/features/exercise_tracking/providers/exercise_log_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Load environment variables securely
+  await dotenv.load(fileName: ".env");
+
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.light,
     ),
   );
+
+  if (kIsWeb) {
+    databaseFactory = databaseFactoryFfiWeb;
+  }
 
   // Initialize Services
   final dbService = DatabaseService();
@@ -106,8 +119,7 @@ class _NavyPFAAppState extends State<NavyPFAApp> {
   }
 
   Future<void> _initializeGemini() async {
-    // Pass GEMINI_API_KEY via --dart-define=GEMINI_API_KEY=your_key
-    const apiKey = String.fromEnvironment('GEMINI_API_KEY', defaultValue: '');
+    final apiKey = dotenv.env['GEMINI_API_KEY'] ?? '';
     if (apiKey.isNotEmpty) {
       await widget.geminiService.initialize(
         apiKey,
