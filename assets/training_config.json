@@ -1,0 +1,87 @@
+{
+  "categorias": [
+    {
+      "titulo": "Entrenamiento de Comando - Resistencia",
+      "cantidadRutinas": "15 rutinas",
+      "ejercicios": [
+        "Carrera Continua 30 min",
+        "Intervalos 400m x 8",
+        "Carrera Fartlek 40 min",
+        "Carrera Progresiva",
+        "Carrera Tempo 25 min"
+      ]
+    },
+    {
+      "titulo": "FEP - Fuerza Tren Superior",
+      "cantidadRutinas": "12 rutinas",
+      "ejercicios": [
+        "Flexiones Progresivas",
+        "Flexiones Diamante",
+        "Plancha Militar",
+        "Fondos en Barras Paralelas",
+        "Flexiones Brazos Abiertos"
+      ]
+    },
+    {
+      "titulo": "Core y Abdominales",
+      "cantidadRutinas": "10 rutinas",
+      "ejercicios": [
+        "Abdominales Estándar",
+        "Sostener Plancha Frontal",
+        "Escalada de Montaña",
+        "Giros Rusos",
+        "Abdominales Bicicleta"
+      ]
+    },
+    {
+      "titulo": "Natación y Cardio",
+      "cantidadRutinas": "8 rutinas",
+      "ejercicios": [
+        "Técnica de Nado 450m",
+        "Intervalos en Piscina",
+        "Resistencia Acuática",
+        "Cardio Combinado"
+      ]
+    },
+    {
+      "titulo": "Flexibilidad y Movilidad",
+      "cantidadRutinas": "8 rutinas",
+      "ejercicios": [
+        "Estiramiento Dinámico",
+        "Yoga Militar",
+        "Movilidad Articular",
+        "Vuelta a la Calma Completa"
+      ]
+    },
+    {
+      "titulo": "Ciclismo y Remo",
+      "cantidadRutinas": "6 rutinas",
+      "ejercicios": [
+        "Prueba de Bici 12 min",
+        "Preparación Remo 2000m",
+        "Intervalos en Bici",
+        "Resistencia Cardio Alt."
+      ]
+    },
+    {
+      "titulo": "Entrenamiento Cuerpo Completo",
+      "cantidadRutinas": "10 rutinas",
+      "ejercicios": [
+        "Circuito Cuerpo Total",
+        "Resistencia de Fuerza",
+        "Acondicionamiento de Combate",
+        "Fitness Funcional"
+      ]
+    },
+    {
+      "titulo": "Preparación Pre-Evaluación",
+      "cantidadRutinas": "6 rutinas",
+      "ejercicios": [
+        "Simulacro de Evaluación",
+        "Entrenamiento Específico",
+        "Protocolo Semana Pico",
+        "Rutina de Recuperación"
+      ]
+    }
+  ]
+}

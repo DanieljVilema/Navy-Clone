@@ -1,0 +1,155 @@
+{
+  "tabla_1": {
+    "edades": "0 a 24 años",
+    "puntos_maximos": 600,
+    "hombres": { "abdominales": { "meta": 65, "puntos": 100 }, "flexiones": { "meta": 60, "puntos": 100 }, "trote_segundos": { "meta": 746, "puntos": 150 }, "natacion_segundos": { "meta": 330, "puntos": 150 }, "cabo_segundos": { "meta": 10, "puntos": 100 } },
+    "mujeres": { "abdominales": { "meta": 55, "puntos": 100 }, "flexiones": { "meta": 45, "puntos": 100 }, "trote_segundos": { "meta": 872, "puntos": 150 }, "natacion_segundos": { "meta": 420, "puntos": 150 }, "cabo_segundos": { "meta": 15, "puntos": 100 } }
+  },
+  "tabla_2": {
+    "edades": "25 a 27 años",
+    "puntos_maximos": 600,
+    "hombres": { "abdominales": { "meta": 62, "puntos": 100 }, "flexiones": { "meta": 56, "puntos": 100 }, "trote_segundos": { "meta": 777, "puntos": 150 }, "natacion_segundos": { "meta": 340, "puntos": 150 }, "cabo_segundos": { "meta": 12, "puntos": 100 } },
+    "mujeres": { "abdominales": { "meta": 53, "puntos": 100 }, "flexiones": { "meta": 43, "puntos": 100 }, "trote_segundos": { "meta": 936, "puntos": 150 }, "natacion_segundos": { "meta": 430, "puntos": 150 }, "cabo_segundos": { "meta": 20, "puntos": 100 } }
+  },
+  "tabla_3": {
+    "edades": "28 a 30 años",
+    "puntos_maximos": 600,
+    "hombres": { "abdominales": { "meta": 59, "puntos": 100 }, "flexiones": { "meta": 52, "puntos": 100 }, "trote_segundos": { "meta": 809, "puntos": 150 }, "natacion_segundos": { "meta": 350, "puntos": 150 }, "cabo_segundos": { "meta": 14, "puntos": 100 } },
+    "mujeres": { "abdominales": { "meta": 50, "puntos": 100 }, "flexiones": { "meta": 41, "puntos": 100 }, "trote_segundos": { "meta": 1049, "puntos": 150 }, "natacion_segundos": { "meta": 440, "puntos": 150 }, "cabo_segundos": { "meta": 25, "puntos": 100 } }
+  },
+  "tabla_4": {
+    "edades": "31 a 33 años",
+    "puntos_maximos": 500,
+    "hombres": { "abdominales": { "meta": 56, "puntos": 100 }, "flexiones": { "meta": 48, "puntos": 100 }, "trote_segundos": { "meta": 830, "puntos": 150 }, "natacion_segundos": { "meta": 270, "puntos": 150 } },
+    "mujeres": { "abdominales": { "meta": 47, "puntos": 100 }, "flexiones": { "meta": 38, "puntos": 100 }, "trote_segundos": { "meta": 1009, "puntos": 150 }, "natacion_segundos": { "meta": 338, "puntos": 150 } }
+  },
+  "tabla_5": {
+    "edades": "34 a 36 años",
+    "puntos_maximos": 500,
+    "hombres": { "abdominales": { "meta": 52, "puntos": 100 }, "flexiones": { "meta": 43, "puntos": 100 }, "trote_segundos": { "meta": 851, "puntos": 150 }, "natacion_segundos": { "meta": 280, "puntos": 150 } },
+    "mujeres": { "abdominales": { "meta": 44, "puntos": 100 }, "flexiones": { "meta": 35, "puntos": 100 }, "trote_segundos": { "meta": 1030, "puntos": 150 }, "natacion_segundos": { "meta": 347, "puntos": 150 } }
+  },
+  "tabla_6": {
+    "edades": "37 a 39 años",
+    "puntos_maximos": 500,
+    "hombres": { "abdominales": { "meta": 48, "puntos": 100 }, "flexiones": { "meta": 38, "puntos": 100 }, "trote_segundos": { "meta": 872, "puntos": 150 }, "natacion_segundos": { "meta": 290, "puntos": 150 } },
+    "mujeres": { "abdominales": { "meta": 41, "puntos": 100 }, "flexiones": { "meta": 32, "puntos": 100 }, "trote_segundos": { "meta": 1083, "puntos": 150 }, "natacion_segundos": { "meta": 358, "puntos": 150 } }
+  },
+  "tabla_7": {
+    "edades": "40 a 42 años",
+    "puntos_maximos": 500,
+    "hombres": { "abdominales": { "meta": 43, "puntos": 100 }, "flexiones": { "meta": 33, "puntos": 100 }, "trote_segundos": { "meta": 914, "puntos": 150 }, "natacion_segundos": { "meta": 200, "puntos": 150 } },
+    "mujeres": { "abdominales": { "meta": 37, "puntos": 100 }, "flexiones": { "meta": 28, "puntos": 100 }, "trote_segundos": { "meta": 1104, "puntos": 150 }, "natacion_segundos": { "meta": 358, "puntos": 150 } }
+  },
+  "tabla_8": {
+    "edades": "43 a 45 años",
+    "puntos_maximos": 500,
+    "hombres": { "abdominales": { "meta": 38, "puntos": 100 }, "flexiones": { "meta": 27, "puntos": 100 }, "trote_segundos": { "meta": 957, "puntos": 150 }, "natacion_segundos": { "meta": 210, "puntos": 150 } },
+    "mujeres": { "abdominales": { "meta": 33, "puntos": 100 }, "flexiones": { "meta": 24, "puntos": 100 }, "trote_segundos": { "meta": 1115, "puntos": 150 }, "natacion_segundos": { "meta": 290, "puntos": 150 } }
+  },
+  "tabla_9": {
+    "edades": "46 a 48 años",
+    "puntos_maximos": 500,
+    "hombres": { "abdominales": { "meta": 32, "puntos": 100 }, "flexiones": { "meta": 21, "puntos": 100 }, "trote_segundos": { "meta": 1009, "puntos": 150 }, "natacion_segundos": { "meta": 165, "puntos": 150 } },
+    "mujeres": { "abdominales": { "meta": 29, "puntos": 100 }, "flexiones": { "meta": 20, "puntos": 100 }, "trote_segundos": { "meta": 1125, "puntos": 150 }, "natacion_segundos": { "meta": 199, "puntos": 150 } }
+  },
+  "tabla_10": {
+    "edades": "49 a 51 años",
+    "puntos_maximos": 500,
+    "hombres": { "abdominales": { "meta": 26, "puntos": 100 }, "flexiones": { "meta": 15, "puntos": 100 }, "trote_segundos": { "meta": 1062, "puntos": 150 }, "natacion_segundos": { "meta": 172, "puntos": 150 } },
+    "mujeres": { "abdominales": { "meta": 24, "puntos": 100 }, "flexiones": { "meta": 16, "puntos": 100 }, "trote_segundos": { "meta": 1136, "puntos": 150 }, "natacion_segundos": { "meta": 206, "puntos": 150 } }
+  },
+ "tabla_11": {
+    "edades": "52 a 54 años",
+    "hombres": {
+      "opcion_regular": {
+        "puntos_maximos": 500,
+        "abdominales": { "meta": 20, "puntos": 100 },
+        "flexiones": { "meta": 12, "puntos": 100 },
+        "trote_segundos": { "meta": 1083, "puntos": 150 },
+        "natacion_segundos": { "meta": 120, "puntos": 150 }
+      },
+      "opcion_alternativa": {
+        "puntos_maximos": 500,
+        "vo2_rockport": { "meta": 32.98, "puntos": 300 },
+        "natacion_segundos": { "meta": 120, "puntos": 200 }
+      }
+    },
+    "mujeres": {
+      "opcion_regular": {
+        "puntos_maximos": 500,
+        "abdominales": { "meta": 18, "puntos": 100 },
+        "flexiones": { "meta": 11, "puntos": 100 },
+        "trote_segundos": { "meta": 1146, "puntos": 150 },
+        "natacion_segundos": { "meta": 143, "puntos": 150 }
+      },
+      "opcion_alternativa": {
+        "puntos_maximos": 500,
+        "vo2_rockport": { "meta": 24.60, "puntos": 300 },
+        "natacion_segundos": { "meta": 143, "puntos": 200 }
+      }
+    }
+  },
+  "tabla_12": {
+    "edades": "55 a 57 años",
+    "hombres": {
+      "opcion_regular": {
+        "puntos_maximos": 500,
+        "abdominales": { "meta": 15, "puntos": 100 },
+        "flexiones": { "meta": 10, "puntos": 100 },
+        "trote_segundos": { "meta": 1094, "puntos": 150 },
+        "natacion_segundos": { "meta": 130, "puntos": 150 }
+      },
+      "opcion_alternativa": {
+        "puntos_maximos": 500,
+        "vo2_rockport": { "meta": 31.01, "puntos": 300 },
+        "natacion_segundos": { "meta": 130, "puntos": 200 }
+      }
+    },
+    "mujeres": {
+      "opcion_regular": {
+        "puntos_maximos": 500,
+        "abdominales": { "meta": 13, "puntos": 100 },
+        "flexiones": { "meta": 6, "puntos": 100 },
+        "trote_segundos": { "meta": 1157, "puntos": 150 },
+        "natacion_segundos": { "meta": 153, "puntos": 150 }
+      },
+      "opcion_alternativa": {
+        "puntos_maximos": 500,
+        "vo2_rockport": { "meta": 22.84, "puntos": 300 },
+        "natacion_segundos": { "meta": 153, "puntos": 200 }
+      }
+    }
+  },
+  "tabla_13": {
+    "edades": "58 años en adelante",
+    "hombres": {
+      "opcion_regular": {
+        "puntos_maximos": 500,
+        "abdominales": { "meta": 10, "puntos": 100 },
+        "flexiones": { "meta": 8, "puntos": 100 },
+        "trote_segundos": { "meta": 1105, "puntos": 150 },
+        "natacion_segundos": { "meta": 140, "puntos": 150 }
+      },
+      "opcion_alternativa": {
+        "puntos_maximos": 500,
+        "vo2_rockport": { "meta": 30.00, "puntos": 300 },
+        "natacion_segundos": { "meta": 140, "puntos": 200 }
+      }
+    },
+    "mujeres": {
+      "opcion_regular": {
+        "puntos_maximos": 500,
+        "abdominales": { "meta": 9, "puntos": 100 },
+        "flexiones": { "meta": 4, "puntos": 100 },
+        "trote_segundos": { "meta": 1168, "puntos": 150 },
+        "natacion_segundos": { "meta": 163, "puntos": 150 }
+      },
+      "opcion_alternativa": {
+        "puntos_maximos": 500,
+        "vo2_rockport": { "meta": 24.07, "puntos": 300 },
+        "natacion_segundos": { "meta": 163, "puntos": 200 }
+      }
+    }
+  }
+}

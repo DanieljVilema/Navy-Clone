@@ -1,0 +1,132 @@
+{
+  "grupos": [
+    {
+      "id": "A",
+      "nombre": "Grupo A",
+      "meses": [
+        {
+          "id": "febrero_2026",
+          "nombre": "Febrero 2026",
+          "semanas": [
+            {
+              "numero": 1,
+              "titulo": "Semana 1",
+              "pdfAsset": null
+            },
+            {
+              "numero": 2,
+              "titulo": "Semana 2",
+              "pdfAsset": null
+            },
+            {
+              "numero": 3,
+              "titulo": "Semana 3",
+              "pdfAsset": null
+            },
+            {
+              "numero": 4,
+              "titulo": "Semana 4",
+              "pdfAsset": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "B",
+      "nombre": "Grupo B",
+      "meses": [
+        {
+          "id": "febrero_2026",
+          "nombre": "Febrero 2026",
+          "semanas": [
+            {
+              "numero": 1,
+              "titulo": "Semana 1",
+              "pdfAsset": null
+            },
+            {
+              "numero": 2,
+              "titulo": "Semana 2",
+              "pdfAsset": null
+            },
+            {
+              "numero": 3,
+              "titulo": "Semana 3",
+              "pdfAsset": null
+            },
+            {
+              "numero": 4,
+              "titulo": "Semana 4",
+              "pdfAsset": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "C",
+      "nombre": "Grupo C",
+      "meses": [
+        {
+          "id": "febrero_2026",
+          "nombre": "Febrero 2026",
+          "semanas": [
+            {
+              "numero": 1,
+              "titulo": "Semana 1",
+              "pdfAsset": null
+            },
+            {
+              "numero": 2,
+              "titulo": "Semana 2",
+              "pdfAsset": null
+            },
+            {
+              "numero": 3,
+              "titulo": "Semana 3",
+              "pdfAsset": null
+            },
+            {
+              "numero": 4,
+              "titulo": "Semana 4",
+              "pdfAsset": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "D",
+      "nombre": "Grupo D",
+      "meses": [
+        {
+          "id": "febrero_2026",
+          "nombre": "Febrero 2026",
+          "semanas": [
+            {
+              "numero": 1,
+              "titulo": "Semana 1",
+              "pdfAsset": null
+            },
+            {
+              "numero": 2,
+              "titulo": "Semana 2",
+              "pdfAsset": null
+            },
+            {
+              "numero": 3,
+              "titulo": "Semana 3",
+              "pdfAsset": null
+            },
+            {
+              "numero": 4,
+              "titulo": "Semana 4",
+              "pdfAsset": null
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
