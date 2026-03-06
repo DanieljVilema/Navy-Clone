@@ -15,6 +15,7 @@ import 'package:navy_pfa_armada_ecuador/shared/services/database_service.dart';
 import 'package:navy_pfa_armada_ecuador/shared/services/json_loader_service.dart';
 import 'package:navy_pfa_armada_ecuador/shared/services/scoring_service.dart';
 import 'package:navy_pfa_armada_ecuador/features/chatbot/services/gemini_service.dart';
+import 'package:navy_pfa_armada_ecuador/features/chatbot/services/pdf_loader_service.dart';
 
 // Providers
 import 'package:navy_pfa_armada_ecuador/shared/providers/content_provider.dart';
@@ -26,7 +27,7 @@ import 'package:navy_pfa_armada_ecuador/features/exercise_tracking/providers/exe
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // Load environment variables securely
   await dotenv.load(fileName: ".env");
 
@@ -51,17 +52,8 @@ void main() async {
   final contentProvider = ContentProvider();
   await contentProvider.loadAllContent();
 
-  // Load the main COGMAR PDF bytes for Gemini multimodal
-  Uint8List? cogmarPdfBytes;
-  if (contentProvider.pdfPathsForGemini.isNotEmpty) {
-    try {
-      final byteData =
-          await rootBundle.load(contentProvider.pdfPathsForGemini.first);
-      cogmarPdfBytes = byteData.buffer.asUint8List();
-    } catch (_) {
-      // PDF not available, Gemini will work without it
-    }
-  }
+  // Auto-discover and load all PDFs from assets/pdfs/
+  final pdfAssets = await PdfLoaderService.loadAllPdfs();
 
   final chatProvider = ChatProvider(geminiService, dbService);
   chatProvider.loadHistory();
@@ -89,7 +81,7 @@ void main() async {
       child: NavyPFAApp(
         contentProvider: contentProvider,
         geminiService: geminiService,
-        cogmarPdfBytes: cogmarPdfBytes,
+        pdfAssets: pdfAssets,
       ),
     ),
   );
@@ -98,13 +90,13 @@ void main() async {
 class NavyPFAApp extends StatefulWidget {
   final ContentProvider contentProvider;
   final GeminiService geminiService;
-  final Uint8List? cogmarPdfBytes;
+  final List<PdfAsset> pdfAssets;
 
   const NavyPFAApp({
     super.key,
     required this.contentProvider,
     required this.geminiService,
-    this.cogmarPdfBytes,
+    required this.pdfAssets,
   });
 
   @override
@@ -126,7 +118,7 @@ class _NavyPFAAppState extends State<NavyPFAApp> {
         baremosContext: widget.contentProvider.baremosContext,
         nutritionContext: widget.contentProvider.nutritionContext,
         regulationsContext: widget.contentProvider.regulationsContext,
-        pdfBytes: widget.cogmarPdfBytes,
+        pdfAssets: widget.pdfAssets,
       );
     }
   }

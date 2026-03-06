@@ -1,15 +1,10 @@
 import 'dart:convert';
-import 'dart:io';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:open_file/open_file.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:share_plus/share_plus.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:navy_pfa_armada_ecuador/core/constants/constants.dart';
 import 'package:navy_pfa_armada_ecuador/shared/models/training_plan.dart';
+import 'package:navy_pfa_armada_ecuador/features/training/widgets/training_week_view.dart';
 
 class TrainingScreen extends StatefulWidget {
   const TrainingScreen({super.key});
@@ -22,6 +17,7 @@ class _TrainingScreenState extends State<TrainingScreen> {
   List<TrainingGroup> _groups = [];
   String? _selectedGroupId;
   String? _selectedMonthId;
+  int? _selectedWeekIndex;
   bool _loading = true;
 
   @override
@@ -32,7 +28,8 @@ class _TrainingScreenState extends State<TrainingScreen> {
 
   Future<void> _loadPlans() async {
     try {
-      final raw = await rootBundle.loadString('assets/training_plans_config.json');
+      final raw =
+          await rootBundle.loadString('assets/training_plans_data.json');
       final json = jsonDecode(raw) as Map<String, dynamic>;
       final groups = (json['grupos'] as List)
           .map((g) => TrainingGroup.fromJson(g as Map<String, dynamic>))
@@ -46,70 +43,41 @@ class _TrainingScreenState extends State<TrainingScreen> {
     }
   }
 
-  Future<void> _openPdf(String assetPath) async {
-    try {
-      if (kIsWeb) {
-        final Uri url = Uri.parse(Uri.encodeFull(assetPath));
-        if (!await launchUrl(url, webOnlyWindowName: '_blank')) {
-          throw Exception('No se puede abrir el PDF en la web');
-        }
-        return;
-      }
-
-      final data = await rootBundle.load(assetPath);
-      final bytes = data.buffer.asUint8List();
-      final tempDir = await getTemporaryDirectory();
-      final safeName = 'navy_training_${assetPath.hashCode.abs()}.pdf';
-      final file = File('${tempDir.path}/$safeName');
-      await file.writeAsBytes(bytes, flush: true);
-      
-      try {
-        final result = await OpenFile.open(file.path, type: 'application/pdf');
-        if (result.type != ResultType.done) {
-          await Share.shareXFiles([XFile(file.path)], text: 'Abrir plan de entrenamiento');
-        }
-      } catch (_) {
-        await Share.shareXFiles([XFile(file.path)], text: 'Abrir plan de entrenamiento');
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('No se pudo abrir el PDF: $e'),
-            backgroundColor: AppColors.danger,
-          ),
-        );
-      }
-    }
-  }
-
   TrainingGroup? get _selectedGroup =>
       _groups.where((g) => g.id == _selectedGroupId).firstOrNull;
 
   TrainingMonth? get _selectedMonth =>
       _selectedGroup?.meses.where((m) => m.id == _selectedMonthId).firstOrNull;
 
+  TrainingSemana? get _selectedWeek {
+    if (_selectedWeekIndex == null || _selectedMonth == null) return null;
+    if (_selectedWeekIndex! >= _selectedMonth!.semanas.length) return null;
+    return _selectedMonth!.semanas[_selectedWeekIndex!];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.darkBg,
       body: _loading
-          ? const Center(child: CircularProgressIndicator(color: AppColors.primary))
+          ? const Center(
+              child: CircularProgressIndicator(color: AppColors.primary))
           : _groups.isEmpty
               ? _buildEmpty()
               : Column(
                   children: [
                     if (_selectedGroupId != null) _buildBreadcrumb(),
-                    Expanded(
-                      child: _selectedMonthId != null
-                          ? _buildWeekList()
-                          : _selectedGroupId != null
-                              ? _buildMonthList()
-                              : _buildGroupList(),
-                    ),
+                    Expanded(child: _buildCurrentLevel()),
                   ],
                 ),
     );
+  }
+
+  Widget _buildCurrentLevel() {
+    if (_selectedWeekIndex != null) return _buildWeekContent();
+    if (_selectedMonthId != null) return _buildWeekList();
+    if (_selectedGroupId != null) return _buildMonthList();
+    return _buildGroupList();
   }
 
   Widget _buildEmpty() {
@@ -152,63 +120,81 @@ class _TrainingScreenState extends State<TrainingScreen> {
   Widget _buildBreadcrumb() {
     return Container(
       color: AppColors.darkCard,
-      padding: const EdgeInsets.symmetric(
-          horizontal: Spacing.m, vertical: Spacing.s),
+      padding:
+          const EdgeInsets.symmetric(horizontal: Spacing.m, vertical: Spacing.s),
       child: Row(
         children: [
-          GestureDetector(
+          _breadcrumbItem(
+            label: 'Grupos',
+            isLink: true,
             onTap: () => setState(() {
               _selectedGroupId = null;
               _selectedMonthId = null;
+              _selectedWeekIndex = null;
             }),
-            child: Text(
-              'Grupos',
-              style: GoogleFonts.inter(
-                fontSize: 13,
-                color: AppColors.primary,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
           ),
           if (_selectedGroupId != null) ...[
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 6),
-              child: Icon(Icons.chevron_right,
-                  size: 16, color: AppColors.darkTextTertiary),
-            ),
-            GestureDetector(
-              onTap: () => setState(() => _selectedMonthId = null),
-              child: Text(
-                _selectedGroup?.nombre ?? '',
-                style: GoogleFonts.inter(
-                  fontSize: 13,
-                  color: _selectedMonthId != null
-                      ? AppColors.primary
-                      : AppColors.darkTextPrimary,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
+            _breadcrumbChevron(),
+            _breadcrumbItem(
+              label: _selectedGroup?.nombre ?? '',
+              isLink: _selectedMonthId != null,
+              onTap: () => setState(() {
+                _selectedMonthId = null;
+                _selectedWeekIndex = null;
+              }),
             ),
           ],
           if (_selectedMonthId != null) ...[
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 6),
-              child: Icon(Icons.chevron_right,
-                  size: 16, color: AppColors.darkTextTertiary),
+            _breadcrumbChevron(),
+            _breadcrumbItem(
+              label: _selectedMonth?.nombre ?? '',
+              isLink: _selectedWeekIndex != null,
+              onTap: () => setState(() => _selectedWeekIndex = null),
             ),
-            Text(
-              _selectedMonth?.nombre ?? '',
-              style: GoogleFonts.inter(
-                fontSize: 13,
-                color: AppColors.darkTextPrimary,
-                fontWeight: FontWeight.w500,
-              ),
+          ],
+          if (_selectedWeekIndex != null) ...[
+            _breadcrumbChevron(),
+            _breadcrumbItem(
+              label: _selectedWeek?.titulo ?? '',
+              isLink: false,
+              onTap: () {},
             ),
           ],
         ],
       ),
     );
   }
+
+  Widget _breadcrumbItem({
+    required String label,
+    required bool isLink,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: isLink ? onTap : null,
+      child: Flexible(
+        child: Text(
+          label,
+          overflow: TextOverflow.ellipsis,
+          style: GoogleFonts.inter(
+            fontSize: 13,
+            color: isLink ? AppColors.primary : AppColors.darkTextPrimary,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _breadcrumbChevron() {
+    return const Padding(
+      padding: EdgeInsets.symmetric(horizontal: 6),
+      child:
+          Icon(Icons.chevron_right, size: 16, color: AppColors.darkTextTertiary),
+    );
+  }
+
+  // ── Level 1: Groups ──
 
   Widget _buildGroupList() {
     return ListView.separated(
@@ -217,19 +203,23 @@ class _TrainingScreenState extends State<TrainingScreen> {
       separatorBuilder: (_, __) => const SizedBox(height: Spacing.s),
       itemBuilder: (_, i) {
         final group = _groups[i];
+        final totalMonths = group.meses.length;
         return _buildNavCard(
           icon: Icons.group_outlined,
           title: group.nombre,
           subtitle:
-              '${group.meses.length} mes${group.meses.length != 1 ? 'es' : ''}',
+              '$totalMonths mes${totalMonths != 1 ? 'es' : ''} disponible${totalMonths != 1 ? 's' : ''}',
           onTap: () => setState(() {
             _selectedGroupId = group.id;
             _selectedMonthId = null;
+            _selectedWeekIndex = null;
           }),
         );
       },
     );
   }
+
+  // ── Level 2: Months ──
 
   Widget _buildMonthList() {
     final group = _selectedGroup;
@@ -246,11 +236,16 @@ class _TrainingScreenState extends State<TrainingScreen> {
           title: month.nombre,
           subtitle:
               '${month.semanas.length} semana${month.semanas.length != 1 ? 's' : ''}',
-          onTap: () => setState(() => _selectedMonthId = month.id),
+          onTap: () => setState(() {
+            _selectedMonthId = month.id;
+            _selectedWeekIndex = null;
+          }),
         );
       },
     );
   }
+
+  // ── Level 3: Weeks ──
 
   Widget _buildWeekList() {
     final month = _selectedMonth;
@@ -262,7 +257,7 @@ class _TrainingScreenState extends State<TrainingScreen> {
       separatorBuilder: (_, __) => const SizedBox(height: Spacing.s),
       itemBuilder: (_, i) {
         final semana = month.semanas[i];
-        final hasPdf = semana.pdfAsset != null;
+        final hasContent = semana.hasContent;
 
         return Container(
           decoration: BoxDecoration(
@@ -278,19 +273,22 @@ class _TrainingScreenState extends State<TrainingScreen> {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: hasPdf
+                color: hasContent
                     ? AppColors.primary.withValues(alpha: 0.15)
                     : AppColors.darkCardSec,
                 borderRadius: BorderRadius.circular(Radii.s),
               ),
-              child: Icon(
-                hasPdf
-                    ? Icons.picture_as_pdf_outlined
-                    : Icons.lock_outline,
-                size: 20,
-                color: hasPdf
-                    ? AppColors.primary
-                    : AppColors.darkTextTertiary,
+              child: Center(
+                child: Text(
+                  '${semana.numero}',
+                  style: GoogleFonts.inter(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: hasContent
+                        ? AppColors.primary
+                        : AppColors.darkTextTertiary,
+                  ),
+                ),
               ),
             ),
             title: Text(
@@ -302,26 +300,38 @@ class _TrainingScreenState extends State<TrainingScreen> {
               ),
             ),
             subtitle: Text(
-              hasPdf
-                  ? 'Toca para abrir el PDF'
-                  : 'PDF no disponible aún',
+              hasContent
+                  ? '${semana.dias.length} días de entrenamiento'
+                  : 'Sin contenido disponible',
               style: GoogleFonts.inter(
                 fontSize: 12,
-                color: hasPdf
+                color: hasContent
                     ? AppColors.darkTextSecondary
                     : AppColors.darkTextTertiary,
               ),
             ),
-            trailing: hasPdf
-                ? const Icon(Icons.open_in_new,
-                    size: 18, color: AppColors.primary)
+            trailing: hasContent
+                ? const Icon(Icons.chevron_right,
+                    size: 20, color: AppColors.primary)
                 : null,
-            onTap: hasPdf ? () => _openPdf(semana.pdfAsset!) : null,
+            onTap: hasContent
+                ? () => setState(() => _selectedWeekIndex = i)
+                : null,
           ),
         );
       },
     );
   }
+
+  // ── Level 4: Week Content ──
+
+  Widget _buildWeekContent() {
+    final week = _selectedWeek;
+    if (week == null) return const SizedBox.shrink();
+    return TrainingWeekView(semana: week);
+  }
+
+  // ── Shared Card ──
 
   Widget _buildNavCard({
     required IconData icon,

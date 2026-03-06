@@ -33,6 +33,7 @@ void main() {
         child: NavyPFAApp(
           contentProvider: contentProvider,
           geminiService: geminiService,
+          pdfAssets: const [],
         ),
       ),
     );

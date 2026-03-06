@@ -1,5 +1,5 @@
-import 'dart:typed_data';
 import 'package:google_generative_ai/google_generative_ai.dart';
+import 'package:navy_pfa_armada_ecuador/features/chatbot/services/pdf_loader_service.dart';
 
 class GeminiService {
   GenerativeModel? _model;
@@ -37,7 +37,7 @@ CONTEXTO DE REGLAMENTOS:
     String? baremosContext,
     String? nutritionContext,
     String? regulationsContext,
-    Uint8List? pdfBytes,
+    List<PdfAsset> pdfAssets = const [],
   }) async {
     if (apiKey.isEmpty) return;
 
@@ -56,21 +56,28 @@ CONTEXTO DE REGLAMENTOS:
         systemInstruction: Content.system(instructions),
       );
 
-      // If PDF bytes are provided, start chat with the PDF as initial context
-      if (pdfBytes != null && pdfBytes.isNotEmpty) {
+      // If PDFs are provided, start chat with all of them as initial context
+      if (pdfAssets.isNotEmpty) {
+        final parts = <Part>[];
+        for (final pdf in pdfAssets) {
+          parts.add(DataPart('application/pdf', pdf.bytes));
+          parts.add(TextPart(
+            'Documento: "${pdf.name}". '
+            'Úsalo como referencia para responder consultas.',
+          ));
+        }
+        parts.add(TextPart(
+          'Estos son los documentos oficiales de la Armada del Ecuador. '
+          'Contienen normas, reglamentos y manuales relevantes. '
+          'Úsalos como referencia principal para responder consultas.',
+        ));
+
         _chat = _model!.startChat(history: [
-          Content.multi([
-            DataPart('application/pdf', pdfBytes),
-            TextPart(
-              'Este es el reglamento oficial COGMAR-EDU-001-2019-O de la Armada del Ecuador. '
-              'Contiene las normas completas para la evaluación de condiciones físicas y '
-              'la recuperación de pruebas físicas. Úsalo como referencia para responder consultas.',
-            ),
-          ]),
+          Content.multi(parts),
           Content.model([
             TextPart(
-              'Entendido. He procesado el reglamento oficial COGMAR-EDU-001-2019-O. '
-              'Estoy listo para responder consultas sobre evaluación física de la Armada del Ecuador.',
+              'Entendido. He procesado ${pdfAssets.length} documento(s) oficial(es). '
+              'Estoy listo para responder consultas sobre la Armada del Ecuador.',
             ),
           ]),
         ]);

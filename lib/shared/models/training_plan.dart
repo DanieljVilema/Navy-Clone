@@ -1,12 +1,53 @@
+class TrainingBloque {
+  final String hora;
+  final String seccion;
+  final String actividad;
+
+  const TrainingBloque({
+    required this.hora,
+    required this.seccion,
+    required this.actividad,
+  });
+
+  factory TrainingBloque.fromJson(Map<String, dynamic> json) {
+    return TrainingBloque(
+      hora: json['hora'] as String? ?? '',
+      seccion: json['seccion'] as String? ?? '',
+      actividad: json['actividad'] as String? ?? '',
+    );
+  }
+}
+
+class TrainingDia {
+  final String nombre;
+  final List<TrainingBloque> bloques;
+
+  const TrainingDia({
+    required this.nombre,
+    required this.bloques,
+  });
+
+  factory TrainingDia.fromJson(Map<String, dynamic> json) {
+    return TrainingDia(
+      nombre: json['nombre'] as String,
+      bloques: (json['bloques'] as List)
+          .map((b) => TrainingBloque.fromJson(b as Map<String, dynamic>))
+          .toList(),
+    );
+  }
+}
+
 class TrainingSemana {
   final int numero;
   final String titulo;
   final String? pdfAsset;
+  final List<TrainingDia> dias;
 
   const TrainingSemana({
     required this.numero,
     required this.titulo,
     this.pdfAsset,
+    this.dias = const [],
   });
 
   factory TrainingSemana.fromJson(Map<String, dynamic> json) {
@@ -14,8 +55,14 @@ class TrainingSemana {
       numero: json['numero'] as int,
       titulo: json['titulo'] as String,
       pdfAsset: json['pdfAsset'] as String?,
+      dias: (json['dias'] as List?)
+              ?.map((d) => TrainingDia.fromJson(d as Map<String, dynamic>))
+              .toList() ??
+          [],
     );
   }
+
+  bool get hasContent => dias.isNotEmpty;
 }
 
 class TrainingMonth {

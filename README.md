@@ -69,3 +69,7 @@ flutter run -d chrome
 ## Créditos
 - Armada del Ecuador
 - Desarrollador: [Tu Nombre]
+
+## Documentos
+
+Ir a la carpeta assets/pdfs para insertar nuevos manuales, pdfs, que deba leer el chatbot.
