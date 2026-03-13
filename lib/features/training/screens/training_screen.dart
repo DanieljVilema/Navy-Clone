@@ -66,11 +66,83 @@ class _TrainingScreenState extends State<TrainingScreen> {
               ? _buildEmpty()
               : Column(
                   children: [
-                    if (_selectedGroupId != null) _buildBreadcrumb(),
+                    if (_selectedGroupId != null) _buildNavigationHeader(),
                     Expanded(child: _buildCurrentLevel()),
                   ],
                 ),
     );
+  }
+
+  Widget _buildNavigationHeader() {
+    bool canGoBack = _selectedGroupId != null;
+    String title = 'Biblioteca';
+    if (_selectedWeekIndex != null) {
+      title = _selectedWeek?.titulo ?? 'Semana';
+    } else if (_selectedMonthId != null) {
+      title = _selectedMonth?.nombre ?? 'Mes';
+    } else if (_selectedGroupId != null) {
+      title = _selectedGroup?.nombre ?? 'Grupo';
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: Spacing.m, vertical: Spacing.s),
+      decoration: BoxDecoration(
+        color: AppColors.darkCard,
+        border: Border(bottom: BorderSide(color: AppColors.darkCardSec, width: 1)),
+      ),
+      child: Row(
+        children: [
+          // BACK BUTTON
+          if (canGoBack)
+            Padding(
+              padding: const EdgeInsets.only(right: Spacing.s),
+              child: IconButton(
+                onPressed: _onBack,
+                icon: const Icon(Icons.arrow_back_ios, size: 18, color: AppColors.primary),
+                tooltip: 'Atrás',
+                constraints: const BoxConstraints(),
+                padding: const EdgeInsets.all(Spacing.s),
+              ),
+            ),
+          
+          // CURRENT TITLE
+          Expanded(
+            child: Text(
+              title,
+              style: GoogleFonts.inter(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: AppColors.darkTextPrimary,
+              ),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+
+          // HOME ACTION
+          IconButton(
+            onPressed: () => setState(() {
+              _selectedGroupId = null;
+              _selectedMonthId = null;
+              _selectedWeekIndex = null;
+            }),
+            icon: const Icon(Icons.home_outlined, size: 22, color: AppColors.darkTextSecondary),
+            tooltip: 'Inicio',
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _onBack() {
+    setState(() {
+      if (_selectedWeekIndex != null) {
+        _selectedWeekIndex = null;
+      } else if (_selectedMonthId != null) {
+        _selectedMonthId = null;
+      } else if (_selectedGroupId != null) {
+        _selectedGroupId = null;
+      }
+    });
   }
 
   Widget _buildCurrentLevel() {
@@ -117,82 +189,9 @@ class _TrainingScreenState extends State<TrainingScreen> {
     );
   }
 
-  Widget _buildBreadcrumb() {
-    return Container(
-      color: AppColors.darkCard,
-      padding:
-          const EdgeInsets.symmetric(horizontal: Spacing.m, vertical: Spacing.s),
-      child: Row(
-        children: [
-          _breadcrumbItem(
-            label: 'Grupos',
-            isLink: true,
-            onTap: () => setState(() {
-              _selectedGroupId = null;
-              _selectedMonthId = null;
-              _selectedWeekIndex = null;
-            }),
-          ),
-          if (_selectedGroupId != null) ...[
-            _breadcrumbChevron(),
-            _breadcrumbItem(
-              label: _selectedGroup?.nombre ?? '',
-              isLink: _selectedMonthId != null,
-              onTap: () => setState(() {
-                _selectedMonthId = null;
-                _selectedWeekIndex = null;
-              }),
-            ),
-          ],
-          if (_selectedMonthId != null) ...[
-            _breadcrumbChevron(),
-            _breadcrumbItem(
-              label: _selectedMonth?.nombre ?? '',
-              isLink: _selectedWeekIndex != null,
-              onTap: () => setState(() => _selectedWeekIndex = null),
-            ),
-          ],
-          if (_selectedWeekIndex != null) ...[
-            _breadcrumbChevron(),
-            _breadcrumbItem(
-              label: _selectedWeek?.titulo ?? '',
-              isLink: false,
-              onTap: () {},
-            ),
-          ],
-        ],
-      ),
-    );
-  }
 
-  Widget _breadcrumbItem({
-    required String label,
-    required bool isLink,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: isLink ? onTap : null,
-      child: Flexible(
-        child: Text(
-          label,
-          overflow: TextOverflow.ellipsis,
-          style: GoogleFonts.inter(
-            fontSize: 13,
-            color: isLink ? AppColors.primary : AppColors.darkTextPrimary,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ),
-    );
-  }
 
-  Widget _breadcrumbChevron() {
-    return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 6),
-      child:
-          Icon(Icons.chevron_right, size: 16, color: AppColors.darkTextTertiary),
-    );
-  }
+
 
   // ── Level 1: Groups ──
 

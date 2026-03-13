@@ -50,8 +50,12 @@ class ChatProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final responseText = await _gemini.sendMessage(text);
-      final botMsg = ChatMessageModel(role: 'assistant', text: responseText);
+      final response = await _gemini.sendMessage(text);
+      final botMsg = ChatMessageModel(
+        role: 'assistant',
+        text: response.text,
+        sources: response.sources,
+      );
       _messages.insert(0, botMsg);
       
       try {

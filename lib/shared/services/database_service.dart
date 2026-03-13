@@ -21,7 +21,7 @@ class DatabaseService {
     
     return openDatabase(
       path,
-      version: 3,
+      version: 4,
       onCreate: _createTables,
       onUpgrade: _onUpgrade,
       onOpen: (db) async {
@@ -74,7 +74,8 @@ class DatabaseService {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         role TEXT NOT NULL,
         text TEXT NOT NULL,
-        timestamp TEXT NOT NULL
+        timestamp TEXT NOT NULL,
+        sources TEXT
       )
     ''');
 
@@ -92,6 +93,14 @@ class DatabaseService {
       // Ensure exercise tables exist (handles DBs at v2 that missed the migration)
       await _createExerciseTables(db);
       await _seedExerciseTypes(db);
+    }
+    if (oldVersion < 4) {
+      // Add sources column to chat_messages
+      try {
+        await db.execute('ALTER TABLE chat_messages ADD COLUMN sources TEXT');
+      } catch (e) {
+        // Ignorar si la columna ya existe
+      }
     }
   }
 

@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:navy_pfa_armada_ecuador/shared/providers/content_provider.dart';
 import 'package:navy_pfa_armada_ecuador/core/constants/constants.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class NutritionScreen extends StatelessWidget {
   const NutritionScreen({super.key});
@@ -106,6 +107,28 @@ class NutritionScreen extends StatelessWidget {
                                   ),
                                 )),
                               ],
+                              if (item.url != null) ...[
+                                const SizedBox(height: Spacing.xl),
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: ElevatedButton.icon(
+                                    onPressed: () async {
+                                      final uri = Uri.parse(item.url!);
+                                      if (await canLaunchUrl(uri)) {
+                                        await launchUrl(uri, mode: LaunchMode.externalApplication);
+                                      }
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: AppColors.primary,
+                                      foregroundColor: Colors.white,
+                                      padding: const EdgeInsets.symmetric(vertical: 16),
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(Radii.m)),
+                                    ),
+                                    icon: const Icon(Icons.open_in_new),
+                                    label: const Text('Visitar Sitio Oficial', style: TextStyle(fontWeight: FontWeight.bold)),
+                                  ),
+                                ),
+                              ],
                               const SizedBox(height: Spacing.xl),
                             ],
                           ),
@@ -117,10 +140,16 @@ class NutritionScreen extends StatelessWidget {
                         Container(
                           width: 44, height: 44,
                           decoration: BoxDecoration(
-                            color: AppColors.success.withValues(alpha: 0.15),
+                            color: item.url != null 
+                              ? AppColors.primary.withValues(alpha: 0.15)
+                              : AppColors.success.withValues(alpha: 0.15),
                             borderRadius: BorderRadius.circular(Radii.m),
                           ),
-                          child: const Icon(Icons.restaurant, size: 22, color: AppColors.success),
+                          child: Icon(
+                            item.url != null ? Icons.link : Icons.restaurant, 
+                            size: 22, 
+                            color: item.url != null ? AppColors.primary : AppColors.success,
+                          ),
                         ),
                         const SizedBox(width: Spacing.m),
                         Expanded(

@@ -21,7 +21,7 @@ class ExerciseTrackingScreen extends StatefulWidget {
 }
 
 class _ExerciseTrackingScreenState extends State<ExerciseTrackingScreen> {
-  int _selectedTab = 0; // 0 = Progreso, 1 = Historial, 2 = Simulador
+  int _selectedTab = 0; // 0 = Historial, 1 = Estadísticas, 2 = Simulador
 
   @override
   void initState() {
@@ -85,72 +85,6 @@ class _ExerciseTrackingScreenState extends State<ExerciseTrackingScreen> {
           ),
           body: Column(
             children: [
-              // ── MONTH SELECTOR ──
-              Container(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: Spacing.m, vertical: Spacing.s),
-                color: AppColors.darkCard,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.chevron_left,
-                          color: AppColors.darkTextSecondary),
-                      onPressed: () {
-                        provider.previousMonth();
-                        final userId = context.read<UserProvider>().userId;
-                        provider.loadLogs(userId);
-                      },
-                    ),
-                    Text(
-                      _formatMonth(provider.selectedMonth),
-                      style: GoogleFonts.inter(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.darkTextPrimary,
-                      ),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.chevron_right,
-                          color: AppColors.darkTextSecondary),
-                      onPressed: () {
-                        provider.nextMonth();
-                        final userId = context.read<UserProvider>().userId;
-                        provider.loadLogs(userId);
-                      },
-                    ),
-                  ],
-                ),
-              ),
-
-              // ── STATS ROW ──
-              Container(
-                padding: const EdgeInsets.all(Spacing.m),
-                child: Row(
-                  children: [
-                    _StatCard(
-                      label: 'Este mes',
-                      value: '${provider.totalSessionsThisMonth}',
-                      unit: 'sesiones',
-                    ),
-                    const SizedBox(width: Spacing.s),
-                    _StatCard(
-                      label: 'Esta semana',
-                      value: '${provider.totalSessionsThisWeek}',
-                      unit: 'sesiones',
-                    ),
-                  ],
-                ),
-              ),
-
-              // ── EXERCISE TYPE FILTER ──
-              ExerciseTypeSelector(
-                types: provider.exerciseTypes,
-                selectedClave: selectedClave,
-                onSelected: (clave) => provider.setSelectedExercise(clave),
-              ),
-              const SizedBox(height: Spacing.m),
-
               // ── TOGGLE TABS ──
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: Spacing.m),
@@ -162,10 +96,10 @@ class _ExerciseTrackingScreenState extends State<ExerciseTrackingScreen> {
                   ),
                   child: Row(
                     children: [
-                      _buildTab('Progreso', _selectedTab == 0, () {
+                      _buildTab('Historial', _selectedTab == 0, () {
                         setState(() => _selectedTab = 0);
                       }),
-                      _buildTab('Historial', _selectedTab == 1, () {
+                      _buildTab('Estadísticas', _selectedTab == 1, () {
                         setState(() => _selectedTab = 1);
                       }),
                       _buildTab('Simulador', _selectedTab == 2, () {
@@ -180,9 +114,9 @@ class _ExerciseTrackingScreenState extends State<ExerciseTrackingScreen> {
               // ── CONTENT ──
               Expanded(
                 child: _selectedTab == 0
-                    ? _buildChartsView(provider, selectedClave, daysInMonth)
+                    ? _buildHistoryView(provider)
                     : _selectedTab == 1
-                        ? _buildHistoryView(provider)
+                        ? _buildChartsView(provider, selectedClave, daysInMonth)
                         : const EvaluationSimulatorTab(),
               ),
             ],
@@ -217,41 +151,118 @@ class _ExerciseTrackingScreenState extends State<ExerciseTrackingScreen> {
 
   Widget _buildChartsView(
       ExerciseLogProvider provider, String? selectedClave, int daysInMonth) {
-    if (selectedClave == null) {
-      return ListView(
-        padding: const EdgeInsets.all(Spacing.m),
-        children: [
-          Container(
-            padding: const EdgeInsets.all(Spacing.m),
-            decoration: BoxDecoration(
-              color: AppColors.darkCard,
-              borderRadius: BorderRadius.circular(Radii.m),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Selecciona un ejercicio',
-                  style: GoogleFonts.inter(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.darkTextPrimary,
-                  ),
+    return Column(
+      children: [
+        // ── MONTH SELECTOR ──
+        Container(
+          padding: const EdgeInsets.symmetric(
+              horizontal: Spacing.m, vertical: Spacing.s),
+          color: AppColors.darkCard,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.chevron_left,
+                    color: AppColors.darkTextSecondary),
+                onPressed: () {
+                  provider.previousMonth();
+                  final userId = context.read<UserProvider>().userId;
+                  provider.loadLogs(userId);
+                },
+              ),
+              Text(
+                _formatMonth(provider.selectedMonth),
+                style: GoogleFonts.inter(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.darkTextPrimary,
                 ),
-                const SizedBox(height: Spacing.xs),
-                Text(
-                  'Usa los filtros de arriba para ver el progreso de un ejercicio específico.',
-                  style: GoogleFonts.inter(
-                    fontSize: 13,
-                    color: AppColors.darkTextSecondary,
-                  ),
-                ),
-              ],
-            ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.chevron_right,
+                    color: AppColors.darkTextSecondary),
+                onPressed: () {
+                  provider.nextMonth();
+                  final userId = context.read<UserProvider>().userId;
+                  provider.loadLogs(userId);
+                },
+              ),
+            ],
           ),
-        ],
-      );
-    }
+        ),
+
+        // ── STATS ROW ──
+        Container(
+          padding: const EdgeInsets.all(Spacing.m),
+          child: Row(
+            children: [
+              _StatCard(
+                label: 'Este mes',
+                value: '${provider.totalSessionsThisMonth}',
+                unit: 'sesiones',
+              ),
+              const SizedBox(width: Spacing.s),
+              _StatCard(
+                label: 'Esta semana',
+                value: '${provider.totalSessionsThisWeek}',
+                unit: 'sesiones',
+              ),
+            ],
+          ),
+        ),
+
+        // ── EXERCISE TYPE FILTER ──
+        ExerciseTypeSelector(
+          types: provider.exerciseTypes,
+          selectedClave: selectedClave,
+          onSelected: (clave) => provider.setSelectedExercise(clave),
+        ),
+        const SizedBox(height: Spacing.s),
+
+        // ── CHARTS CONTENT ──
+        Expanded(
+          child: selectedClave == null
+              ? ListView(
+                  padding: const EdgeInsets.all(Spacing.m),
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(Spacing.m),
+                      decoration: BoxDecoration(
+                        color: AppColors.darkCard,
+                        borderRadius: BorderRadius.circular(Radii.m),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Selecciona un ejercicio',
+                            style: GoogleFonts.inter(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.darkTextPrimary,
+                            ),
+                          ),
+                          const SizedBox(height: Spacing.xs),
+                          Text(
+                            'Usa los filtros de arriba para ver el progreso de un ejercicio específico.',
+                            style: GoogleFonts.inter(
+                              fontSize: 13,
+                              color: AppColors.darkTextSecondary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                )
+              : _buildExpandedCharts(provider, selectedClave, daysInMonth),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildExpandedCharts(
+      ExerciseLogProvider provider, String selectedClave, int daysInMonth) {
 
     final spots = provider.getSpotsForExercise(selectedClave);
     final weeklyTotals = provider.getWeeklyTotals(selectedClave);

@@ -3,7 +3,10 @@ import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:navy_pfa_armada_ecuador/features/chatbot/providers/chat_provider.dart';
+import 'package:navy_pfa_armada_ecuador/features/chatbot/models/chat_message.dart';
 import 'package:navy_pfa_armada_ecuador/core/constants/constants.dart';
+import 'package:navy_pfa_armada_ecuador/shared/providers/content_provider.dart';
+import 'package:navy_pfa_armada_ecuador/shared/utils/pdf_opener.dart';
 
 class ChatbotScreen extends StatefulWidget {
   const ChatbotScreen({super.key});
@@ -74,26 +77,68 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                   borderRadius: Radii.m,
                   messageTextBuilder: (message, previousMessage, nextMessage) {
                     final isUser = message.user.id == _currentUser.id;
-                    return MarkdownBody(
-                      data: message.text,
-                      selectable: true,
-                      styleSheet: MarkdownStyleSheet(
-                        p: TextStyle(
-                          color: isUser ? Colors.white : AppColors.darkTextPrimary,
-                          fontSize: 15,
+                    final sourceMsg = chatProvider.messages.firstWhere(
+                      (m) => m.text == message.text && m.timestamp == message.createdAt,
+                      orElse: () => ChatMessageModel(role: 'user', text: ''),
+                    );
+
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        MarkdownBody(
+                          data: message.text,
+                          selectable: true,
+                          styleSheet: MarkdownStyleSheet(
+                            p: TextStyle(
+                              color: isUser ? Colors.white : AppColors.darkTextPrimary,
+                              fontSize: 15,
+                            ),
+                            strong: TextStyle(
+                              color: isUser ? Colors.white : AppColors.darkTextPrimary,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            em: TextStyle(
+                              color: isUser ? Colors.white : AppColors.darkTextPrimary,
+                              fontStyle: FontStyle.italic,
+                            ),
+                            listBullet: TextStyle(
+                              color: isUser ? Colors.white : AppColors.darkTextPrimary,
+                            ),
+                          ),
                         ),
-                        strong: TextStyle(
-                          color: isUser ? Colors.white : AppColors.darkTextPrimary,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        em: TextStyle(
-                          color: isUser ? Colors.white : AppColors.darkTextPrimary,
-                          fontStyle: FontStyle.italic,
-                        ),
-                        listBullet: TextStyle(
-                          color: isUser ? Colors.white : AppColors.darkTextPrimary,
-                        ),
-                      ),
+                        if (!isUser && sourceMsg.sources.isNotEmpty) ...[
+                          const SizedBox(height: Spacing.m),
+                          const Divider(color: AppColors.darkBorder, height: 1),
+                          const SizedBox(height: Spacing.s),
+                          Text(
+                            'Fuentes:',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.darkTextSecondary,
+                            ),
+                          ),
+                          const SizedBox(height: Spacing.xs),
+                          Wrap(
+                            spacing: 8,
+                            runSpacing: 8,
+                            children: sourceMsg.sources.map((source) {
+                              return ActionChip(
+                                avatar: const Icon(Icons.picture_as_pdf, size: 16, color: AppColors.primary),
+                                label: Text(
+                                  source,
+                                  style: const TextStyle(fontSize: 12, color: AppColors.darkTextPrimary),
+                                ),
+                                backgroundColor: AppColors.darkCard,
+                                side: const BorderSide(color: AppColors.darkBorder),
+                                onPressed: () {
+                                  _openSourcePdf(source);
+                                },
+                              );
+                            }).toList(),
+                          ),
+                        ],
+                      ],
                     );
                   },
                 ),
@@ -169,11 +214,86 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                     ),
                   ),
                 ),
+              if (messages.isEmpty && !chatProvider.isLoading)
+                Positioned.fill(
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Padding(
+                      padding: const EdgeInsets.all(Spacing.l),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.chat_bubble_outline,
+                            size: 48,
+                            color: AppColors.primary.withValues(alpha: 0.5),
+                          ),
+                          const SizedBox(height: Spacing.m),
+                          Text(
+                            '¿En qué te puedo ayudar hoy?',
+                            style: TextStyle(
+                              color: AppColors.darkTextPrimary,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: Spacing.xs),
+                          Text(
+                            'Selecciona una consulta común o escribe la tuya.',
+                            style: TextStyle(
+                              color: AppColors.darkTextSecondary,
+                              fontSize: 14,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: Spacing.l),
+                          Wrap(
+                            spacing: Spacing.s,
+                            runSpacing: Spacing.s,
+                            alignment: WrapAlignment.center,
+                            children: [
+                              _buildSuggestionChip('¿Cuáles son los estándares de flexiones?'),
+                              _buildSuggestionChip('¿Cómo funciona el Control de Peso (BCA)?'),
+                              _buildSuggestionChip('¿Qué es el Programa de Mejora Física?'),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
             ],
           );
         },
       ),
     );
+  }
+
+  Widget _buildSuggestionChip(String text) {
+    return ActionChip(
+      label: Text(text),
+      labelStyle: const TextStyle(color: AppColors.darkTextPrimary, fontSize: 13),
+      backgroundColor: AppColors.darkCardSec,
+      side: const BorderSide(color: AppColors.darkBorder),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(Radii.m)),
+      onPressed: () {
+        _onSend(ChatMessage(
+          user: _currentUser,
+          createdAt: DateTime.now(),
+          text: text,
+        ));
+      },
+    );
+  }
+
+  void _openSourcePdf(String docName) {
+    final pdfAssets = context.read<ContentProvider>().pdfPathsForGemini;
+    // Map documentation name back to asset path if possible. Note we load from assets/pdfs/
+    // This is a simple matching, assuming docName closely matches the file name.
+    final assetPath = 'assets/pdfs/$docName.pdf';
+    
+    // Use the shared pdf opener utility
+    PdfOpener.open(assetPath, context);
   }
 
   void _showClearDialog() {
