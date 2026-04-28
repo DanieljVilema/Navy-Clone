@@ -37,11 +37,12 @@ Aplicación móvil Flutter offline-first para autoevaluación, entrenamiento, co
    cd Navy-Clone-main
    ```
 
-2. **Crea el archivo `.env`** en la raíz del proyecto:
+2. **Crea el archivo `.env`** en la raíz del proyecto (no lo subas al repositorio):
    ```bash
    GEMINI_API_KEY=tu_api_key_aqui
    ```
    > ⚠️ Sin una API Key válida de Gemini, el chatbot no funcionará, pero el resto de la app sí.
+   > Mantén la clave fuera del código y del control de versiones; rota la clave si se expone.
 
 3. **Instala las dependencias**:
    ```bash
@@ -53,6 +54,12 @@ Aplicación móvil Flutter offline-first para autoevaluación, entrenamiento, co
 ### En Chrome (Web)
 ```bash
 flutter run -d chrome
+```
+
+### Script de consola (listar modelos)
+Este script lee la clave desde la variable de entorno `GEMINI_API_KEY`:
+```bash
+GEMINI_API_KEY=tu_api_key_aqui dart run bin/list_models.dart
 ```
 
 ### Comandos útiles mientras corre
