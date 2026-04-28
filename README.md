@@ -37,7 +37,7 @@ Aplicación móvil Flutter offline-first para autoevaluación, entrenamiento, co
    cd Navy-Clone-main
    ```
 
-2. **Crea el archivo `.env`** en la raíz del proyecto (no lo subas al repositorio):
+2. **Crea el archivo `.env`** en la raíz del proyecto (no lo subas al repositorio; está en `.gitignore`):
    ```bash
    GEMINI_API_KEY=tu_api_key_aqui
    ```
