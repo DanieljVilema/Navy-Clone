@@ -59,7 +59,13 @@ flutter run -d chrome
 ### Script de consola (listar modelos)
 Este script lee la clave desde la variable de entorno `GEMINI_API_KEY`:
 ```bash
-GEMINI_API_KEY=tu_api_key_aqui dart run bin/list_models.dart
+export GEMINI_API_KEY=tu_api_key_aqui
+dart run bin/list_models.dart
+```
+En Windows PowerShell:
+```powershell
+$env:GEMINI_API_KEY="tu_api_key_aqui"
+dart run bin/list_models.dart
 ```
 
 ### Comandos útiles mientras corre
